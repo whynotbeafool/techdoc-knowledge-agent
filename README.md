@@ -19,11 +19,11 @@
 
 ## 架构图
 
-_(TODO: 补充 architecture.png,放入 docs/)_
+![architecture](docs/architecture.png)
 
 ## 功能截图
 
-_(TODO: Phase 1 完成后补充至少 3 张截图,放入 docs/demo_screenshots/)_
+_(TODO: 补充至少 3 张截图到 docs/demo_screenshots/ —— 上传区、提问+回答、引用来源)_
 
 ## 本地运行
 
@@ -72,10 +72,14 @@ Phase 1 MVP:上传 -> 解析 -> 切分 -> 向量检索 -> 问答 -> 引用溯源
 - [x] LLM 问答 + 引用溯源（文档名/页码/chunk_id）
 - [x] Streamlit 前端（上传区、提问框、回答区、引用区）
 - [x] 错误处理：缺 API key、文档解析失败、检索为空、LLM 请求失败均不崩溃
-- [ ] Docker 打包验证 + 架构图 + 功能截图（Day 13-14）
+- [x] Docker 打包验证：`docker compose up --build` 可启动 backend + frontend 两个容器，容器内已验证可完整跑通检索+生成
+- [x] 架构图
+- [ ] 功能截图（3 张，待补）
 
 Phase 2（9 月起）:混合检索(BM25 + 向量)、Rerank、评测集、轻量 Agent 节点
 
 ## 后续规划
 
 详见项目求职计划文档中的 Phase 2 迭代功能(混合检索、Rerank、多轮追问、评测集、日志与成本记录)。
+
+**已知技术债**：目前 FastAPI backend 只有 `/` 和 `/health` 两个占位路由，检索和问答逻辑由 `scripts/` 和 `frontend/streamlit_app.py` 直接 import `backend/app/rag/` 模块调用，尚未封装成 REST API。Phase 1 阶段这是合理的简化（本地单机场景下更快跑通），但严格的前后端分离（frontend 通过 HTTP 调用 backend）留作后续迭代。
