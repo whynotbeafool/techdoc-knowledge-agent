@@ -23,7 +23,14 @@
 
 ## 功能截图
 
-_(TODO: 补充至少 3 张截图到 docs/demo_screenshots/ —— 上传区、提问+回答、引用来源)_
+**上传文档 + 问答 + 引用溯源**（PDF 上传，问题命中 `autonomous_driving_survey.pdf`）
+![upload and answer](docs/demo_screenshots/01_upload_and_answer.png)
+
+**资料不足时诚实拒答**（Markdown 上传，检索到的 chunk 未覆盖问题细节，系统未强行回答）
+![refusal example](docs/demo_screenshots/02_refusal_example.png)
+
+**跨文档主题命中**（txt 上传，问题命中 `kubernetes_overview.md`）
+![kubernetes answer](docs/demo_screenshots/03_kubernetes_answer.png)
 
 ## 本地运行
 
@@ -74,7 +81,9 @@ Phase 1 MVP:上传 -> 解析 -> 切分 -> 向量检索 -> 问答 -> 引用溯源
 - [x] 错误处理：缺 API key、文档解析失败、检索为空、LLM 请求失败均不崩溃
 - [x] Docker 打包验证：`docker compose up --build` 可启动 backend + frontend 两个容器，容器内已验证可完整跑通检索+生成
 - [x] 架构图
-- [ ] 功能截图（3 张，待补）
+- [x] 功能截图（3 张：正常问答、拒答、跨文档命中）
+
+**Phase 1 MVP 全部完成。**
 
 Phase 2（9 月起）:混合检索(BM25 + 向量)、Rerank、评测集、轻量 Agent 节点
 
