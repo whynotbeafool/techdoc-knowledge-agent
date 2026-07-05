@@ -25,8 +25,12 @@ def main():
     for path in sorted(RAW_DOCS_DIR.iterdir()):
         if path.suffix.lower() not in SUPPORTED_SUFFIXES:
             continue
-        pages = load_document(path)
-        chunks = chunk_pages(pages)
+        try:
+            pages = load_document(path)
+            chunks = chunk_pages(pages)
+        except Exception as e:
+            print(f"跳过 {path.name}：解析失败（{e}）")
+            continue
         all_chunks.extend(chunks)
         print(f"{path.name}: {len(chunks)} chunk(s)")
 

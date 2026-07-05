@@ -1,3 +1,4 @@
+import openai
 from openai import OpenAI
 
 from app.core.config import get_llm_config
@@ -17,18 +18,25 @@ def build_context(chunks: list[dict]) -> str:
 
 
 def generate_answer(question: str, chunks: list[dict]) -> str:
-    config = get_llm_config()
+    try:
+        config = get_llm_config()
+    except RuntimeError as e:
+        return f"LLM未配置：{e}"
+
     client = OpenAI(api_key=config["api_key"], base_url=config["base_url"])
 
     context = build_context(chunks)
     user_prompt = f"资料：\n{context}\n\n问题：{question}"
 
-    response = client.chat.completions.create(
-        model=config["model"],
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_prompt},
-        ],
-        temperature=0.2,
-    )
-    return response.choices[0].message.content
+    try:
+        response = client.chat.completions.create(
+            model=config["model"],
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.2,
+        )
+        return response.choices[0].message.content
+    except openai.OpenAIError as e:
+        return f"LLM请求失败，请检查API key或网络连接。详细信息：{e}"
