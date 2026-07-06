@@ -77,7 +77,7 @@ Phase 1 MVP:上传 -> 解析 -> 切分 -> 向量检索 -> 问答 -> 引用溯源
 - [x] 文档解析（PDF/Markdown/txt）+ 段落切分
 - [x] Embedding + Chroma 向量检索（top-k）
 - [x] LLM 问答 + 引用溯源（文档名/页码/chunk_id）
-- [x] Streamlit 前端（上传区、提问框、回答区、引用区）
+- [x] Streamlit 前端（上传区、提问框、回答区、引用区）；上传区支持真实建索引（点击“建立索引”即可解析+切分+写入 Chroma，无需再手动跑 CLI 脚本）
 - [x] 错误处理：缺 API key、文档解析失败、检索为空、LLM 请求失败均不崩溃
 - [x] Docker 打包验证：`docker compose up --build` 可启动 backend + frontend 两个容器，容器内已验证可完整跑通检索+生成
 - [x] 架构图
