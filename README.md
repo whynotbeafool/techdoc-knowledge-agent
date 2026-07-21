@@ -1,5 +1,7 @@
 # TechDocKnowledgeAgent
 
+[![Tests](https://github.com/whynotbeafool/techdoc-knowledge-agent/actions/workflows/tests.yml/badge.svg)](https://github.com/whynotbeafool/techdoc-knowledge-agent/actions/workflows/tests.yml)
+
 > 面向技术文档的 RAG 智能知识库问答系统,支持 PDF/Markdown/txt 上传、语义检索、引用溯源和 Docker 一键部署。
 
 ## 项目背景
