@@ -6,3 +6,5 @@ pypdf
 chromadb
 openai
 pytest
+pytest-cov
+ruff

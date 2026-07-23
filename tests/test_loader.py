@@ -1,5 +1,4 @@
 import pytest
-
 from app.rag.loader import load_document
 
 # Note: PDF loading isn't unit tested here — it needs a real PDF binary fixture,

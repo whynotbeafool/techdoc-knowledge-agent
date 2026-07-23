@@ -1,7 +1,6 @@
 from unittest.mock import MagicMock, patch
 
 import openai
-
 from app.rag.generator import build_context, generate_answer
 
 

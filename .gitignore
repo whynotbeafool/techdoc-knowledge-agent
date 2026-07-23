@@ -10,3 +10,6 @@ data/raw_docs/*
 data/uploaded_docs/*
 !data/uploaded_docs/.gitkeep
 .DS_Store
+.coverage
+.ruff_cache/
+.pytest_cache/

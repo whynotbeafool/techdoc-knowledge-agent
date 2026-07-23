@@ -7,9 +7,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "backend"))
 
 from app.rag.chunker import chunk_pages  # noqa: E402
+from app.rag.generator import generate_answer  # noqa: E402
 from app.rag.loader import load_document  # noqa: E402
 from app.rag.retriever import ChromaRetriever  # noqa: E402
-from app.rag.generator import generate_answer  # noqa: E402
 
 VECTOR_STORE_DIR = PROJECT_ROOT / "data" / "vector_store"
 UPLOADED_DOCS_DIR = PROJECT_ROOT / "data" / "uploaded_docs"
@@ -51,7 +51,11 @@ if uploaded_files:
 
             if all_chunks:
                 retriever.index_chunks(all_chunks)
-                st.success(f"已建立索引：{len(all_chunks)} 个 chunk，来自 {len(uploaded_files)} 个文件。现在可以直接提问。")
+                msg = (
+                    f"已建立索引：{len(all_chunks)} 个 chunk，"
+                    f"来自 {len(uploaded_files)} 个文件。现在可以直接提问。"
+                )
+                st.success(msg)
             else:
                 st.write("没有可用的 chunk，索引未更新。")
 
