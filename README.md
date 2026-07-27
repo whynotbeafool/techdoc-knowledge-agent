@@ -23,6 +23,12 @@
 
 ![architecture](docs/architecture.png)
 
+## 设计决策
+
+每个关键技术选择的备选方案、选择理由和已知代价，记录在
+[docs/design-decisions.md](docs/design-decisions.md)——包括为什么引用溯源由代码强制输出而不依赖
+LLM 自觉标注、为什么 Phase 1 不用 LangChain、为什么分块上限是 800 字符等。
+
 ## 功能截图
 
 **上传文档 + 问答 + 引用溯源**（PDF 上传，问题命中 `autonomous_driving_survey.pdf`）
