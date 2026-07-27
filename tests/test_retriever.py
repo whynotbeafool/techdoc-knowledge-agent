@@ -13,6 +13,10 @@ def test_index_and_query_returns_matching_chunk(tmp_path):
         source="doc.txt",
         page=None,
         text="FastAPI is a modern Python web framework",
+        start_char=10,
+        end_char=50,
+        document_id="doc",
+        document_version="v1",
     )
 
     retriever.index_chunks([chunk])
@@ -22,6 +26,10 @@ def test_index_and_query_returns_matching_chunk(tmp_path):
     assert results[0]["chunk_id"] == "doc.txt_p0_0"
     assert results[0]["source"] == "doc.txt"
     assert results[0]["page"] == 0  # page=None is stored as 0 — Chroma metadata can't hold None
+    assert results[0]["start_char"] == 10
+    assert results[0]["end_char"] == 50
+    assert results[0]["document_id"] == "doc"
+    assert results[0]["document_version"] == "v1"
 
 
 def test_index_chunks_with_empty_list_does_nothing(tmp_path):

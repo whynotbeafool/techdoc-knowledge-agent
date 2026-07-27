@@ -1,0 +1,6 @@
+# Canonical corpus artifacts are byte-exact and hash-verified by
+# load_canonical_document(). Git's automatic CRLF conversion would change their
+# bytes on checkout (e.g. 69706 -> 70718 for rag_paper/v1.txt) and break every
+# recorded text_hash and character offset. Never convert line endings here.
+/data/corpus/canonical/** -text
+/data/corpus/documents.jsonl text eol=lf

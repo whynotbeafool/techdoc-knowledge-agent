@@ -70,6 +70,21 @@ python scripts/query.py "your question here"
 python scripts/ask.py "your question here"
 ```
 
+## 研究评测语料
+
+正式评测不直接以 `data/raw_docs/` 的临时提取结果为坐标系。每份来源文档先冻结成
+canonical text，并将文本、`documents.jsonl` 和后续 QA 标注一起提交进版本库：
+
+```bash
+python scripts/build_canonical.py data/raw_docs/rag_paper.pdf \
+  --document-id rag_paper --document-version v1
+```
+
+读取时必须使用 `load_canonical_document()` 校验文本哈希，再交给
+`chunk_canonical_document()`。chunk 的 `start_char / end_char` 是 canonical text 上
+零基半开区间的 Unicode 码点下标，不是 UTF-8 字节偏移。正式评测不得使用 `chunk_id`
+作为证据锚点，因为它会随 chunk 参数变化。
+
 ## Docker 一键启动
 
 ```bash

@@ -19,7 +19,7 @@ class ChromaRetriever:
         self.collection.upsert(
             ids=[c.chunk_id for c in chunks],
             documents=[c.text for c in chunks],
-            metadatas=[{"source": c.source, "page": c.page or 0} for c in chunks],
+            metadatas=[_chunk_metadata(c) for c in chunks],
         )
 
     def query(self, question: str, top_k: int = 5) -> dict:
@@ -39,6 +39,24 @@ class ChromaRetriever:
                 "page": meta["page"],
                 "text": doc,
                 "distance": dist,
+                "start_char": meta.get("start_char"),
+                "end_char": meta.get("end_char"),
+                "document_id": meta.get("document_id"),
+                "document_version": meta.get("document_version"),
             }
             for chunk_id, doc, meta, dist in zip(ids, documents, metadatas, distances)
         ]
+
+
+def _chunk_metadata(chunk: Chunk) -> dict:
+    metadata = {"source": chunk.source, "page": chunk.page or 0}
+    for field in (
+        "start_char",
+        "end_char",
+        "document_id",
+        "document_version",
+    ):
+        value = getattr(chunk, field)
+        if value is not None:
+            metadata[field] = value
+    return metadata

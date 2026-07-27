@@ -188,3 +188,25 @@ mock 之后，测试在 CI 里毫秒级完成，且能精确构造"接口报错"
 **代价 / 已知局限**：mock 测不出真实接口的行为变化（比如厂商改了返回结构、模型名下线）。
 这类问题需要靠真实运行来发现——目前是靠 `scripts/ask.py` 手动验证，
 后续可以考虑加一个不进 CI 的 smoke test，需要时手动跑。
+
+---
+
+## 11. 评测切块：以 canonical text 偏移为依据，不以 chunk_id 为证据锚点
+
+**决策**：研究评测链路只切分经过哈希校验的 canonical text。每个 chunk 保存相对于该
+canonical revision 的 `start_char / end_char`，偏移采用零基半开区间，单位是 Unicode 码点
+（等价于 Python `str` 下标，不是 UTF-8 字节或字形簇）。chunk 不跨页，并强制满足：
+
+```python
+chunk.text == canonical_text[chunk.start_char:chunk.end_char]
+```
+
+**为什么这样选**：改变 chunk 大小、段落策略或 overlap 后，chunk 的编号和边界都会变化；
+如果金标准证据直接引用 chunk_id，切块消融会让标注失效。原文字符区间属于冻结语料，
+可以稳定映射到任意一次切块结果，也能用自动断言发现坐标错位。
+
+**chunk_id 的语义**：继续使用 `{source}_p{page}_{index}`，便于展示和向量库去重；
+但 `index` 依赖当前切分参数，因此 chunk_id 不是跨实验稳定标识，严禁用作金标准证据锚点。
+
+**兼容边界**：`chunk_pages(RawPage)` 仅服务于未进入冻结语料的交互式上传 MVP；
+正式评测必须使用 `load_canonical_document()` 后调用 `chunk_canonical_document()`。
