@@ -61,7 +61,7 @@ def test_build_canonical_document_writes_hashes_mapping_and_manifest(tmp_path):
     record = build_canonical_document(
         source,
         document_id="notes",
-        document_version="v1",
+        revision="v1",
         corpus_dir=corpus_dir,
     )
 
@@ -96,13 +96,13 @@ def test_build_canonical_document_is_idempotent_for_same_revision(tmp_path):
     first = build_canonical_document(
         source,
         document_id="notes",
-        document_version="v1",
+        revision="v1",
         corpus_dir=corpus_dir,
     )
     second = build_canonical_document(
         source,
         document_id="notes",
-        document_version="v1",
+        revision="v1",
         corpus_dir=corpus_dir,
     )
 
@@ -120,16 +120,16 @@ def test_build_canonical_document_rejects_changed_existing_revision(tmp_path):
     build_canonical_document(
         source,
         document_id="notes",
-        document_version="v1",
+        revision="v1",
         corpus_dir=corpus_dir,
     )
     source.write_text("changed content", encoding=CANONICAL_ENCODING)
 
-    with pytest.raises(ValueError, match="use a new document_version"):
+    with pytest.raises(ValueError, match="use a new revision"):
         build_canonical_document(
             source,
             document_id="notes",
-            document_version="v1",
+            revision="v1",
             corpus_dir=corpus_dir,
         )
 
@@ -141,14 +141,14 @@ def test_load_canonical_document_verifies_and_returns_revision(tmp_path):
     record = build_canonical_document(
         source,
         document_id="notes",
-        document_version="v1",
+        revision="v1",
         corpus_dir=corpus_dir,
     )
 
     loaded = load_canonical_document(
         corpus_dir,
         document_id="notes",
-        document_version="v1",
+        revision="v1",
     )
 
     assert loaded.text == "trusted content"
@@ -162,7 +162,7 @@ def test_load_canonical_document_rejects_tampered_text(tmp_path):
     record = build_canonical_document(
         source,
         document_id="notes",
-        document_version="v1",
+        revision="v1",
         corpus_dir=corpus_dir,
     )
     (corpus_dir / record["canonical_text_file"]).write_text(
@@ -174,7 +174,7 @@ def test_load_canonical_document_rejects_tampered_text(tmp_path):
         load_canonical_document(
             corpus_dir,
             document_id="notes",
-            document_version="v1",
+            revision="v1",
         )
 
 
@@ -185,7 +185,7 @@ def test_load_canonical_document_rejects_path_outside_corpus(tmp_path):
     outside.write_text("outside", encoding=CANONICAL_ENCODING)
     record = {
         "document_id": "notes",
-        "document_version": "v1",
+        "revision": "v1",
         "canonical_text_file": "../outside.txt",
         "text_hash": f"sha256:{hashlib.sha256(outside.read_bytes()).hexdigest()}",
     }
@@ -198,7 +198,7 @@ def test_load_canonical_document_rejects_path_outside_corpus(tmp_path):
         load_canonical_document(
             corpus_dir,
             document_id="notes",
-            document_version="v1",
+            revision="v1",
         )
 
 
@@ -209,7 +209,7 @@ def test_load_canonical_document_rejects_absolute_canonical_path(tmp_path):
     outside.write_text("outside", encoding=CANONICAL_ENCODING)
     record = {
         "document_id": "notes",
-        "document_version": "v1",
+        "revision": "v1",
         "canonical_text_file": str(outside.resolve()),
         "text_hash": f"sha256:{hashlib.sha256(outside.read_bytes()).hexdigest()}",
     }
@@ -222,7 +222,7 @@ def test_load_canonical_document_rejects_absolute_canonical_path(tmp_path):
         load_canonical_document(
             corpus_dir,
             document_id="notes",
-            document_version="v1",
+            revision="v1",
         )
 
 
@@ -233,7 +233,7 @@ def test_load_canonical_document_rejects_missing_revision(tmp_path):
         load_canonical_document(
             corpus_dir,
             document_id="missing",
-            document_version="v1",
+            revision="v1",
         )
 
 
@@ -244,7 +244,7 @@ def test_load_canonical_document_rejects_ambiguous_offset_unit(tmp_path):
     build_canonical_document(
         source,
         document_id="notes",
-        document_version="v1",
+        revision="v1",
         corpus_dir=corpus_dir,
     )
     manifest_path = corpus_dir / "documents.jsonl"
@@ -259,7 +259,7 @@ def test_load_canonical_document_rejects_ambiguous_offset_unit(tmp_path):
         load_canonical_document(
             corpus_dir,
             document_id="notes",
-            document_version="v1",
+            revision="v1",
         )
 
 
@@ -285,7 +285,7 @@ def test_load_canonical_document_rejects_invalid_page_spans(tmp_path, page_spans
     build_canonical_document(
         source,
         document_id="notes",
-        document_version="v1",
+        revision="v1",
         corpus_dir=corpus_dir,
     )
     manifest_path = corpus_dir / "documents.jsonl"
@@ -300,5 +300,5 @@ def test_load_canonical_document_rejects_invalid_page_spans(tmp_path, page_spans
         load_canonical_document(
             corpus_dir,
             document_id="notes",
-            document_version="v1",
+            revision="v1",
         )

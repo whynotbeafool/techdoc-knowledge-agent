@@ -16,7 +16,7 @@ def test_index_and_query_returns_matching_chunk(tmp_path):
         start_char=10,
         end_char=50,
         document_id="doc",
-        document_version="v1",
+        revision="v1",
     )
 
     retriever.index_chunks([chunk])
@@ -29,7 +29,7 @@ def test_index_and_query_returns_matching_chunk(tmp_path):
     assert results[0]["start_char"] == 10
     assert results[0]["end_char"] == 50
     assert results[0]["document_id"] == "doc"
-    assert results[0]["document_version"] == "v1"
+    assert results[0]["revision"] == "v1"
 
 
 def test_index_chunks_with_empty_list_does_nothing(tmp_path):

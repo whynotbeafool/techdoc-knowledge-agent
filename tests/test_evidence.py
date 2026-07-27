@@ -53,7 +53,7 @@ def test_canonical_chunk_offsets_connect_to_evidence_hit_mapping():
         text=text,
         metadata={
             "document_id": "doc001",
-            "document_version": "v1",
+            "revision": "v1",
             "source_file": "doc.txt",
             "page_spans": [{"page": None, "start_char": 0, "end_char": len(text)}],
         },

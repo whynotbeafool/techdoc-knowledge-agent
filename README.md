@@ -77,8 +77,13 @@ canonical text，并将文本、`documents.jsonl` 和后续 QA 标注一起提�
 
 ```bash
 python scripts/build_canonical.py data/raw_docs/rag_paper.pdf \
-  --document-id rag_paper --document-version v1
+  --document-id rag_paper --revision v1
 ```
+
+`revision` 标识的是**一份不可变的 canonical 产物**，不是上游文档的版本号。源文件换新、
+或者提取流程变化（pypdf 版本、页分隔符、规范化方式）都必须升 revision——两者都会让已记录的
+字符偏移失效，下游无法区别对待。具体是哪一种原因，可以从记录里的 `source_hash` 和
+`extraction.pipeline_version` 反查。
 
 读取时必须使用 `load_canonical_document()` 校验文本哈希，再交给
 `chunk_canonical_document()`。chunk 的 `start_char / end_char` 是 canonical text 上

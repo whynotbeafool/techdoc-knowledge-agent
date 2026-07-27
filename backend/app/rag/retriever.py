@@ -42,7 +42,7 @@ class ChromaRetriever:
                 "start_char": meta.get("start_char"),
                 "end_char": meta.get("end_char"),
                 "document_id": meta.get("document_id"),
-                "document_version": meta.get("document_version"),
+                "revision": meta.get("revision"),
             }
             for chunk_id, doc, meta, dist in zip(ids, documents, metadatas, distances)
         ]
@@ -54,7 +54,7 @@ def _chunk_metadata(chunk: Chunk) -> dict:
         "start_char",
         "end_char",
         "document_id",
-        "document_version",
+        "revision",
     ):
         value = getattr(chunk, field)
         if value is not None:

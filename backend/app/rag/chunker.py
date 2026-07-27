@@ -21,7 +21,7 @@ class Chunk:
     start_char: Optional[int] = None
     end_char: Optional[int] = None
     document_id: Optional[str] = None
-    document_version: Optional[str] = None
+    revision: Optional[str] = None
 
 
 def split_paragraphs(text: str) -> list[str]:
@@ -53,7 +53,7 @@ def chunk_pages(pages: list[RawPage], max_chars: int = DEFAULT_MAX_CHARS) -> lis
         text=canonical.text,
         metadata={
             "document_id": source,
-            "document_version": "runtime",
+            "revision": "runtime",
             "source_file": source,
             "page_spans": [asdict(span) for span in canonical.page_spans],
         },
@@ -72,7 +72,7 @@ def chunk_canonical_document(
     metadata = document.metadata
     source = metadata["source_file"]
     document_id = metadata["document_id"]
-    document_version = metadata["document_version"]
+    revision = metadata["revision"]
     chunks: list[Chunk] = []
 
     for page_span in metadata["page_spans"]:
@@ -93,7 +93,7 @@ def chunk_canonical_document(
                     start_char=start_char,
                     end_char=end_char,
                     document_id=document_id,
-                    document_version=document_version,
+                    revision=revision,
                 )
             )
 

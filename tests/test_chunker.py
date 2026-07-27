@@ -61,7 +61,7 @@ def test_chunk_canonical_document_preserves_exact_substring_and_page_boundaries(
         text=text,
         metadata={
             "document_id": "doc001",
-            "document_version": "v1",
+            "revision": "v1",
             "source_file": "doc.pdf",
             "page_spans": [
                 {"page": 1, "start_char": 0, "end_char": len("alpha\n\nbeta")},
@@ -88,7 +88,7 @@ def test_chunk_canonical_document_keeps_original_single_newline():
         text=text,
         metadata={
             "document_id": "doc001",
-            "document_version": "v1",
+            "revision": "v1",
             "source_file": "doc.txt",
             "page_spans": [{"page": None, "start_char": 0, "end_char": len(text)}],
         },
@@ -107,7 +107,7 @@ def test_chunk_canonical_document_converts_long_paragraph_to_document_offsets():
         text=text,
         metadata={
             "document_id": "doc001",
-            "document_version": "v1",
+            "revision": "v1",
             "source_file": "doc.pdf",
             "page_spans": [
                 {"page": 1, "start_char": 0, "end_char": len("head")},
@@ -135,7 +135,7 @@ def test_chunk_canonical_document_rejects_non_positive_max_chars():
         text="content",
         metadata={
             "document_id": "doc001",
-            "document_version": "v1",
+            "revision": "v1",
             "source_file": "doc.txt",
             "page_spans": [{"page": None, "start_char": 0, "end_char": 7}],
         },

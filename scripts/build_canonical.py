@@ -2,7 +2,7 @@
 
 Usage:
     python scripts/build_canonical.py data/raw_docs/pep8.txt \
-        --document-id pep8 --document-version v1
+        --document-id pep8 --revision v1
 """
 
 import argparse
@@ -27,7 +27,7 @@ def main():
     )
     parser.add_argument("source", type=Path)
     parser.add_argument("--document-id", required=True)
-    parser.add_argument("--document-version", required=True)
+    parser.add_argument("--revision", required=True)
     parser.add_argument(
         "--corpus-dir",
         type=Path,
@@ -43,7 +43,7 @@ def main():
     record = build_canonical_document(
         args.source,
         document_id=args.document_id,
-        document_version=args.document_version,
+        revision=args.revision,
         corpus_dir=args.corpus_dir,
         page_separator=args.page_separator,
     )

@@ -51,20 +51,27 @@ def build_canonical_document(
     source_path: Path,
     *,
     document_id: str,
-    document_version: str,
+    revision: str,
     corpus_dir: Path,
     page_separator: str = DEFAULT_PAGE_SEPARATOR,
 ) -> dict:
     """Freeze one source document as canonical text and register its metadata.
 
-    The canonical artifact is immutable for a given ``document_id`` and
-    ``document_version``. Re-running with identical content is idempotent;
-    attempting to reuse the revision for different content raises an error.
+    ``revision`` identifies one immutable canonical artifact, **not** a version
+    of the upstream document. It must be bumped whenever the canonical text
+    changes for any reason -- a new source file *or* a change to the extraction
+    pipeline (different pypdf version, page separator, normalization). Both
+    invalidate every recorded character offset, so downstream consumers cannot
+    treat them differently. Which of the two caused a bump is recoverable from
+    ``source_hash`` and ``extraction.pipeline_version`` in the record.
+
+    Re-running with identical content is idempotent; attempting to reuse a
+    revision for different content raises an error.
     """
     source_path = source_path.resolve()
     corpus_dir = corpus_dir.resolve()
     _validate_revision_component(document_id, name="document_id")
-    _validate_revision_component(document_version, name="document_version")
+    _validate_revision_component(revision, name="revision")
     _validate_page_separator(page_separator)
 
     pages, tool, tool_version = extract_pages(source_path)
@@ -76,14 +83,14 @@ def build_canonical_document(
     canonical_bytes = canonical.text.encode(CANONICAL_ENCODING)
     text_hash = _sha256_bytes(canonical_bytes)
 
-    relative_text_path = Path("canonical") / document_id / f"{document_version}.txt"
+    relative_text_path = Path("canonical") / document_id / f"{revision}.txt"
     canonical_path = corpus_dir / relative_text_path
     manifest_path = corpus_dir / "documents.jsonl"
 
     record = {
         "schema_version": "0.1",
         "document_id": document_id,
-        "document_version": document_version,
+        "revision": revision,
         "source_file": source_path.name,
         "source_hash": f"sha256:{source_hash}",
         "canonical_text_file": relative_text_path.as_posix(),
@@ -108,16 +115,16 @@ def build_canonical_document(
         },
     }
 
-    existing_record = _find_revision(manifest_path, document_id, document_version)
+    existing_record = _find_revision(manifest_path, document_id, revision)
     if existing_record is not None and existing_record != record:
         raise ValueError(
-            f"Revision {document_id}@{document_version} already exists with different metadata; "
-            "use a new document_version"
+            f"Revision {document_id}@{revision} already exists with different metadata; "
+            "use a new revision"
         )
     if canonical_path.exists() and canonical_path.read_bytes() != canonical_bytes:
         raise ValueError(
             f"Canonical artifact already exists with different content: {canonical_path}; "
-            "use a new document_version"
+            "use a new revision"
         )
 
     canonical_path.parent.mkdir(parents=True, exist_ok=True)
@@ -135,17 +142,17 @@ def load_canonical_document(
     corpus_dir: Path,
     *,
     document_id: str,
-    document_version: str,
+    revision: str,
 ) -> LoadedCanonicalDocument:
     """Load a frozen revision only after verifying its canonical-text hash."""
     corpus_dir = corpus_dir.resolve()
     _validate_revision_component(document_id, name="document_id")
-    _validate_revision_component(document_version, name="document_version")
+    _validate_revision_component(revision, name="revision")
 
     manifest_path = corpus_dir / "documents.jsonl"
-    record = _find_revision(manifest_path, document_id, document_version)
+    record = _find_revision(manifest_path, document_id, revision)
     if record is None:
-        raise KeyError(f"Canonical revision not found: {document_id}@{document_version}")
+        raise KeyError(f"Canonical revision not found: {document_id}@{revision}")
 
     relative_text_path = Path(record["canonical_text_file"])
     canonical_path = (corpus_dir / relative_text_path).resolve()
@@ -159,7 +166,7 @@ def load_canonical_document(
     expected_hash = record.get("text_hash")
     if actual_hash != expected_hash:
         raise ValueError(
-            f"Canonical text hash mismatch for {document_id}@{document_version}: "
+            f"Canonical text hash mismatch for {document_id}@{revision}: "
             f"expected {expected_hash}, got {actual_hash}"
         )
 
@@ -231,7 +238,7 @@ def assemble_canonical_text(
 
 
 def _find_revision(
-    manifest_path: Path, document_id: str, document_version: str
+    manifest_path: Path, document_id: str, revision: str
 ) -> Optional[dict]:
     if not manifest_path.exists():
         return None
@@ -249,11 +256,11 @@ def _find_revision(
                 ) from exc
             if (
                 record.get("document_id") == document_id
-                and record.get("document_version") == document_version
+                and record.get("revision") == revision
             ):
                 if found is not None:
                     raise ValueError(
-                        f"Duplicate revision {document_id}@{document_version} in {manifest_path}"
+                        f"Duplicate revision {document_id}@{revision} in {manifest_path}"
                     )
                 found = record
     return found
