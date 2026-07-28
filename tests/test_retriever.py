@@ -49,3 +49,4 @@ def test_query_chunks_on_empty_collection_returns_empty_list(tmp_path):
     retriever = ChromaRetriever(str(tmp_path))
     results = retriever.query_chunks("anything", top_k=5)
     assert results == []
+    retriever.close()

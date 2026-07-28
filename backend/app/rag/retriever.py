@@ -47,6 +47,10 @@ class ChromaRetriever:
             for chunk_id, doc, meta, dist in zip(ids, documents, metadatas, distances)
         ]
 
+    def close(self) -> None:
+        """Release persistent index files, required before cleanup on Windows."""
+        self.client.close()
+
 
 def _chunk_metadata(chunk: Chunk) -> dict:
     metadata = {"source": chunk.source, "page": chunk.page or 0}

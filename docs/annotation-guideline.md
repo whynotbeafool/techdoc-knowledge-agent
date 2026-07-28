@@ -38,11 +38,12 @@ results/runs/*.jsonl             实验层：每次跑基线的输出，可反�
 
 ```json
 {
-  "schema_version": "0.1",
+  "schema_version": "0.2",
   "guideline_version": "0",
   "question_id": "q001",
   "question": "What are the main challenges in end-to-end autonomous driving?",
   "answerability": "answerable",
+  "expected_behavior": "answer",
   "unanswerable_reason": null,
   "reasoning_type": "multi_evidence",
   "reference_answer": "Multimodal fusion, interpretability, causal confusion, robustness and world modelling.",
@@ -52,9 +53,9 @@ results/runs/*.jsonl             实验层：每次跑基线的输出，可反�
       "document_id": "autonomous_driving_survey",
       "revision": "v1",
       "page": 1,
-      "start_char": 1280,
-      "end_char": 1331,
-      "quote": "We summarize a series of critical challenges, including ..."
+      "start_char": 942,
+      "end_char": 1092,
+      "quote": "We delve into several critical challenges, including multi-modality, interpretability, causal confusion, robustness, and world models..."
     }
   ],
   "annotation_status": "confirmed",
@@ -66,15 +67,16 @@ results/runs/*.jsonl             实验层：每次跑基线的输出，可反�
 
 | 字段 | 取值 | 说明 |
 |---|---|---|
-| `schema_version` | `"0.1"` | 记录结构版本 |
+| `schema_version` | `"0.2"` | QA 记录结构版本；`expected_behavior` 自 0.2 起为必填 |
 | `guideline_version` | `"0"` | 标注时依据的本规范版本 |
 | `question_id` | `q001`、`q002`… | 稳定主键，**一旦分配不得复用或重排**。它是 qa.jsonl 与各条基线结果表 join 的依据 |
 | `question` | 英文字符串 | 见 §5 各类问题的构造要求 |
 | `answerability` | `answerable` \| `unanswerable` | 见 §4.1 |
+| `expected_behavior` | `answer` \| `refuse` \| `correct_premise` | 系统应回答、拒答，还是指出并纠正错误前提 |
 | `unanswerable_reason` | `out_of_scope` \| `false_premise` \| `null` | `answerable` 时必须为 `null`；`unanswerable` 时必须非空 |
-| `reasoning_type` | `single_evidence` \| `multi_evidence` \| `multi_hop` \| `not_applicable` | `unanswerable` 一律填 `not_applicable` |
-| `reference_answer` | 英文字符串 | 简洁陈述答案本身，不复述问题，不加"根据资料…"这类套话 |
-| `evidence` | 数组 | `answerable` 时至少 1 条；**`unanswerable` 时必须为空数组** |
+| `reasoning_type` | `single_evidence` \| `multi_evidence` \| `multi_hop` \| `not_applicable` | `out_of_scope` 填 `not_applicable`；错误前提按纠正所需证据填写 |
+| `reference_answer` | 英文字符串 \| `null` | 可答题写简洁答案；错误前提写纠正性回答；`out_of_scope` 填 `null` |
+| `evidence` | 数组 | 普通可答题和错误前提至少 1 条；仅 `out_of_scope` 必须为空数组 |
 | `annotation_status` | `confirmed` \| `needs_review` | 自己不确定时填 `needs_review`，不要勉强填 `confirmed` |
 | `split` | `dev` | 见 §6.2。30 题阶段一律 `dev` |
 | `annotator` | 字符串 | 目前只有 `self` |
@@ -103,9 +105,22 @@ results/runs/*.jsonl             实验层：每次跑基线的输出，可反�
 注意判定的是**语料**能不能支持，不是**你自己**知不知道答案。
 你从别处知道的知识不算数——那正是要检测的幻觉来源。
 
+`answerability` 与系统的预期动作并不完全等价：普通可答题应回答；
+语料完全不涉及的问题应拒答；带错误前提的问题虽不能按原问法作答，
+但系统应利用反证指出并纠正前提，而不是只说"无法回答"。
+
+约束如下：
+
+| 情况 | `answerability` | `expected_behavior` | `reference_answer` | `evidence` |
+|---|---|---|---|---|
+| 普通可答 | `answerable` | `answer` | 非空 | 至少 1 条支持证据 |
+| 语料外 | `unanswerable` | `refuse` | `null` | 空数组 |
+| 错误前提 | `unanswerable` | `correct_premise` | 非空纠正 | 至少 1 条反证 |
+
 ### 4.2 什么算"支持"
 
-一段文字构成证据，当且仅当它**直接陈述了参考答案中的某个成分**。以下不算：
+一段文字构成证据，当且仅当它**直接陈述了参考答案中的某个成分**；
+错误前提题中，直接证伪前提的文字也构成证据。以下不算：
 
 - 只是提到了相关主题，但没有给出答案（例如问"有哪些挑战"，某段只说"挑战很多，见第 5 节"）
 - 需要读者自行推断、计算或跨领域补全才能得到答案
@@ -120,7 +135,8 @@ results/runs/*.jsonl             实验层：每次跑基线的输出，可反�
 
 ### 4.4 多段文字都支持答案时
 
-**每一段独立记为一条 evidence**，不要合并成一个跨越无关文字的大区间。
+标注构成参考答案所需的**最小充分证据集**。其中每一段独立记为一条 evidence，
+不要合并成一个跨越无关文字的大区间；不要求穷举全文中所有重复或等价表述。
 v0 **不区分**"单独就足够"和"仅部分支持"——两者一律平等记录。
 
 这个简化是有意的：区分需要额外的判断规则和标注成本，
@@ -129,8 +145,9 @@ v0 **不区分**"单独就足够"和"仅部分支持"——两者一律平等记
 
 ### 4.5 同一段文字在文档中多处出现
 
-以**实际支持答案的那一处**的偏移为准。若确实多处都支持，按 §4.4 各记一条。
-`quote` 相同但偏移不同是合法的。
+不要求穷举所有重复位置。选入最小充分证据集的引文若在全文重复，
+以**实际选定的那一处**偏移为准；不得让 `find()` 默认返回的第一处替代人工选择。
+不同题目选择了相同 quote 的不同位置是合法的。
 
 ### 4.6 证据必须可机械校验
 
@@ -147,16 +164,17 @@ canonical_text[start_char:end_char] == quote          # 引文与偏移一致
 
 试标阶段每类各标 1 题，共 5 题。
 
-| 类别 | `answerability` | `reasoning_type` | 构造要求 |
-|---|---|---|---|
-| 单证据可答 | `answerable` | `single_evidence` | 答案由**一段**文字直接支持 |
-| 多证据可答 | `answerable` | `multi_evidence` | 答案的不同成分由**多段并列**文字支持，各段之间无推理依赖 |
-| 跨章节多步 | `answerable` | `multi_hop` | 必须**先从一处获得中间信息，再据此定位另一处**才能作答。若两段可以任意顺序读取，那是 `multi_evidence` 而非 `multi_hop` |
-| 明确无答案 | `unanswerable` | `not_applicable` | 问题合理但语料完全不涉及。`unanswerable_reason` 填 `out_of_scope` |
-| 前提错误 | `unanswerable` | `not_applicable` | 问题内含语料可证伪的错误预设。`unanswerable_reason` 填 `false_premise` |
+| 类别 | `answerability` | `expected_behavior` | `reasoning_type` | 构造要求 |
+|---|---|---|---|---|
+| 单证据可答 | `answerable` | `answer` | `single_evidence` | 答案由**一段**文字直接支持 |
+| 多证据可答 | `answerable` | `answer` | `multi_evidence` | 答案的不同成分由**多段并列**文字支持，各段之间无推理依赖 |
+| 跨章节多步 | `answerable` | `answer` | `multi_hop` | 第一处证据给出的中间实体、属性或取值，是约束第二步检索所必需的；若两段可任意顺序读取，则是 `multi_evidence` |
+| 明确无答案 | `unanswerable` | `refuse` | `not_applicable` | 问题合理但语料完全不涉及。`unanswerable_reason` 填 `out_of_scope`，`reference_answer` 填 `null` |
+| 前提错误 | `unanswerable` | `correct_premise` | 按纠正所需证据填写 | 问题内含语料可直接证伪的错误预设。记录反证并给出纠正性 `reference_answer` |
 
 **关于"前提错误"**：例如询问某工具的一个它并不具备的特性、或把 A 的属性安在 B 上。
 这类问题专门检验系统会不会顺着错误前提编造答案，是 RQ3 的重要样本。
+理想输出是引用反证并纠正前提，不是无依据地继续回答，也不是笼统拒答。
 
 **关于"版本冲突"**：当前语料每份文档只有一个快照，无法构造真实的版本冲突问题。
 待日后向语料中加入同一文档的多个 revision 后再引入该类别。
@@ -172,6 +190,20 @@ canonical_text[start_char:end_char] == quote          # 引文与偏移一致
 做 chunk 参数消融时，"完整包含"会随着 chunk 变小而系统性地降低命中率，
 从而引入与检索质量无关的伪差异。论文中报告主表时采用本规则并写明理由；
 如需更严格的口径，可另算一份"完整包含"版本作为补充。
+
+主指标定义为 **Evidence Recall@K**：
+
+```
+单题 Evidence Recall@K
+= 被 top-K 中任一 chunk 命中的 gold evidence 数 / 该题 gold evidence 总数
+
+数据集 Evidence Recall@K
+= 所有 answerable 题单题 Recall@K 的宏平均
+```
+
+错误前提题的反证检索单独报告，不混入普通 answerable 题的主 Recall。
+另可报告 `Complete Evidence Hit@K`：一道题的最小充分证据集是否全部被 top-K 覆盖。
+v0 不把它作为唯一主指标，因为它会把"命中部分证据"和"完全没有命中"都压成 0。
 
 **注意**：chunk 并不完整覆盖 canonical text——段落之间被 trim 掉的空白字符不属于任何 chunk。
 因此证据引文不应只包含空白，实践中正常引文不会遇到这个问题。
@@ -204,7 +236,8 @@ canonical_text[start_char:end_char] == quote          # 引文与偏移一致
    （会自动校验哈希），在 canonical text 上定位证据并读取偏移。
 2. 按 §3 填写记录，追加进 `data/eval/qa.jsonl`。
 3. 运行校验脚本（待实现）检查：schema 完整、偏移合法、`quote` 与偏移一致、
-   `document_id@revision` 存在于语料、无答案题的 `evidence` 为空、`question_id` 无重复。
+   `document_id@revision` 存在于语料、三类 `expected_behavior` 的字段组合合法、
+   `question_id` 无重复。引文超过 300 字符只给 warning，不作为失败。
 4. **凡是判断时犹豫超过 10 秒的，一律记入 `data/eval/hesitations.md`**，格式：
 
    ```
@@ -240,7 +273,8 @@ v0 **只收录能够完全由 canonical text 支持的问题**。依赖图片、
 2. §4.2 "直接陈述答案成分"这条判据，在实际文本上是否足够可操作。
 3. `reasoning_type` 四个取值是否够用，`multi_evidence` 与 `multi_hop` 的边界是否清晰。
 4. `unanswerable_reason` 是否需要在 `out_of_scope` / `false_premise` 之外增加取值。
-5. 每题实际耗时多少——这决定 100 题是否现实，以及是否需要引入自动辅助标注。
+5. `expected_behavior` 是否足以区分回答、拒答和纠正错误前提。
+6. 每题实际耗时多少——这决定 100 题是否现实，以及是否需要引入自动辅助标注。
 
 ## 9. 试标验收标准
 
