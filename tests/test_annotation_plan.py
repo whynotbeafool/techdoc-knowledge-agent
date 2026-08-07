@@ -5,6 +5,7 @@ from app.evaluation.plan import check_annotation_plan_files
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PLAN_PATH = PROJECT_ROOT / "data" / "eval" / "annotation-plan.json"
+QA_PATH = PROJECT_ROOT / "data" / "eval" / "qa.jsonl"
 
 
 def _load_plan() -> dict:
@@ -54,7 +55,7 @@ def _record_for_slot(slot: dict, document_id: str | None = None) -> dict:
         }
     return _evidence_record(
         slot["question_id"],
-        slot["reasoning_type"],
+        slot["reasoning_type"] or "single_evidence",
         slot["expected_behavior"],
         slot["target_stratum"],
         document_id or "rag_paper",
@@ -113,10 +114,35 @@ def test_plan_distribution_mismatch_is_an_error(tmp_path):
 
     report = check_annotation_plan_files(qa_path, plan_path)
 
-    assert any(
-        issue.severity == "error" and "distribution" in issue.message
-        for issue in report.issues
-    )
+    assert any(issue.severity == "error" and "distribution" in issue.message for issue in report.issues)
+
+
+def test_correct_premise_reasoning_type_is_discovered_from_evidence(tmp_path):
+    plan = _load_plan()
+    record = _evidence_record("q026", "multi_hop", "correct_premise", "low")
+    qa_path, plan_path = _write_inputs(tmp_path, plan, [record])
+
+    report = check_annotation_plan_files(qa_path, plan_path)
+
+    assert report.issues == ()
+
+
+def test_refuse_still_requires_planned_not_applicable_reasoning(tmp_path):
+    plan = _load_plan()
+    record = {
+        "question_id": "q021",
+        "question": "missing subject",
+        "reasoning_type": "single_evidence",
+        "expected_behavior": "refuse",
+        "evidence": [],
+    }
+    qa_path, plan_path = _write_inputs(tmp_path, plan, [record])
+
+    report = check_annotation_plan_files(qa_path, plan_path)
+    errors = [issue for issue in report.issues if issue.severity == "error"]
+
+    assert len(errors) == 1
+    assert errors[0].question_id == "q021"
 
 
 def test_complete_30_question_plan_has_no_errors(tmp_path):
@@ -129,6 +155,25 @@ def test_complete_30_question_plan_has_no_errors(tmp_path):
     assert [issue for issue in report.issues if issue.severity == "warning"] == []
     assert report.progress.completed == 25
     assert report.progress.next_pending is None
+
+
+def test_preexisting_category_mismatch_is_caught_before_plan_completion(tmp_path):
+    plan = _load_plan()
+    records = _complete_records(plan)[:5]
+    records[-1]["reasoning_type"] = "single_evidence"
+    qa_path, plan_path = _write_inputs(tmp_path, plan, records)
+
+    report = check_annotation_plan_files(qa_path, plan_path)
+    errors = [issue for issue in report.issues if issue.severity == "error"]
+
+    assert len(errors) == 1
+    assert errors[0].question_id == "<plan>"
+
+
+def test_committed_qa_conforms_to_annotation_plan():
+    report = check_annotation_plan_files(QA_PATH, PLAN_PATH)
+
+    assert [issue for issue in report.issues if issue.severity == "error"] == []
 
 
 def test_question_id_outside_plan_is_an_error(tmp_path):

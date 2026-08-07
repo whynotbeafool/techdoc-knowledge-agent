@@ -65,11 +65,15 @@
 | q023 | not_applicable | refuse | N/A |
 | q024 | not_applicable | refuse | N/A |
 | q025 | not_applicable | refuse | N/A |
-| q026 | single_evidence | correct_premise | low |
-| q027 | single_evidence | correct_premise | medium |
-| q028 | multi_evidence | correct_premise | medium |
-| q029 | multi_evidence | correct_premise | high |
-| q030 | multi_hop | correct_premise | high |
+| q026 | null（按纠正所需证据填写） | correct_premise | low |
+| q027 | null（按纠正所需证据填写） | correct_premise | medium |
+| q028 | null（按纠正所需证据填写） | correct_premise | medium |
+| q029 | null（按纠正所需证据填写） | correct_premise | high |
+| q030 | null（按纠正所需证据填写） | correct_premise | high |
+
+q026--q030 在计划中的 `reasoning_type: null` 表示**不预分配证据拓扑**，不是允许对应的
+`qa.jsonl` 记录填 `null`；实际记录仍须按最小充分反证填写 `single_evidence`、
+`multi_evidence` 或 `multi_hop`。
 
 题号一旦写入 `qa.jsonl` 就不得复用或重排。候选题若失败，保留该题号槽位并更换候选内容；不要
 把后续题号向前移动。
@@ -87,8 +91,9 @@
 1. 选定自然问题与候选证据，不查看新增题的 baseline 输出。
 2. 依次检查问题质量、语料支持类别、证据推理拓扑、金答案充分性、证据充分性。
 3. 写入派生的 `expected_behavior`，计算 `lexical_overlap`，确认落入 JSON 声明的目标层。
-4. 追加一条 `qa.jsonl` 记录并立即运行 `scripts/check_annotation_plan.py`；不得积累多题后
-   一次性修偏移。
+4. 追加一条 `qa.jsonl` 记录并立即依次运行 `python scripts/validate_eval.py` 和
+   `python scripts/check_annotation_plan.py`；前者检查记录的内在合法性，后者检查对当前 30 题
+   计划的符合性。不得积累多题后一次性修偏移。
 5. 任一人工维度犹豫超过 10 秒，立即写入 `hesitations.md` 并使用 `needs_review`。
 6. 以脚本打印的进度和下一个 pending 槽位为准；下一题开始前确认仍由本机独占编辑。
 

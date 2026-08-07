@@ -75,34 +75,22 @@
       "count": 5
     },
     {
-      "reasoning_type": "single_evidence",
+      "reasoning_type": null,
       "expected_behavior": "correct_premise",
       "target_stratum": "low",
       "count": 1
     },
     {
-      "reasoning_type": "single_evidence",
+      "reasoning_type": null,
       "expected_behavior": "correct_premise",
       "target_stratum": "medium",
-      "count": 1
+      "count": 2
     },
     {
-      "reasoning_type": "multi_evidence",
-      "expected_behavior": "correct_premise",
-      "target_stratum": "medium",
-      "count": 1
-    },
-    {
-      "reasoning_type": "multi_evidence",
+      "reasoning_type": null,
       "expected_behavior": "correct_premise",
       "target_stratum": "high",
-      "count": 1
-    },
-    {
-      "reasoning_type": "multi_hop",
-      "expected_behavior": "correct_premise",
-      "target_stratum": "high",
-      "count": 1
+      "count": 2
     }
   ],
   "final_category_counts": [
@@ -255,31 +243,31 @@
     },
     {
       "question_id": "q026",
-      "reasoning_type": "single_evidence",
+      "reasoning_type": null,
       "expected_behavior": "correct_premise",
       "target_stratum": "low"
     },
     {
       "question_id": "q027",
-      "reasoning_type": "single_evidence",
+      "reasoning_type": null,
       "expected_behavior": "correct_premise",
       "target_stratum": "medium"
     },
     {
       "question_id": "q028",
-      "reasoning_type": "multi_evidence",
+      "reasoning_type": null,
       "expected_behavior": "correct_premise",
       "target_stratum": "medium"
     },
     {
       "question_id": "q029",
-      "reasoning_type": "multi_evidence",
+      "reasoning_type": null,
       "expected_behavior": "correct_premise",
       "target_stratum": "high"
     },
     {
       "question_id": "q030",
-      "reasoning_type": "multi_hop",
+      "reasoning_type": null,
       "expected_behavior": "correct_premise",
       "target_stratum": "high"
     }

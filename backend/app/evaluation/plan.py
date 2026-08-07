@@ -22,6 +22,7 @@ VALID_REASONING_TYPES = {
     "multi_hop",
     "not_applicable",
 }
+EVIDENCE_REASONING_TYPES = VALID_REASONING_TYPES - {"not_applicable"}
 VALID_STRATA = {"low", "medium", "high", None}
 
 
@@ -87,10 +88,11 @@ def validate_annotation_plan(plan: dict, records: list[dict]) -> AnnotationPlanR
         if record is not None:
             issues.extend(_validate_record_against_slot(record, slot))
 
+    issues.extend(_validate_preexisting_categories(plan, slots, record_by_id, preexisting_ids))
     progress = _build_progress(slots, slot_order, set(record_by_id))
     all_expected_ids = set(slots) | preexisting_ids
     if all_expected_ids and all_expected_ids <= set(record_by_id):
-        issues.extend(_validate_final_invariants(plan, slots, record_by_id))
+        issues.extend(_corpus_coverage_warnings(plan, slots, record_by_id))
 
     return AnnotationPlanReport(tuple(issues), progress)
 
@@ -116,9 +118,7 @@ def _validate_plan_definition(
         preexisting_ids = set(preexisting)
         if len(preexisting_ids) != len(preexisting):
             issues.append(
-                ValidationIssue(
-                    "error", PLAN_QUESTION_ID, "preexisting_question_ids contains duplicates"
-                )
+                ValidationIssue("error", PLAN_QUESTION_ID, "preexisting_question_ids contains duplicates")
             )
 
     raw_slots = plan.get("slots")
@@ -136,9 +136,7 @@ def _validate_plan_definition(
     }
     for index, slot in enumerate(raw_slots, start=1):
         if not isinstance(slot, dict):
-            issues.append(
-                ValidationIssue("error", PLAN_QUESTION_ID, f"Slot {index} must be an object")
-            )
+            issues.append(ValidationIssue("error", PLAN_QUESTION_ID, f"Slot {index} must be an object"))
             continue
         question_id = slot.get("question_id", f"<slot-{index}>")
         missing = sorted(required_slot_fields - slot.keys())
@@ -152,16 +150,14 @@ def _validate_plan_definition(
             )
             continue
         if not isinstance(question_id, str):
-            issues.append(
-                ValidationIssue("error", PLAN_QUESTION_ID, f"Slot {index} has invalid question_id")
-            )
+            issues.append(ValidationIssue("error", PLAN_QUESTION_ID, f"Slot {index} has invalid question_id"))
             continue
         if question_id in slots:
             issues.append(ValidationIssue("error", question_id, "Duplicate plan question_id"))
             continue
         slots[question_id] = slot
         slot_order.append(question_id)
-        if slot["reasoning_type"] not in VALID_REASONING_TYPES:
+        if not _valid_planned_reasoning_type(slot["reasoning_type"], slot["expected_behavior"]):
             issues.append(ValidationIssue("error", question_id, "Invalid plan reasoning_type"))
         if slot["expected_behavior"] not in VALID_BEHAVIORS:
             issues.append(ValidationIssue("error", question_id, "Invalid plan expected_behavior"))
@@ -186,14 +182,8 @@ def _validate_plan_definition(
 
 def _validate_planned_slot_count(plan: dict, actual_count: int) -> list[ValidationIssue]:
     expected_count = plan.get("planned_slot_count")
-    if (
-        not isinstance(expected_count, int)
-        or isinstance(expected_count, bool)
-        or expected_count < 1
-    ):
-        return [
-            ValidationIssue("error", PLAN_QUESTION_ID, "planned_slot_count must be a positive integer")
-        ]
+    if not isinstance(expected_count, int) or isinstance(expected_count, bool) or expected_count < 1:
+        return [ValidationIssue("error", PLAN_QUESTION_ID, "planned_slot_count must be a positive integer")]
     if actual_count != expected_count:
         return [
             ValidationIssue(
@@ -208,9 +198,7 @@ def _validate_planned_slot_count(plan: dict, actual_count: int) -> list[Validati
 def _validate_question_id_range(plan: dict, slots: dict[str, dict]) -> list[ValidationIssue]:
     spec = plan.get("question_id_range")
     if not isinstance(spec, dict):
-        return [
-            ValidationIssue("error", PLAN_QUESTION_ID, "question_id_range must be an object")
-        ]
+        return [ValidationIssue("error", PLAN_QUESTION_ID, "question_id_range must be an object")]
     prefix = spec.get("prefix")
     start = spec.get("start")
     end = spec.get("end")
@@ -241,16 +229,12 @@ def _validate_question_id_range(plan: dict, slots: dict[str, dict]) -> list[Vali
 def _validate_expected_distribution(plan: dict, slots: dict[str, dict]) -> list[ValidationIssue]:
     entries = plan.get("expected_distribution")
     if not isinstance(entries, list):
-        return [
-            ValidationIssue("error", PLAN_QUESTION_ID, "expected_distribution must be an array")
-        ]
-    expected: Counter[tuple[str, str, str | None]] = Counter()
+        return [ValidationIssue("error", PLAN_QUESTION_ID, "expected_distribution must be an array")]
+    expected: Counter[tuple[str | None, str, str | None]] = Counter()
     for entry in entries:
         if not isinstance(entry, dict):
             return [
-                ValidationIssue(
-                    "error", PLAN_QUESTION_ID, "expected_distribution entries must be objects"
-                )
+                ValidationIssue("error", PLAN_QUESTION_ID, "expected_distribution entries must be objects")
             ]
         key = (
             entry.get("reasoning_type"),
@@ -259,17 +243,15 @@ def _validate_expected_distribution(plan: dict, slots: dict[str, dict]) -> list[
         )
         count = entry.get("count")
         if (
-            key[0] not in VALID_REASONING_TYPES
-            or key[1] not in VALID_BEHAVIORS
+            key[1] not in VALID_BEHAVIORS
+            or not _valid_planned_reasoning_type(key[0], key[1])
             or key[2] not in VALID_STRATA
             or not isinstance(count, int)
             or isinstance(count, bool)
             or count < 1
             or key in expected
         ):
-            return [
-                ValidationIssue("error", PLAN_QUESTION_ID, "Invalid expected_distribution")
-            ]
+            return [ValidationIssue("error", PLAN_QUESTION_ID, "Invalid expected_distribution")]
         expected[key] = count
     actual = Counter(
         (
@@ -299,9 +281,7 @@ def _validate_expected_distribution(plan: dict, slots: dict[str, dict]) -> list[
 def _validate_final_category_definition(plan: dict, expected_total: int) -> list[ValidationIssue]:
     entries = plan.get("final_category_counts")
     if not isinstance(entries, list):
-        return [
-            ValidationIssue("error", PLAN_QUESTION_ID, "final_category_counts must be an array")
-        ]
+        return [ValidationIssue("error", PLAN_QUESTION_ID, "final_category_counts must be an array")]
     total = 0
     seen: set[tuple[str, str | None]] = set()
     for entry in entries:
@@ -311,7 +291,7 @@ def _validate_final_category_definition(plan: dict, expected_total: int) -> list
         count = entry.get("count")
         if (
             key[0] not in VALID_BEHAVIORS
-            or (key[1] is not None and key[1] not in VALID_REASONING_TYPES)
+            or not _valid_final_category(key[1], key[0])
             or not isinstance(count, int)
             or isinstance(count, bool)
             or count < 1
@@ -364,15 +344,25 @@ def _index_records(records: list[dict]) -> dict[str, dict]:
 def _validate_record_against_slot(record: dict, slot: dict) -> list[ValidationIssue]:
     question_id = slot["question_id"]
     issues = []
-    for field in ("reasoning_type", "expected_behavior"):
-        if record.get(field) != slot[field]:
-            issues.append(
-                ValidationIssue(
-                    "error",
-                    question_id,
-                    f"{field} does not match plan: expected {slot[field]}, got {record.get(field)}",
-                )
+    if record.get("expected_behavior") != slot["expected_behavior"]:
+        issues.append(
+            ValidationIssue(
+                "error",
+                question_id,
+                "expected_behavior does not match plan: "
+                f"expected {slot['expected_behavior']}, got {record.get('expected_behavior')}",
             )
+        )
+    planned_reasoning_type = slot["reasoning_type"]
+    if planned_reasoning_type is not None and record.get("reasoning_type") != planned_reasoning_type:
+        issues.append(
+            ValidationIssue(
+                "error",
+                question_id,
+                "reasoning_type does not match plan: "
+                f"expected {planned_reasoning_type}, got {record.get('reasoning_type')}",
+            )
+        )
     actual_stratum = _record_stratum(record, question_id, issues)
     if actual_stratum != slot["target_stratum"]:
         issues.append(
@@ -449,55 +439,41 @@ def _build_progress(
     )
 
 
-def _validate_final_invariants(
+def _validate_preexisting_categories(
     plan: dict,
     slots: dict[str, dict],
     record_by_id: dict[str, dict],
+    preexisting_ids: set[str],
 ) -> list[ValidationIssue]:
-    issues: list[ValidationIssue] = []
-    expected_categories = {
-        (entry["expected_behavior"], entry.get("reasoning_type")): entry["count"]
-        for entry in plan.get("final_category_counts", [])
-        if isinstance(entry, dict)
-        and "expected_behavior" in entry
-        and "count" in entry
-    }
-    actual_categories = Counter(
+    if not preexisting_ids or not preexisting_ids <= set(record_by_id):
+        return []
+
+    final_categories = Counter(
+        {
+            (entry["expected_behavior"], entry.get("reasoning_type")): entry["count"]
+            for entry in plan.get("final_category_counts", [])
+            if isinstance(entry, dict) and "expected_behavior" in entry and "count" in entry
+        }
+    )
+    planned_categories = Counter(
+        _category_key(slot["expected_behavior"], slot["reasoning_type"]) for slot in slots.values()
+    )
+    expected_categories = final_categories.copy()
+    expected_categories.subtract(planned_categories)
+    actual_categories: Counter[tuple[str | None, str | None]] = Counter(
         _category_key(record.get("expected_behavior"), record.get("reasoning_type"))
         for question_id, record in record_by_id.items()
-        if question_id in set(slots) | set(plan.get("preexisting_question_ids", []))
+        if question_id in preexisting_ids
     )
     if actual_categories != expected_categories:
-        issues.append(
+        return [
             ValidationIssue(
                 "error",
                 PLAN_QUESTION_ID,
-                "Final 30-question category counts do not match the plan",
+                "Preexisting question category counts do not supply the plan's final balance",
             )
-        )
-
-    expected_strata = Counter(slot["target_stratum"] for slot in slots.values())
-    actual_strata: Counter[str | None] = Counter()
-    for question_id, slot in slots.items():
-        record = record_by_id[question_id]
-        actual = None
-        if record.get("expected_behavior") != "refuse":
-            question = record.get("question")
-            evidence = record.get("evidence")
-            if isinstance(question, str) and isinstance(evidence, list):
-                actual = lexical_overlap_stratum(lexical_overlap_score(question, evidence))
-        actual_strata[actual] += 1
-    if actual_strata != expected_strata:
-        issues.append(
-            ValidationIssue(
-                "error",
-                PLAN_QUESTION_ID,
-                "Final planned-question stratum counts do not match the plan",
-            )
-        )
-
-    issues.extend(_corpus_coverage_warnings(plan, slots, record_by_id))
-    return issues
+        ]
+    return []
 
 
 def _corpus_coverage_warnings(
@@ -535,6 +511,24 @@ def _corpus_coverage_warnings(
 
 def _category_key(behavior: str | None, reasoning_type: str | None) -> tuple[str | None, str | None]:
     return (behavior, reasoning_type if behavior == "answer" else None)
+
+
+def _valid_planned_reasoning_type(reasoning_type: object, behavior: object) -> bool:
+    if behavior == "correct_premise":
+        return reasoning_type is None
+    if behavior == "refuse":
+        return reasoning_type == "not_applicable"
+    return (
+        behavior == "answer"
+        and isinstance(reasoning_type, str)
+        and reasoning_type in EVIDENCE_REASONING_TYPES
+    )
+
+
+def _valid_final_category(reasoning_type: object, behavior: object) -> bool:
+    if behavior == "answer":
+        return isinstance(reasoning_type, str) and reasoning_type in EVIDENCE_REASONING_TYPES
+    return behavior in {"refuse", "correct_premise"} and reasoning_type is None
 
 
 def _category_label(category: tuple[str | None, str | None]) -> str:

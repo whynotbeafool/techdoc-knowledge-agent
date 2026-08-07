@@ -351,7 +351,7 @@ v1 不把它作为唯一主指标，因为它会把"命中部分证据"和"完�
 1. 从 `data/corpus/documents.jsonl` 中选定目标文档，用 `load_canonical_document()` 载入
    （会自动校验哈希），在 canonical text 上定位证据并读取偏移。
 2. 按 §3 填写记录，追加进 `data/eval/qa.jsonl`。
-3. 运行校验脚本（待实现）检查：schema 完整、偏移合法、`quote` 与偏移一致、
+3. 运行 `python scripts/validate_eval.py` 检查：schema 完整、偏移合法、`quote` 与偏移一致、
    `document_id@revision` 存在于语料、三类 `expected_behavior` 的字段组合合法、
    `question_id` 无重复。引文超过 300 字符只给 warning，不作为失败。
 4. **凡是判断时犹豫超过 10 秒的，一律记入 `data/eval/hesitations.md`**，格式：
