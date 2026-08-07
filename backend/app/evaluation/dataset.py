@@ -1,4 +1,5 @@
 import json
+import re
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -20,6 +21,15 @@ REQUIRED_FIELDS = {
     "split",
     "annotator",
     "created_at",
+}
+
+V1_REQUIRED_FIELDS = {"unanswerable_search", "lexical_overlap"}
+CONTENT_TOKEN_PATTERN = re.compile(r"[A-Za-z0-9_]+")
+CONTENT_STOPWORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "by", "did", "do", "does",
+    "for", "from", "how", "in", "is", "it", "of", "on", "or", "that", "the",
+    "this", "to", "was", "were", "what", "when", "where", "which", "who", "why",
+    "with",
 }
 
 
@@ -73,6 +83,9 @@ def validate_qa_dataset(qa_path: Path, corpus_dir: Path) -> list[ValidationIssue
 
         issues.extend(_validate_record_fields(record))
         issues.extend(_validate_evidence(record, corpus_dir, document_cache))
+        issues.extend(
+            _validate_search_audit(record, corpus_dir, document_cache)
+        )
 
     return issues
 
@@ -80,12 +93,31 @@ def validate_qa_dataset(qa_path: Path, corpus_dir: Path) -> list[ValidationIssue
 def _validate_record_fields(record: dict) -> list[ValidationIssue]:
     question_id = record["question_id"]
     issues = []
-    if record["schema_version"] != "0.2":
+    if record["schema_version"] not in {"0.2", "0.3"}:
         issues.append(ValidationIssue("error", question_id, "Unsupported schema_version"))
-    if record["guideline_version"] != "0":
+    if record["guideline_version"] not in {"0", "1"}:
         issues.append(
             ValidationIssue("error", question_id, "Unsupported guideline_version")
         )
+    if (record["schema_version"], record["guideline_version"]) not in {
+        ("0.2", "0"),
+        ("0.3", "1"),
+    }:
+        issues.append(
+            ValidationIssue(
+                "error", question_id, "schema_version and guideline_version do not match"
+            )
+        )
+    if record["guideline_version"] == "1":
+        missing_v1 = sorted(V1_REQUIRED_FIELDS - record.keys())
+        if missing_v1:
+            issues.append(
+                ValidationIssue(
+                    "error",
+                    question_id,
+                    f"Missing v1 fields: {', '.join(missing_v1)}",
+                )
+            )
     if not isinstance(record["question"], str) or not record["question"].strip():
         issues.append(ValidationIssue("error", question_id, "question must be non-empty"))
     if record["answerability"] not in {"answerable", "unanswerable"}:
@@ -203,6 +235,200 @@ def _validate_record_fields(record: dict) -> list[ValidationIssue]:
                 )
             )
 
+    if record["guideline_version"] == "1" and not (V1_REQUIRED_FIELDS - record.keys()):
+        issues.extend(_validate_v1_design_fields(record))
+
+    return issues
+
+
+def _validate_v1_design_fields(record: dict) -> list[ValidationIssue]:
+    question_id = record["question_id"]
+    issues = []
+    search_audit = record["unanswerable_search"]
+    overlap = record["lexical_overlap"]
+
+    if record["expected_behavior"] == "refuse":
+        if not isinstance(search_audit, dict):
+            issues.append(
+                ValidationIssue("error", question_id, "refuse requires unanswerable_search")
+            )
+    elif search_audit is not None:
+        issues.append(
+            ValidationIssue(
+                "error", question_id, "unanswerable_search is only valid for refuse"
+            )
+        )
+
+    if record["expected_behavior"] == "refuse":
+        if overlap is not None:
+            issues.append(
+                ValidationIssue("error", question_id, "refuse requires null lexical_overlap")
+            )
+        return issues
+
+    if not isinstance(overlap, dict):
+        issues.append(
+            ValidationIssue("error", question_id, "evidence-bearing records require lexical_overlap")
+        )
+        return issues
+    if overlap.get("metric") != "question_content_token_recall_in_evidence":
+        issues.append(ValidationIssue("error", question_id, "Invalid lexical overlap metric"))
+        return issues
+    expected_score = lexical_overlap_score(record["question"], record["evidence"])
+    score = overlap.get("score")
+    if not isinstance(score, (int, float)) or isinstance(score, bool):
+        issues.append(ValidationIssue("error", question_id, "Invalid lexical overlap score"))
+        return issues
+    if abs(score - expected_score) > 0.00005:
+        issues.append(
+            ValidationIssue(
+                "error",
+                question_id,
+                f"Lexical overlap score mismatch: expected {expected_score:.4f}, got {score}",
+            )
+        )
+    expected_stratum = lexical_overlap_stratum(expected_score)
+    if overlap.get("stratum") != expected_stratum:
+        issues.append(
+            ValidationIssue(
+                "error",
+                question_id,
+                f"Lexical overlap stratum mismatch: expected {expected_stratum}",
+            )
+        )
+    return issues
+
+
+def lexical_overlap_score(question: str, evidence: list[dict]) -> float:
+    question_tokens = _content_tokens(question)
+    evidence_tokens = _content_tokens(
+        " ".join(item.get("quote", "") for item in evidence if isinstance(item, dict))
+    )
+    if not question_tokens:
+        return 0.0
+    return round(len(question_tokens & evidence_tokens) / len(question_tokens), 4)
+
+
+def lexical_overlap_stratum(score: float) -> str:
+    if score < 0.25:
+        return "low"
+    if score < 0.50:
+        return "medium"
+    return "high"
+
+
+def _content_tokens(text: str) -> set[str]:
+    return {
+        token
+        for token in CONTENT_TOKEN_PATTERN.findall(text.lower())
+        if token not in CONTENT_STOPWORDS
+    }
+
+
+def _validate_search_audit(
+    record: dict,
+    corpus_dir: Path,
+    document_cache: dict[tuple[str, str], LoadedCanonicalDocument],
+) -> list[ValidationIssue]:
+    if record.get("guideline_version") != "1" or record.get("expected_behavior") != "refuse":
+        return []
+    question_id = record["question_id"]
+    audit = record.get("unanswerable_search")
+    if not isinstance(audit, dict):
+        return []
+
+    issues = []
+    searched_terms = audit.get("searched_terms")
+    searched_term_items = searched_terms if isinstance(searched_terms, list) else []
+    distinct_terms = {
+        term.strip().lower()
+        for term in searched_term_items
+        if isinstance(term, str) and term.strip()
+    }
+    if not isinstance(searched_terms, list) or len(distinct_terms) < 2:
+        issues.append(
+            ValidationIssue(
+                "error",
+                question_id,
+                "unanswerable_search requires at least two distinct searched_terms",
+            )
+        )
+
+    candidates = audit.get("candidate_checks")
+    if not isinstance(candidates, list) or not candidates:
+        issues.append(
+            ValidationIssue(
+                "error",
+                question_id,
+                "unanswerable_search requires at least one candidate check",
+            )
+        )
+        return issues
+
+    required = {
+        "document_id",
+        "revision",
+        "start_char",
+        "end_char",
+        "quote",
+        "reason_not_answer",
+    }
+    for index, candidate in enumerate(candidates, start=1):
+        if not isinstance(candidate, dict):
+            issues.append(
+                ValidationIssue("error", question_id, f"Candidate check {index} must be an object")
+            )
+            continue
+        missing = sorted(required - candidate.keys())
+        if missing:
+            issues.append(
+                ValidationIssue(
+                    "error",
+                    question_id,
+                    f"Candidate check {index} is missing fields: {', '.join(missing)}",
+                )
+            )
+            continue
+        if not isinstance(candidate["reason_not_answer"], str) or not candidate["reason_not_answer"].strip():
+            issues.append(
+                ValidationIssue(
+                    "error", question_id, f"Candidate check {index} needs reason_not_answer"
+                )
+            )
+        key = (candidate["document_id"], candidate["revision"])
+        try:
+            if key not in document_cache:
+                document_cache[key] = load_canonical_document(
+                    corpus_dir, document_id=key[0], revision=key[1]
+                )
+            document = document_cache[key]
+        except (KeyError, OSError, ValueError) as exc:
+            issues.append(
+                ValidationIssue(
+                    "error",
+                    question_id,
+                    f"Cannot load candidate revision {key[0]}@{key[1]}: {exc}",
+                )
+            )
+            continue
+        start = candidate["start_char"]
+        end = candidate["end_char"]
+        if (
+            not isinstance(start, int)
+            or isinstance(start, bool)
+            or not isinstance(end, int)
+            or isinstance(end, bool)
+            or not 0 <= start < end <= len(document.text)
+        ):
+            issues.append(
+                ValidationIssue(
+                    "error", question_id, f"Invalid candidate span {index}: [{start}, {end})"
+                )
+            )
+        elif document.text[start:end] != candidate["quote"]:
+            issues.append(
+                ValidationIssue("error", question_id, f"Candidate quote mismatch at {index}")
+            )
     return issues
 
 

@@ -3,9 +3,11 @@
 import argparse
 import hashlib
 import json
+import platform
 import sys
 import tempfile
 from datetime import datetime, timezone
+from importlib.metadata import version
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -98,8 +100,10 @@ def main() -> int:
             "dense": {
                 "implementation": "chromadb.DefaultEmbeddingFunction",
                 "model": "all-MiniLM-L6-v2",
+                "chromadb_version": version("chromadb"),
             },
         },
+        "python_version": platform.python_version(),
         "corpus": [
             {
                 "document_id": record["document_id"],
@@ -136,6 +140,7 @@ def _evaluate_method(
                 "run_id": run_id,
                 "method": method,
                 "question_id": record["question_id"],
+                "annotation_status": record["annotation_status"],
                 "expected_behavior": record["expected_behavior"],
                 "reasoning_type": record["reasoning_type"],
                 "retrieved": [
@@ -163,30 +168,44 @@ def _evaluate_method(
 
 def _print_summary(rows: list[dict]) -> None:
     for method in ("bm25", "dense"):
-        method_rows = [
+        answer_rows = [
             row
             for row in rows
             if row["method"] == method and row["expected_behavior"] == "answer"
         ]
-        values = [
-            row["metrics"]["evidence_recall_at_5"] for row in method_rows
+        confirmed_answer_rows = [
+            row for row in answer_rows if row["annotation_status"] == "confirmed"
         ]
-        macro_recall = sum(values) / len(values) if values else float("nan")
         correction_rows = [
             row
             for row in rows
             if row["method"] == method
             and row["expected_behavior"] == "correct_premise"
         ]
-        correction_recall = (
-            correction_rows[0]["metrics"]["evidence_recall_at_5"]
-            if correction_rows
-            else None
-        )
+        confirmed_correction_rows = [
+            row for row in correction_rows if row["annotation_status"] == "confirmed"
+        ]
         print(
-            f"{method}: answerable macro Evidence Recall@5={macro_recall:.3f}; "
-            f"false-premise counter-evidence Recall@5={correction_recall}"
+            f"{method}: answerable macro Evidence Recall@5 "
+            f"(all={_mean_recall_at_5(answer_rows):.3f}, n={len(answer_rows)}; "
+            f"confirmed-only={_mean_recall_at_5(confirmed_answer_rows):.3f}, "
+            f"n={len(confirmed_answer_rows)}); "
+            f"false-premise counter-evidence Recall@5 "
+            f"(all={_format_optional_recall(correction_rows)}, n={len(correction_rows)}; "
+            f"confirmed-only={_format_optional_recall(confirmed_correction_rows)}, "
+            f"n={len(confirmed_correction_rows)})"
         )
+
+
+def _mean_recall_at_5(rows: list[dict]) -> float:
+    values = [row["metrics"]["evidence_recall_at_5"] for row in rows]
+    return sum(values) / len(values) if values else float("nan")
+
+
+def _format_optional_recall(rows: list[dict]) -> str:
+    if not rows:
+        return "n/a"
+    return f"{_mean_recall_at_5(rows):.3f}"
 
 
 def _load_jsonl(path: Path) -> list[dict]:

@@ -18,8 +18,8 @@ class Chunk:
     source: str
     page: Optional[int]
     text: str
-    start_char: Optional[int] = None
-    end_char: Optional[int] = None
+    start_char: int
+    end_char: int
     document_id: Optional[str] = None
     revision: Optional[str] = None
 

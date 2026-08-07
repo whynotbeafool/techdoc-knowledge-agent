@@ -210,3 +210,6 @@ chunk.text == canonical_text[chunk.start_char:chunk.end_char]
 
 **兼容边界**：`chunk_pages(RawPage)` 仅服务于未进入冻结语料的交互式上传 MVP；
 正式评测必须使用 `load_canonical_document()` 后调用 `chunk_canonical_document()`。
+
+**覆盖边界**：chunk 不完整覆盖 canonical text。切分时被 trim 掉的段落间空白和页间分隔符
+不属于任何 chunk；金标准证据必须锚定有语义内容的字符区间，不能只标这些空白。

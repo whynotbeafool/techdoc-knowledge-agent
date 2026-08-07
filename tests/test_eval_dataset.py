@@ -116,3 +116,84 @@ def test_validate_qa_dataset_warns_for_long_quote(tmp_path):
     issues = validate_qa_dataset(qa_path, corpus_dir)
 
     assert any(issue.severity == "warning" for issue in issues)
+
+
+def test_validate_v1_record_recomputes_lexical_overlap(tmp_path):
+    qa_path, corpus_dir, record = _build_record(tmp_path)
+    record.update(
+        {
+            "schema_version": "0.3",
+            "guideline_version": "1",
+            "unanswerable_search": None,
+            "lexical_overlap": {
+                "metric": "question_content_token_recall_in_evidence",
+                "score": 1.0,
+                "stratum": "high",
+            },
+        }
+    )
+    _write_record(qa_path, record)
+
+    assert validate_qa_dataset(qa_path, corpus_dir) == []
+
+
+def test_validate_v1_refusal_requires_search_terms_and_candidate_check(tmp_path):
+    qa_path, corpus_dir, record = _build_record(tmp_path)
+    quote = record["evidence"][0]["quote"]
+    record.update(
+        {
+            "schema_version": "0.3",
+            "guideline_version": "1",
+            "answerability": "unanswerable",
+            "expected_behavior": "refuse",
+            "unanswerable_reason": "out_of_scope",
+            "reasoning_type": "not_applicable",
+            "reference_answer": None,
+            "evidence": [],
+            "unanswerable_search": {
+                "searched_terms": ["missing concept", "absent topic"],
+                "candidate_checks": [
+                    {
+                        "document_id": "doc",
+                        "revision": "v1",
+                        "start_char": 0,
+                        "end_char": len(quote),
+                        "quote": quote,
+                        "reason_not_answer": "This only supports a different answer.",
+                    }
+                ],
+            },
+            "lexical_overlap": None,
+        }
+    )
+    _write_record(qa_path, record)
+
+    assert validate_qa_dataset(qa_path, corpus_dir) == []
+
+
+def test_validate_v1_refusal_rejects_non_list_search_terms(tmp_path):
+    qa_path, corpus_dir, record = _build_record(tmp_path)
+    record.update(
+        {
+            "schema_version": "0.3",
+            "guideline_version": "1",
+            "answerability": "unanswerable",
+            "expected_behavior": "refuse",
+            "unanswerable_reason": "out_of_scope",
+            "reasoning_type": "not_applicable",
+            "reference_answer": None,
+            "evidence": [],
+            "unanswerable_search": {
+                "searched_terms": 42,
+                "candidate_checks": [],
+            },
+            "lexical_overlap": None,
+        }
+    )
+    _write_record(qa_path, record)
+
+    messages = [
+        issue.message for issue in validate_qa_dataset(qa_path, corpus_dir)
+    ]
+
+    assert any("at least two distinct searched_terms" in message for message in messages)

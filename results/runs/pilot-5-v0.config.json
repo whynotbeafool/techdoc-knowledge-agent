@@ -36,10 +36,12 @@
       "tokenizer": "[A-Za-z0-9_]+"
     },
     "dense": {
+      "chromadb_version": "1.5.9",
       "implementation": "chromadb.DefaultEmbeddingFunction",
       "model": "all-MiniLM-L6-v2"
     }
   },
+  "python_version": "3.13.5",
   "qa_file": "data/eval/qa.jsonl",
   "qa_hash": "sha256:ab3b39c08437585eb0f5368c5e50a039690f76958d4062eee1b20a6dce219dac",
   "question_count": 5,
