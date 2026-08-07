@@ -98,13 +98,37 @@ python -m pytest tests/ -q && ruff check .
 | `data/raw_docs/*.pdf` 等 5 份源文档 | `build_canonical.py`、`build_index.py` | 从公开地址重新下载；或从另一台机器手工拷贝。语料已冻结，日常研究用不到它们 |
 | `data/vector_store/` | Streamlit 演示 | `python scripts/build_index.py` 重建（需要 raw_docs） |
 
+### 两台机器可以并行，但要按文件类型分工
+
+**不需要固定在一台机器上工作。** 冲突风险取决于改的是哪类文件，不取决于机器。
+
+| 可以并行改 | 为什么安全 |
+|---|---|
+| `data/eval/qa.jsonl` | 槽位由 `annotation-plan.json` 预分配，认领不同 `question_id` 就不会撞；逐行追加，万一冲突保留双方即可。`validate_eval.py` 另有重复 id 检查兜底 |
+| `results/runs/*` | 每次 run 独立文件，且 `evaluate_retrieval.py` 拒绝覆盖已存在的 run_id |
+| `data/corpus/**` | 冻结后不可变，不会被编辑 |
+| 代码与测试 | git 常规合并 |
+
+| 不要并行改 | 为什么 |
+|---|---|
+| `docs/annotation-guideline.md`、`data/eval/hesitations.md`、`data/eval/annotation-plan.md`、`CLAUDE.md` | 散文，整体重写，合并代价高且容易改错语义 |
+
+**`data/eval/annotation-plan.json` 是槽位的权威来源**，同时承担进度追踪和多机分工两个职责。
+
+标注前后的固定动作：
+
+```bash
+git pull
+python scripts/check_annotation_plan.py   # 看 Next pending，认领槽位后再动手
+# ...标注...
+python scripts/validate_eval.py && python scripts/check_annotation_plan.py
+git push
+```
+
 ### 平台差异
 
 - 本项目在 **Windows（PowerShell）** 和 **macOS/Linux（bash）** 上都能跑，
   但两边的 shell 语法不同，跨机器抄命令时注意。
-- **换机器后第一件事是 `git pull`**，最后一件事是 `git push`。两台机器都改同一批文件很容易冲突，
-  尤其 `data/eval/qa.jsonl` 和 `docs/annotation-guideline.md` 是逐行追加/整体重写的文本，
-  合并起来很烦。**同一时间只在一台机器上改标注数据。**
 - macOS 默认不做 CRLF 转换，但 `.gitattributes` 仍然必须保留——它保护的是 Windows 那一侧。
 
 ## 参考文档
