@@ -3,10 +3,10 @@
 ## 结论先行
 
 谢倩倩组的主线不是通用搜索引擎或纯 IR，但已经明确进入“检索 + 推理 + 事实性评测”：2025 年的
-RAEmoLLM 使用检索到的跨域样本做 in-context learning；2026 年又出现 RAAR、Plan Then Retrieve、
-DR³-Eval、TVIR 以及深度研究轨迹错误定位。因此，本项目的 BM25/Dense/Hybrid/Rerank、证据覆盖、
-拒答和可复核评测不是无人指导的旁支，最合适的定位是：**为她的垂域高风险生成与深度研究评测
-补上可诊断、可复现的 retrieval layer**。但如果把研究目标写成纯索引结构或检索模型训练，匹配度会下降。
+RAEmoLLM 使用检索到的跨域样本做 in-context learning，之后又有 Plan Then Retrieve 和 RAAR；FinCDM
+则继续强调细粒度能力诊断。因此，本项目的 BM25/Dense/Hybrid/Rerank、证据覆盖、拒答和可复核评测
+不是无人指导的旁支，最合适的定位是：**为她的垂域高风险生成与 agentic reasoning 补上可诊断、
+可复现的 retrieval layer**。但如果把研究目标写成纯索引结构或检索模型训练，匹配度会下降。
 
 武汉大学人工智能学院 2026 硕士口径为：`140500 智能科学与技术`（学术学位）和
 `085410 人工智能`（专业学位），不能沿用计算机学院的专业名称与培养单位口径。
@@ -30,8 +30,8 @@ generation、faithfulness 分层诊断；无答案与事实性判断需要可复
 作者单位包含 The Fin AI、武汉大学、曼彻斯特大学及多所合作高校；谢倩倩为第一作者，论文列出的
 武汉大学合作者与 Min Peng 团队说明她的金融 NLP 线有稳定的本地协作网络。
 
-第一遍（问题—贡献—结论）：FinBen 将 36 个数据集、24 个金融任务组织为 IE、文本分析、QA、生成、
-风险管理、预测和决策七类，并首次把交易 agent 与 RAG 纳入较完整的金融 LLM 评测。15 个模型的结果
+第一遍（问题—贡献—结论）：FinBen 最终版覆盖 42 个数据集、24 个金融任务和 8 个能力方面，并把
+agent-based evaluation 与 RAG-based evaluation 纳入较完整的金融 LLM 评测。21 个模型的结果
 表明：基础抽取/分析已较强，生成、预测、复杂推理仍弱，领域 instruction tuning 对复杂任务并不自动有效。
 
 第二遍（方法与证据）：任务设计强调 broad coverage、真实应用、领域特征和人类认知能力；指标随任务
@@ -47,8 +47,8 @@ retriever 消融。该论文真正可迁移到本项目的是“分能力、分�
 ### Factual Consistency Evaluation of Summarisation in the Era of Large Language Models
 
 来源：[arXiv](https://arxiv.org/abs/2402.13758)，Expert Systems with Applications 254 (2024) 124456。
-作者为 Zheheng Luo、Qianqian Xie、Sophia Ananiadou；论文单位为曼彻斯特大学。作者贡献声明中谢倩倩
-参与 conceptualization、写作和 supervision。
+作者为 Zheheng Luo、Qianqian Xie、Sophia Ananiadou；论文首页将 Luo 与 Ananiadou 列为曼彻斯特大学，
+将谢倩倩列为 The Fin AI。谢倩倩为通讯作者，并在贡献声明中参与 conceptualization、写作和 supervision。
 
 第一遍：论文指出现有 factual consistency 评测集中在新闻，构建由循证医学专家标注的 TreatFact：
 170 篇临床研究摘要及 ChatGPT/Vicuna 生成摘要；同时在新闻与临床域比较 11 个 LLM/传统指标。
@@ -64,33 +64,26 @@ counter-evidence 与拒答真值，把 RAGAS/LLM judge 当补充指标；`out_of
 最相关候选人工排除记录。对导师匹配而言，项目的证据覆盖与拒答研究正对她的“高风险域事实准确性”，
 而检索层比较提供了该论文未拆开的上游误差来源。
 
-## 2026 论文核实：她的组是否碰检索
+## 2025 年 5 月入职武汉大学后的产出核实
 
-我按武汉大学主页给出的 Google Scholar ID `UYW7X_0AAAAJ` 定位作者记录；Scholar 动态页在当前环境
-未能稳定导出 2026 列表，因此以下条目以 Scholar 检索线索为起点，再用 arXiv、ACM/ACL Anthology
-和 DBLP 逐条交叉核实，避免把同名作者混入。这里不把“检索到 Scholar 入口”误写成“已完整导出主页”。
+我按武汉大学主页给出的 Google Scholar ID `UYW7X_0AAAAJ` 定位作者记录，再用论文首页、ACM、
+ACL Anthology 和 arXiv 逐条核对单位。完整清单与证据见 `docs/literature-notes.md`；套磁材料只能把
+论文首页明确列武汉大学或正式作者记录能稳定归一的条目算作她的入职后产出。
 
-- **RAAR: Retrieval Augmented Agentic Reasoning for Cross-Domain Misinformation Detection**
-  ([arXiv](https://arxiv.org/abs/2601.04853))：检索语义、情感、写作风格多视角源域证据，再由专门 agent
-  形成可验证推理路径，并训练 verifier。谢倩倩为作者之一。
-- **Plan Then Retrieve: Reinforcement Learning-Guided Complex Reasoning over Knowledge Graphs**
-  ([ACM DOI](https://doi.org/10.1145/3774904.3792191))：WWW 2026；先规划再检索知识图谱，谢倩倩单位明确列为
-  武汉大学人工智能学院/语言与信息中心。
-- **DR³-Eval: Towards Realistic and Reproducible Deep Research Evaluation**
-  ([arXiv](https://arxiv.org/abs/2604.14683))：谢倩倩第一作者；每题配置静态 research sandbox corpus，含
-  supportive documents、distractors 和 noise，并评 Information Recall、Factual Accuracy、Citation Coverage、
-  Instruction Following、Depth Quality。这与本项目“冻结语料 + 检索召回 + 引用覆盖”最直接对齐。
-- **TVIR: Building Deep Research Agents Towards Text--Visual Interleaved Report Generation**
-  ([arXiv](https://arxiv.org/abs/2606.02320))：显式检索图片、生成可追溯图表并做文图双路径评测。
-- **Where Do Deep-Research Agents Go Wrong?**
-  ([arXiv](https://arxiv.org/abs/2606.02060))：基于真实 search/tool/evidence trajectories 做 span-level
-  error localization，关注未支持或冲突 claim 如何污染答案路径。
-- ACL 2026 另有 MultiFinBen、ClinicalSkillQA、EmCellLLM、TaxPraBen 等 benchmark 工作，继续强化她的
-  垂域评测取向；其中 MultiFinBen 已要求跨语言、多模态证据整合。
+- **RAEmoLLM**（ACL 2025）：检索情感相近的跨域示例用于 in-context learning，谢倩倩署名武汉大学。
+- **Plan Then Retrieve**（WWW 2026）：学习何时查知识图谱、何时查 Web，正式出版页列武汉大学单位。
+- **RAAR**（2026）：按语义、情感和写作风格检索多视角证据，再构造可验证推理路径。
+- **MoodAngels**（NeurIPS 2025）：检索 DSM-5 条目和相似病例，作为高风险域 RAG 系统的旁证。
+- **FinCDM、MultiFinBen、TaxPraBen**：延续细粒度能力诊断和垂域 benchmark 主线；其中 MultiFinBen
+  论文首页仍列 The FinAI，套磁时不能笼统称为武大署名论文。
 
-判断：她的组不仅“碰检索”，而且 2026 年把检索推进到 agentic reasoning 与 deep-research evaluation。
-项目的半套 IR 工作是可被指导的补充；最强套磁切口是 DR³-Eval 的静态可验证 corpus 与 retrieval robustness，
-其次是 RAAR 的多视角 evidence retrieval。不要把自己写成要在她组内独立做传统 IR leaderboard。
+同名风险必须单独处理：DR³-Eval、Where Do Deep-Research Agents Go Wrong?/TELBench 和 TVIR 的
+论文首页把 `Qianqian Xie` 列在南京大学/NJU-LINK 作者组，DR³-Eval 还给出南京大学学生邮箱。
+在得到 ORCID、作者主页或本人确认前，这三篇不得归入武汉大学谢倩倩教授的成果。
+
+判断：已经确认的 **RAEmoLLM → Plan Then Retrieve → RAAR** 足以证明她的研究进入检索增强与
+agentic reasoning；最稳妥的套磁切口是为这条主线补充可诊断、可复现的 retrieval evaluation，
+而不是借同名作者的 deep-research 工作夸大匹配度，也不要把自己写成要做传统 IR leaderboard。
 
 ## 第二组：RAG/IR 对照文献
 
