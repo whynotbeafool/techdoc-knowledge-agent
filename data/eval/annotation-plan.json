@@ -1,0 +1,298 @@
+{
+  "plan_version": "1",
+  "planned_slot_count": 25,
+  "question_id_range": {
+    "prefix": "q",
+    "start": 6,
+    "end": 30
+  },
+  "preexisting_question_ids": [
+    "q001",
+    "q002",
+    "q003",
+    "q004",
+    "q005"
+  ],
+  "expected_distribution": [
+    {
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "low",
+      "count": 2
+    },
+    {
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "medium",
+      "count": 2
+    },
+    {
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "high",
+      "count": 1
+    },
+    {
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "low",
+      "count": 2
+    },
+    {
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "medium",
+      "count": 1
+    },
+    {
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "high",
+      "count": 2
+    },
+    {
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "answer",
+      "target_stratum": "low",
+      "count": 2
+    },
+    {
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "answer",
+      "target_stratum": "medium",
+      "count": 2
+    },
+    {
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "answer",
+      "target_stratum": "high",
+      "count": 1
+    },
+    {
+      "reasoning_type": "not_applicable",
+      "expected_behavior": "refuse",
+      "target_stratum": null,
+      "count": 5
+    },
+    {
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "low",
+      "count": 1
+    },
+    {
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "medium",
+      "count": 1
+    },
+    {
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "medium",
+      "count": 1
+    },
+    {
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "high",
+      "count": 1
+    },
+    {
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "high",
+      "count": 1
+    }
+  ],
+  "final_category_counts": [
+    {
+      "expected_behavior": "answer",
+      "reasoning_type": "single_evidence",
+      "count": 6
+    },
+    {
+      "expected_behavior": "answer",
+      "reasoning_type": "multi_evidence",
+      "count": 6
+    },
+    {
+      "expected_behavior": "answer",
+      "reasoning_type": "multi_hop",
+      "count": 6
+    },
+    {
+      "expected_behavior": "refuse",
+      "reasoning_type": null,
+      "count": 6
+    },
+    {
+      "expected_behavior": "correct_premise",
+      "reasoning_type": null,
+      "count": 6
+    }
+  ],
+  "slots": [
+    {
+      "question_id": "q006",
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "low"
+    },
+    {
+      "question_id": "q007",
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "low"
+    },
+    {
+      "question_id": "q008",
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "medium"
+    },
+    {
+      "question_id": "q009",
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "medium"
+    },
+    {
+      "question_id": "q010",
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "high"
+    },
+    {
+      "question_id": "q011",
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "low"
+    },
+    {
+      "question_id": "q012",
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "low"
+    },
+    {
+      "question_id": "q013",
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "medium"
+    },
+    {
+      "question_id": "q014",
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "high"
+    },
+    {
+      "question_id": "q015",
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "answer",
+      "target_stratum": "high"
+    },
+    {
+      "question_id": "q016",
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "answer",
+      "target_stratum": "low"
+    },
+    {
+      "question_id": "q017",
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "answer",
+      "target_stratum": "low"
+    },
+    {
+      "question_id": "q018",
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "answer",
+      "target_stratum": "medium"
+    },
+    {
+      "question_id": "q019",
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "answer",
+      "target_stratum": "medium"
+    },
+    {
+      "question_id": "q020",
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "answer",
+      "target_stratum": "high"
+    },
+    {
+      "question_id": "q021",
+      "reasoning_type": "not_applicable",
+      "expected_behavior": "refuse",
+      "target_stratum": null
+    },
+    {
+      "question_id": "q022",
+      "reasoning_type": "not_applicable",
+      "expected_behavior": "refuse",
+      "target_stratum": null
+    },
+    {
+      "question_id": "q023",
+      "reasoning_type": "not_applicable",
+      "expected_behavior": "refuse",
+      "target_stratum": null
+    },
+    {
+      "question_id": "q024",
+      "reasoning_type": "not_applicable",
+      "expected_behavior": "refuse",
+      "target_stratum": null
+    },
+    {
+      "question_id": "q025",
+      "reasoning_type": "not_applicable",
+      "expected_behavior": "refuse",
+      "target_stratum": null
+    },
+    {
+      "question_id": "q026",
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "low"
+    },
+    {
+      "question_id": "q027",
+      "reasoning_type": "single_evidence",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "medium"
+    },
+    {
+      "question_id": "q028",
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "medium"
+    },
+    {
+      "question_id": "q029",
+      "reasoning_type": "multi_evidence",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "high"
+    },
+    {
+      "question_id": "q030",
+      "reasoning_type": "multi_hop",
+      "expected_behavior": "correct_premise",
+      "target_stratum": "high"
+    }
+  ],
+  "corpus_coverage": {
+    "document_ids": [
+      "rag_paper",
+      "autonomous_driving_survey",
+      "fastapi_first_steps",
+      "kubernetes_overview",
+      "pep8"
+    ],
+    "min_per_document": 3,
+    "max_per_document": 5
+  }
+}

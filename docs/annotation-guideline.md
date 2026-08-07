@@ -423,8 +423,9 @@ inter-annotator agreement；同一人的稳定偏差可能在两轮中重复出�
    不设单一总分。
 9. 30 题中分层抽取 14 题做至少间隔 14 天的盲化自我复标，并按维度报告一致性与 limitation。
 10. RQ1 固定补报 Evidence Recall@1 和 first-relevant-chunk MRR@5，以缓解 Recall@5 天花板效应。
-11. 剩余 25 题按 `data/eval/annotation-plan.md` 的题型与词汇重叠配额执行；代码指标实现不再
-    阻塞标注，但必须在首次 30 题正式运行前完成。
+11. 剩余 25 题按 `data/eval/annotation-plan.json` 的机器规范执行；
+    `data/eval/annotation-plan.md` 只保留论证与人工说明。代码指标实现不再阻塞标注，但必须在
+    首次 30 题正式运行前完成。
 
 ## 9. 批量标注启动门槛
 
@@ -438,7 +439,7 @@ inter-annotator agreement；同一人的稳定偏差可能在两轮中重复出�
 - [x] 五个人工判断维度、两个派生校验字段、14/30 延迟复标方案及 limitation 已锁定
 - [x] Recall@1 与 MRR@5 的用途和计算口径已锁定
 - [x] 校验器已能验证 v0 历史记录与 v1 新记录，且 v1 专属字段可机械复算
-- [x] 已在 `data/eval/annotation-plan.md` 锁定剩余题目的题型与 low / medium / high 配额
+- [x] 已在 `data/eval/annotation-plan.json` 锁定剩余题目的题型与 low / medium / high 配额
 - [x] 已确认标注数据在同一时间只由当前 Desktop 仓库编辑
 
 ### 9.1 首次 30 题正式运行前门槛
