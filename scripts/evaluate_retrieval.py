@@ -16,6 +16,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "backend"))
 from app.corpus import load_canonical_document  # noqa: E402
 from app.evaluation.dataset import load_qa_jsonl, validate_qa_dataset  # noqa: E402
 from app.evaluation.retrieval import BM25Retriever, retrieval_metrics  # noqa: E402
+from app.evaluation.summary import build_run_summary  # noqa: E402
 from app.rag.chunker import chunk_canonical_document  # noqa: E402
 from app.rag.retriever import ChromaRetriever  # noqa: E402
 
@@ -52,7 +53,8 @@ def main() -> int:
 
     output_path = args.results_dir / f"{args.run_id}.jsonl"
     config_path = args.results_dir / f"{args.run_id}.config.json"
-    if output_path.exists() or config_path.exists():
+    summary_path = args.results_dir / f"{args.run_id}.summary.json"
+    if output_path.exists() or config_path.exists() or summary_path.exists():
         print(f"ERROR run_id already exists: {args.run_id}")
         return 1
 
@@ -85,7 +87,14 @@ def main() -> int:
     args.results_dir.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8", newline="\n") as stream:
         for row in rows:
-            stream.write(json.dumps(row, ensure_ascii=False, sort_keys=True))
+            stream.write(
+                json.dumps(
+                    row,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    allow_nan=False,
+                )
+            )
             stream.write("\n")
 
     config = {
@@ -116,13 +125,34 @@ def main() -> int:
         "question_count": len(qa_records),
     }
     config_path.write_text(
-        json.dumps(config, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        json.dumps(
+            config,
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+            allow_nan=False,
+        )
+        + "\n",
         encoding="utf-8",
     )
 
-    _print_summary(rows)
+    summary = build_run_summary(rows, run_id=args.run_id)
+    summary_path.write_text(
+        json.dumps(
+            summary,
+            ensure_ascii=False,
+            indent=2,
+            sort_keys=True,
+            allow_nan=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    _print_summary(summary)
     print(f"Wrote {output_path}")
     print(f"Wrote {config_path}")
+    print(f"Wrote {summary_path}")
     return 0
 
 
@@ -166,46 +196,60 @@ def _evaluate_method(
     return rows
 
 
-def _print_summary(rows: list[dict]) -> None:
-    for method in ("bm25", "dense"):
-        answer_rows = [
-            row
-            for row in rows
-            if row["method"] == method and row["expected_behavior"] == "answer"
-        ]
-        confirmed_answer_rows = [
-            row for row in answer_rows if row["annotation_status"] == "confirmed"
-        ]
-        correction_rows = [
-            row
-            for row in rows
-            if row["method"] == method
-            and row["expected_behavior"] == "correct_premise"
-        ]
-        confirmed_correction_rows = [
-            row for row in correction_rows if row["annotation_status"] == "confirmed"
-        ]
+def _print_summary(summary: dict) -> None:
+    methods = sorted({cell["method"] for cell in summary["cells"]})
+    for method in methods:
+        answer_all = _summary_cell(summary, method, "answerable", "all_annotations")
+        answer_confirmed = _summary_cell(
+            summary,
+            method,
+            "answerable",
+            "confirmed_only",
+        )
+        correction_all = _summary_cell(
+            summary,
+            method,
+            "counter_evidence",
+            "all_annotations",
+        )
+        correction_confirmed = _summary_cell(
+            summary,
+            method,
+            "counter_evidence",
+            "confirmed_only",
+        )
         print(
             f"{method}: answerable macro Evidence Recall@5 "
-            f"(all={_mean_recall_at_5(answer_rows):.3f}, n={len(answer_rows)}; "
-            f"confirmed-only={_mean_recall_at_5(confirmed_answer_rows):.3f}, "
-            f"n={len(confirmed_answer_rows)}); "
+            f"(all={_format_summary_metric(answer_all)}, n={answer_all['n']}; "
+            f"confirmed-only={_format_summary_metric(answer_confirmed)}, "
+            f"n={answer_confirmed['n']}); "
             f"false-premise counter-evidence Recall@5 "
-            f"(all={_format_optional_recall(correction_rows)}, n={len(correction_rows)}; "
-            f"confirmed-only={_format_optional_recall(confirmed_correction_rows)}, "
-            f"n={len(confirmed_correction_rows)})"
+            f"(all={_format_summary_metric(correction_all)}, n={correction_all['n']}; "
+            f"confirmed-only={_format_summary_metric(correction_confirmed)}, "
+            f"n={correction_confirmed['n']})"
         )
 
 
-def _mean_recall_at_5(rows: list[dict]) -> float:
-    values = [row["metrics"]["evidence_recall_at_5"] for row in rows]
-    return sum(values) / len(values) if values else float("nan")
+def _summary_cell(
+    summary: dict,
+    method: str,
+    question_class: str,
+    cohort: str,
+) -> dict:
+    return next(
+        cell
+        for cell in summary["cells"]
+        if cell["method"] == method
+        and cell["question_class"] == question_class
+        and cell["cohort"] == cohort
+        and cell["stratum"] == "overall"
+    )
 
 
-def _format_optional_recall(rows: list[dict]) -> str:
-    if not rows:
+def _format_summary_metric(cell: dict) -> str:
+    if cell["metrics"] is None:
         return "n/a"
-    return f"{_mean_recall_at_5(rows):.3f}"
+    return f"{cell['metrics']['evidence_recall_at_5']:.3f}"
 
 
 def _load_jsonl(path: Path) -> list[dict]:

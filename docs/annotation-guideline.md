@@ -30,7 +30,8 @@ data/corpus/documents.jsonl      文档层：冻结语料、哈希、page 映射
 data/eval/qa.jsonl               QA 层：本规范定义的金标准，人工标注，稳定不变
 data/eval/excluded.jsonl         排除登记：因超出当前文本证据范围而未收录的问题
 data/eval/hesitations.md         犹豫日志：标注时的判断困难，用于修订本规范
-results/runs/*.jsonl             实验层：每次跑基线的输出，可反复变化
+results/runs/*.jsonl / *.config.json / *.summary.json
+                                实验层：逐题结果与确定性汇总，可反复变化
 ```
 
 **金标准与实验结果必须分离**。qa.jsonl 是一次标定、版本固定的真值，
@@ -447,6 +448,6 @@ inter-annotator agreement；同一人的稳定偏差可能在两轮中重复出�
 以下是实验运行前置条件，不阻塞按已定稿规范创建金标准：
 
 - [ ] `answerable` 与 `unanswerable` 两类能分别算出拒答相关指标
-- [ ] 在评测代码中实现并测试 Recall@1/@3/@5 汇总、按 `reasoning_type` 分层及 MRR@5
+- [x] 在评测代码中实现并测试 Recall@1/@3/@5 汇总、按 `reasoning_type` 分层及 MRR@5
 - [ ] 30 题全部通过 schema、偏移、哈希、词汇重叠与字段组合校验
 - [ ] 在查看新增 25 题的 baseline 输出前冻结 `qa.jsonl`，并建立 `reannotation-plan.md`

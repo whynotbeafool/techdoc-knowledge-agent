@@ -73,12 +73,16 @@ class BM25Retriever:
 
 
 def retrieval_metrics(qa_record: dict, ranked_chunks: list[dict], ks=(1, 3, 5)) -> dict:
+    cutoff = max(ks)
     evidence = qa_record["evidence"]
     if not evidence:
         return {
             f"evidence_recall_at_{k}": None for k in ks
         } | {
             f"complete_evidence_hit_at_{k}": None for k in ks
+        } | {
+            "first_relevant_rank": None,
+            f"reciprocal_rank_at_{cutoff}": None,
         }
 
     metrics = {}
@@ -90,6 +94,19 @@ def retrieval_metrics(qa_record: dict, ranked_chunks: list[dict], ks=(1, 3, 5)) 
         ]
         metrics[f"evidence_recall_at_{k}"] = sum(hits) / len(hits)
         metrics[f"complete_evidence_hit_at_{k}"] = all(hits)
+
+    first_relevant_rank = next(
+        (
+            rank
+            for rank, chunk in enumerate(ranked_chunks[:cutoff], start=1)
+            if any(_chunk_hits_evidence(chunk, gold) for gold in evidence)
+        ),
+        None,
+    )
+    metrics["first_relevant_rank"] = first_relevant_rank
+    metrics[f"reciprocal_rank_at_{cutoff}"] = (
+        1 / first_relevant_rank if first_relevant_rank is not None else 0.0
+    )
     return metrics
 
 
