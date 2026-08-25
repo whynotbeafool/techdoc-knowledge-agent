@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1",
+  "documents": [
+    {"document_id": "rag_paper", "revision": "v1"},
+    {"document_id": "autonomous_driving_survey", "revision": "v1"},
+    {"document_id": "fastapi_first_steps", "revision": "v1"},
+    {"document_id": "kubernetes_overview", "revision": "v1"},
+    {"document_id": "pep8", "revision": "v2"}
+  ]
+}

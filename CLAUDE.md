@@ -43,16 +43,18 @@
 | 金标准 `data/eval/qa.jsonl` 与实验结果 `results/runs/` 严格分离 | 真值一次标定、版本固定；混写会让真值被系统输出污染 |
 | **不得用实验结果反向修改标注** | 某条基线漏召回不能成为改金标准的理由。见 `data/eval/hesitations.md` 最后一条 |
 | canonical 产物不可变；内容变了必须升 `revision` | `revision` 标识一份不可变产物，源文件变或提取流程变（pypdf 版本、分隔符、规范化）都要升 |
+| manifest 保留历史，实验只索引 `active-revisions.json` 选中的版本 | 同一文档的多个 revision 同时进索引会混合过期语料；切换 active 后，旧 gold revision 也不得静默进入新运行 |
 | 30 题阶段全部 `split: dev`，不切 test | 20 题的 test 集置信区间无法支撑结论；100 题后才切 held-out |
 
 ## 当前状态
 
 - **Phase 1 MVP 完成**：上传 → 解析 → 切分 → 向量检索 → 问答 → 引用溯源，错误处理、Docker、
   架构图、截图齐备。
-- **评测基础设施完成**：冻结语料（5 份文档，哈希校验）→ 标注校验 → BM25/Dense → Evidence Recall@K，
-  **两次独立运行输出逐行一致**。
-- **5 题试标完成**，标注规范已修订到 v1。
-- **下一步**：读文献（见下）→ 定稿规范 → 批量标注剩余 25 题。
+- **评测基础设施完成**：冻结语料（5 份文档，哈希校验）→ active revision 选择 → 标注校验 →
+  BM25/Dense → Evidence Recall@K / 完整证据命中率 / MRR → 双 cohort 与双分层轴汇总。
+- **12 题 pilot 完成**：9 条 confirmed、3 条 needs_review；`pilot-12-v2` 已记录完整运行环境和语料选择。
+- **语料审计修复完成**：错误的 PEP 8 404 页面保留为历史 `v1`，有效正文加入为 `v2` 并设为 active。
+- **下一步**：读文献（见下）→ 定稿规范 → 批量标注剩余 18 题。
 
 ## 下一步任务清单
 

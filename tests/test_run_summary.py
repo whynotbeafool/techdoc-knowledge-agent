@@ -29,6 +29,7 @@ def _row(
     behavior="answer",
     status="confirmed",
     reasoning_type="single_evidence",
+    lexical_stratum=None,
     recall_at_1=1.0,
     recall_at_3=1.0,
     recall_at_5=1.0,
@@ -41,6 +42,7 @@ def _row(
         "expected_behavior": behavior,
         "annotation_status": status,
         "reasoning_type": reasoning_type,
+        "lexical_stratum": lexical_stratum,
         "metrics": {
             "evidence_recall_at_1": recall_at_1,
             "evidence_recall_at_3": recall_at_3,
@@ -152,7 +154,7 @@ def test_stratum_counts_sum_to_overall_and_recall_at_one_keeps_ceiling():
         if cell["method"] == "bm25"
         and cell["question_class"] == "answerable"
         and cell["cohort"] == "all_annotations"
-        and cell["stratum"] != "overall"
+        and cell["stratum_kind"] == "reasoning_type"
     ]
     multi_evidence = _cell(
         summary,
@@ -200,4 +202,54 @@ def test_summary_is_deterministic_except_for_run_id_and_strict_json():
     )
 
     assert first_bytes == second_bytes
-    assert parsed["schema_version"] == "1"
+    assert parsed["schema_version"] == "2"
+
+
+def test_lexical_cells_report_separately_and_skip_rows_without_a_stratum():
+    """The lexical axis answers guideline 5.1; it does not partition the cohort.
+
+    out_of_scope questions carry no lexical_overlap, and pilot records predate
+    the field, so lexical cells are allowed to omit rows that reasoning_type
+    cells still count.
+    """
+    rows = [
+        _row("q011", reasoning_type="multi_evidence", lexical_stratum="low"),
+        _row("q018", reasoning_type="multi_hop", lexical_stratum="medium", recall_at_3=0.5),
+        _row("q020", reasoning_type="multi_hop", lexical_stratum="high"),
+        _row("q001", reasoning_type="single_evidence"),  # no lexical stratum
+    ]
+
+    summary = build_run_summary(rows, run_id="run-a")
+    dimensions = {
+        "method": "bm25",
+        "question_class": "answerable",
+        "cohort": "all_annotations",
+    }
+    overall = _cell(summary, **dimensions, stratum_kind="overall", stratum="overall")
+    lexical = [
+        cell
+        for cell in summary["cells"]
+        if all(cell[k] == v for k, v in dimensions.items())
+        and cell["stratum_kind"] == "lexical_overlap"
+    ]
+
+    assert overall["n"] == 4
+    assert {cell["stratum"]: cell["n"] for cell in lexical} == {"low": 1, "medium": 1, "high": 1}
+    assert sum(cell["n"] for cell in lexical) < overall["n"]
+    assert _cell(
+        summary, **dimensions, stratum_kind="lexical_overlap", stratum="medium"
+    )["metrics"]["evidence_recall_at_3"] == 0.5
+
+
+def test_lexical_cells_tolerate_rows_from_runs_predating_the_field():
+    """Older run rows have no lexical_stratum key at all; that must not raise."""
+    row = _row("q001")
+    del row["lexical_stratum"]
+
+    summary = build_run_summary([row], run_id="run-a")
+    lexical = [
+        cell for cell in summary["cells"] if cell["stratum_kind"] == "lexical_overlap"
+    ]
+
+    assert lexical and all(cell["n"] == 0 for cell in lexical)
+    assert all(cell["metrics"] is None for cell in lexical)

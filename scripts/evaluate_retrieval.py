@@ -13,7 +13,11 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "backend"))
 
-from app.corpus import load_canonical_document  # noqa: E402
+from app.corpus import (  # noqa: E402
+    ACTIVE_REVISIONS_FILENAME,
+    load_active_revision_records,
+    load_canonical_document,
+)
 from app.evaluation.dataset import load_qa_jsonl, validate_qa_dataset  # noqa: E402
 from app.evaluation.retrieval import BM25Retriever, retrieval_metrics  # noqa: E402
 from app.evaluation.summary import build_run_summary  # noqa: E402
@@ -58,7 +62,14 @@ def main() -> int:
         print(f"ERROR run_id already exists: {args.run_id}")
         return 1
 
-    manifest_records = _load_jsonl(args.corpus_dir / "documents.jsonl")
+    manifest_records = load_active_revision_records(args.corpus_dir)
+    qa_records = load_qa_jsonl(args.qa)
+    revision_mismatches = _active_revision_mismatches(qa_records, manifest_records)
+    if revision_mismatches:
+        for mismatch in revision_mismatches:
+            print(f"ERROR {mismatch}")
+        return 1
+
     chunks = []
     for record in manifest_records:
         document = load_canonical_document(
@@ -70,7 +81,6 @@ def main() -> int:
             chunk_canonical_document(document, max_chars=args.chunk_size)
         )
 
-    qa_records = load_qa_jsonl(args.qa)
     rows = []
     bm25 = BM25Retriever(chunks)
     rows.extend(_evaluate_method(args.run_id, "bm25", bm25, qa_records))
@@ -102,6 +112,15 @@ def main() -> int:
         "created_at": datetime.now(timezone.utc).isoformat(),
         "qa_file": _portable_path(args.qa),
         "qa_hash": f"sha256:{hashlib.sha256(args.qa.read_bytes()).hexdigest()}",
+        "active_revisions_file": _portable_path(
+            args.corpus_dir / ACTIVE_REVISIONS_FILENAME
+        ),
+        "active_revisions_hash": (
+            "sha256:"
+            + hashlib.sha256(
+                (args.corpus_dir / ACTIVE_REVISIONS_FILENAME).read_bytes()
+            ).hexdigest()
+        ),
         "chunk_size": args.chunk_size,
         "top_ks": list(DEFAULT_TOP_KS),
         "methods": {
@@ -156,6 +175,31 @@ def main() -> int:
     return 0
 
 
+def _active_revision_mismatches(
+    qa_records: list[dict], active_records: list[dict]
+) -> list[str]:
+    """Find gold or audit spans that do not belong to the active corpus."""
+    active_by_document = {
+        record["document_id"]: record["revision"] for record in active_records
+    }
+    mismatches = []
+    for record in qa_records:
+        references = list(record.get("evidence", []))
+        audit = record.get("unanswerable_search")
+        if isinstance(audit, dict):
+            references.extend(audit.get("candidate_checks", []))
+        for reference in references:
+            document_id = reference["document_id"]
+            revision = reference["revision"]
+            active_revision = active_by_document.get(document_id)
+            if revision != active_revision:
+                mismatches.append(
+                    f"{record['question_id']}: {document_id}@{revision} is not active "
+                    f"(selected revision: {active_revision})"
+                )
+    return sorted(set(mismatches))
+
+
 def _evaluate_method(
     run_id: str,
     method: str,
@@ -173,6 +217,7 @@ def _evaluate_method(
                 "annotation_status": record["annotation_status"],
                 "expected_behavior": record["expected_behavior"],
                 "reasoning_type": record["reasoning_type"],
+                "lexical_stratum": (record.get("lexical_overlap") or {}).get("stratum"),
                 "retrieved": [
                     {
                         key: chunk.get(key)
@@ -242,7 +287,7 @@ def _summary_cell(
         if cell["method"] == method
         and cell["question_class"] == question_class
         and cell["cohort"] == cohort
-        and cell["stratum"] == "overall"
+        and cell["stratum_kind"] == "overall"
     )
 
 

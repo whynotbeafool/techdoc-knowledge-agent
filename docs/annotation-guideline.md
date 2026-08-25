@@ -270,6 +270,14 @@ RQ1 比较 BM25、Dense、Hybrid 与 Rerank，因此问题不能都照抄证据�
 释义重写问题，而不是删除领域关键实体；若低重叠题只能靠晦涩绕写获得，则换题。最终报告除
 总体 Recall/MRR/nDCG 外，还要按该三层报告结果，避免数据构造阶段先验地偏向 BM25。
 
+`reasoning_type` 与 `lexical_overlap` 是两个独立的**边际分层轴**：汇总产物用 `stratum_kind`
+区分两者，分别报告 overall → reasoning cells 和 overall → lexical cells，不计算
+`reasoning_type × lexical_overlap` 的笛卡尔积。30 题规模下叉乘会产生大量 `n=0/1` 的单元，
+无法稳定解释，也不是当前研究问题要求的交互效应分析。每个 cell 都必须报告自己的分母；历史
+v0 记录没有 `lexical_overlap`，保留在 overall 和 reasoning cells 中，但不进入任何 lexical cell，
+因此三个 lexical cell 的分母之和不要求等于 overall。正式解释词汇重叠结果时必须明确它只覆盖
+带该字段的 v1 有证据题，不能把它冒充全体 30 题的分层结果。
+
 ## 6. 评测约定
 
 ### 6.1 命中判定规则（影响 Recall@K 的定义）

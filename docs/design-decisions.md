@@ -213,3 +213,23 @@ chunk.text == canonical_text[chunk.start_char:chunk.end_char]
 
 **覆盖边界**：chunk 不完整覆盖 canonical text。切分时被 trim 掉的段落间空白和页间分隔符
 不属于任何 chunk；金标准证据必须锚定有语义内容的字符区间，不能只标这些空白。
+
+---
+
+## 12. 多 revision 语料：manifest 保留历史，active 清单决定实验成员
+
+**决策**：`data/corpus/documents.jsonl` 继续作为 append-only revision 历史；实际检索语料由
+`data/corpus/active-revisions.json` 为每个 `document_id` 显式选择且只选择一个 revision。
+`evaluate_retrieval.py` 和 `find_evidence.py` 都只读取 active 清单，运行配置同时记录该文件的哈希。
+标注校验仍按每条 evidence 显式写出的 revision 加载历史产物，因此旧实验不会因 active 切换失去复现能力。
+正式评测若发现 gold evidence 或无答案候选审计仍指向非 active revision，会直接拒绝运行，避免把
+“换了语料后必然无法召回”静默记成检索器失败。
+
+**为什么这样选**：`pep8@v1` 被审计发现是 PEP 网站的 404 页面。直接覆盖 v1 会破坏不可变性；只追加
+`pep8@v2` 又会让原先遍历整个 manifest 的检索器把错误页和正确页同时索引。显式 active 集合把“历史上
+存在过”与“本次实验采用”分开，也避免依赖 `v1/v2` 字符串排序或 manifest 行序推断最新版。
+
+**本次修复**：`pep8@v2` 来自 Python 官方 PEP 仓库的
+`peps/pep-0008.rst`，源文件 SHA-256 为
+`6028935c6cb2c674d5f4d512c7ba6ce2923713b1c47ce1a78adc690db817fc5d`；active 清单已从 v1 切到 v2。
+完整性测试要求 active PEP 8 以正式标题开头且不得包含原错误页标记。

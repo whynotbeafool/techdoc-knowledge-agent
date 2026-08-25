@@ -17,6 +17,7 @@ CANONICAL_ENCODING = "utf-8"
 DEFAULT_PAGE_SEPARATOR = "\n\n"
 UNICODE_NORMALIZATION = "NFC"
 EXTRACTION_PIPELINE_VERSION = "canonical-text-v1"
+ACTIVE_REVISIONS_FILENAME = "active-revisions.json"
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 
@@ -45,6 +46,71 @@ class CanonicalText:
 class LoadedCanonicalDocument:
     text: str
     metadata: dict
+
+
+def load_active_revision_records(corpus_dir: Path) -> list[dict]:
+    """Return the one explicitly selected revision for every corpus document.
+
+    ``documents.jsonl`` is append-only revision history, so consumers must not
+    treat every manifest row as simultaneously active. The separate selection
+    file makes corpus membership explicit and keeps old runs reproducible.
+    """
+    corpus_dir = corpus_dir.resolve()
+    selection_path = corpus_dir / ACTIVE_REVISIONS_FILENAME
+    manifest_path = corpus_dir / "documents.jsonl"
+
+    try:
+        selection = json.loads(selection_path.read_text(encoding=CANONICAL_ENCODING))
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(
+            f"Active revision selection not found: {selection_path}"
+        ) from exc
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Invalid JSON in {selection_path}") from exc
+
+    if not isinstance(selection, dict) or selection.get("schema_version") != "0.1":
+        raise ValueError("Unsupported active revision selection schema")
+    selected_documents = selection.get("documents")
+    if not isinstance(selected_documents, list) or not selected_documents:
+        raise ValueError("Active revision selection must contain documents")
+
+    manifest_records = _read_manifest_records(manifest_path)
+    records_by_key = {}
+    manifest_document_ids = set()
+    for record in manifest_records:
+        key = (record.get("document_id"), record.get("revision"))
+        if key in records_by_key:
+            raise ValueError(f"Duplicate revision {key[0]}@{key[1]} in {manifest_path}")
+        records_by_key[key] = record
+        manifest_document_ids.add(record.get("document_id"))
+
+    active_records = []
+    active_document_ids = set()
+    for index, selected in enumerate(selected_documents):
+        if not isinstance(selected, dict):
+            raise ValueError(f"Invalid active revision entry at index {index}")
+        document_id = selected.get("document_id")
+        revision = selected.get("revision")
+        if not isinstance(document_id, str) or not isinstance(revision, str):
+            raise ValueError(f"Invalid active revision key at index {index}")
+        _validate_revision_component(document_id, name="document_id")
+        _validate_revision_component(revision, name="revision")
+        if document_id in active_document_ids:
+            raise ValueError(f"Multiple active revisions selected for {document_id}")
+        key = (document_id, revision)
+        if key not in records_by_key:
+            raise KeyError(f"Canonical revision not found: {document_id}@{revision}")
+        active_document_ids.add(document_id)
+        active_records.append(records_by_key[key])
+
+    if active_document_ids != manifest_document_ids:
+        missing = sorted(manifest_document_ids - active_document_ids)
+        extra = sorted(active_document_ids - manifest_document_ids)
+        raise ValueError(
+            "Active revision selection does not match manifest documents; "
+            f"missing={missing}, extra={extra}"
+        )
+    return active_records
 
 
 def build_canonical_document(
@@ -240,10 +306,25 @@ def assemble_canonical_text(
 def _find_revision(
     manifest_path: Path, document_id: str, revision: str
 ) -> Optional[dict]:
-    if not manifest_path.exists():
-        return None
-
     found = None
+    for record in _read_manifest_records(manifest_path):
+        if (
+            record.get("document_id") == document_id
+            and record.get("revision") == revision
+        ):
+            if found is not None:
+                raise ValueError(
+                    f"Duplicate revision {document_id}@{revision} in {manifest_path}"
+                )
+            found = record
+    return found
+
+
+def _read_manifest_records(manifest_path: Path) -> list[dict]:
+    if not manifest_path.exists():
+        return []
+
+    records = []
     with manifest_path.open(encoding=CANONICAL_ENCODING) as manifest:
         for line_number, line in enumerate(manifest, start=1):
             if not line.strip():
@@ -254,16 +335,12 @@ def _find_revision(
                 raise ValueError(
                     f"Invalid JSON in {manifest_path} at line {line_number}"
                 ) from exc
-            if (
-                record.get("document_id") == document_id
-                and record.get("revision") == revision
-            ):
-                if found is not None:
-                    raise ValueError(
-                        f"Duplicate revision {document_id}@{revision} in {manifest_path}"
-                    )
-                found = record
-    return found
+            if not isinstance(record, dict):
+                raise ValueError(
+                    f"Manifest record at line {line_number} must be an object"
+                )
+            records.append(record)
+    return records
 
 
 def _validate_revision_component(value: str, *, name: str) -> None:

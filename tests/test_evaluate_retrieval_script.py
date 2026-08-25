@@ -62,3 +62,39 @@ def test_summary_artifact_reserves_run_id(tmp_path, monkeypatch, capsys):
 
     assert MODULE.main() == 1
     assert "ERROR run_id already exists: occupied" in capsys.readouterr().out
+
+
+def test_evaluation_rejects_gold_spans_from_inactive_revision():
+    qa_records = [
+        {
+            "question_id": "q001",
+            "evidence": [
+                {"document_id": "guide", "revision": "v1"},
+            ],
+            "unanswerable_search": None,
+        }
+    ]
+    active_records = [{"document_id": "guide", "revision": "v2"}]
+
+    assert MODULE._active_revision_mismatches(qa_records, active_records) == [
+        "q001: guide@v1 is not active (selected revision: v2)"
+    ]
+
+
+def test_evaluation_checks_unanswerable_candidate_revisions_too():
+    qa_records = [
+        {
+            "question_id": "q002",
+            "evidence": [],
+            "unanswerable_search": {
+                "candidate_checks": [
+                    {"document_id": "guide", "revision": "v1"},
+                ]
+            },
+        }
+    ]
+    active_records = [{"document_id": "guide", "revision": "v2"}]
+
+    assert MODULE._active_revision_mismatches(qa_records, active_records) == [
+        "q002: guide@v1 is not active (selected revision: v2)"
+    ]

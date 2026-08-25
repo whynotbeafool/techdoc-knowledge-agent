@@ -27,7 +27,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "backend"))
 
-from app.corpus import load_canonical_document  # noqa: E402
+from app.corpus import load_active_revision_records, load_canonical_document  # noqa: E402
 from app.evaluation.dataset import (  # noqa: E402
     _content_tokens,
     lexical_overlap_score,
@@ -39,12 +39,7 @@ SENTENCE_END = re.compile(r"(?<=[.!?])\s")
 
 
 def _manifest(corpus_dir: Path) -> list[dict]:
-    path = corpus_dir / "documents.jsonl"
-    return [
-        json.loads(line)
-        for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
+    return load_active_revision_records(corpus_dir)
 
 
 def _page_for_offset(document, offset: int):

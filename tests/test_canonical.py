@@ -10,6 +10,7 @@ from app.corpus.canonical import (
     ExtractedPage,
     assemble_canonical_text,
     build_canonical_document,
+    load_active_revision_records,
     load_canonical_document,
 )
 
@@ -86,6 +87,70 @@ def test_build_canonical_document_writes_hashes_mapping_and_manifest(tmp_path):
     assert record["extraction"]["newline_normalization"] == "universal_to_lf"
     assert record["extraction"]["offset_unit"] == "unicode_codepoint"
     assert manifest_records == [record]
+
+
+def test_active_revision_selection_excludes_superseded_revision(tmp_path):
+    corpus_dir = tmp_path / "corpus"
+    first = tmp_path / "first.txt"
+    second = tmp_path / "second.txt"
+    other = tmp_path / "other.txt"
+    first.write_text("obsolete", encoding=CANONICAL_ENCODING)
+    second.write_text("current", encoding=CANONICAL_ENCODING)
+    other.write_text("other", encoding=CANONICAL_ENCODING)
+    build_canonical_document(
+        first, document_id="notes", revision="v1", corpus_dir=corpus_dir
+    )
+    build_canonical_document(
+        second, document_id="notes", revision="v2", corpus_dir=corpus_dir
+    )
+    build_canonical_document(
+        other, document_id="other", revision="v1", corpus_dir=corpus_dir
+    )
+    (corpus_dir / "active-revisions.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "0.1",
+                "documents": [
+                    {"document_id": "notes", "revision": "v2"},
+                    {"document_id": "other", "revision": "v1"},
+                ],
+            }
+        ),
+        encoding=CANONICAL_ENCODING,
+    )
+
+    active = load_active_revision_records(corpus_dir)
+
+    assert [(record["document_id"], record["revision"]) for record in active] == [
+        ("notes", "v2"),
+        ("other", "v1"),
+    ]
+
+
+def test_active_revision_selection_requires_every_manifest_document(tmp_path):
+    corpus_dir = tmp_path / "corpus"
+    source = tmp_path / "notes.txt"
+    other = tmp_path / "other.txt"
+    source.write_text("notes", encoding=CANONICAL_ENCODING)
+    other.write_text("other", encoding=CANONICAL_ENCODING)
+    build_canonical_document(
+        source, document_id="notes", revision="v1", corpus_dir=corpus_dir
+    )
+    build_canonical_document(
+        other, document_id="other", revision="v1", corpus_dir=corpus_dir
+    )
+    (corpus_dir / "active-revisions.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "0.1",
+                "documents": [{"document_id": "notes", "revision": "v1"}],
+            }
+        ),
+        encoding=CANONICAL_ENCODING,
+    )
+
+    with pytest.raises(ValueError, match="does not match manifest documents"):
+        load_active_revision_records(corpus_dir)
 
 
 def test_build_canonical_document_is_idempotent_for_same_revision(tmp_path):

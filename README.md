@@ -2,11 +2,22 @@
 
 [![Tests](https://github.com/whynotbeafool/techdoc-knowledge-agent/actions/workflows/tests.yml/badge.svg)](https://github.com/whynotbeafool/techdoc-knowledge-agent/actions/workflows/tests.yml)
 
-> 面向技术文档的 RAG 智能知识库问答系统,支持 PDF/Markdown/txt 上传、语义检索、引用溯源和 Docker 一键部署。
+> 面向技术文档的证据锚定 RAG 系统与可复现检索评测基准：支持 PDF/Markdown/txt、语义检索、引用溯源和 Docker 部署。
 
 ## 项目背景
 
-技术文档数量庞大,传统关键词搜索效率低。本项目基于 RAG,让用户通过自然语言提问,从文档中获得带引用来源的答案。
+技术文档数量庞大，单纯关键词搜索难以覆盖改写、多证据与跨段推理问题。本项目一方面提供可运行的
+RAG 问答 MVP，让用户通过自然语言获得带来源的答案；另一方面冻结语料、证据字符偏移和运行配置，
+用于可复现地比较 BM25、Dense 及后续 Hybrid/Rerank 方法。
+
+## 当前亮点
+
+- 完整 MVP：上传、解析、切分、Chroma 检索、LLM 生成、引用展示与资料不足拒答。
+- 证据锚定：金标准使用 canonical text 上的 Unicode 字符偏移，不依赖会随切分参数变化的 `chunk_id`。
+- 语料版本化：manifest 保留历史 revision，`active-revisions.json` 明确选择每次实验采用的版本。
+- 可复现实验：运行产物记录 QA、active revision、语料、Python、Chroma 和检索参数。
+- 分层评测：分别按推理类型和词汇重叠度汇总 Evidence Recall、完整证据命中率与 MRR。
+- 工程质量：104 项自动化测试，GitHub Actions 持续运行 Ruff、测试与覆盖率检查。
 
 ## 技术栈
 
@@ -85,10 +96,29 @@ python scripts/build_canonical.py data/raw_docs/rag_paper.pdf \
 字符偏移失效，下游无法区别对待。具体是哪一种原因，可以从记录里的 `source_hash` 和
 `extraction.pipeline_version` 反查。
 
+`documents.jsonl` 保留所有历史 revision；当前实验实际索引哪些版本由
+`data/corpus/active-revisions.json` 显式决定，每个文档只能有一个 active revision。不要通过覆盖旧文件、
+删除 manifest 历史行或把所有 revision 一起索引来“升级”语料。
+
 读取时必须使用 `load_canonical_document()` 校验文本哈希，再交给
 `chunk_canonical_document()`。chunk 的 `start_char / end_char` 是 canonical text 上
 零基半开区间的 Unicode 码点下标，不是 UTF-8 字节偏移。正式评测不得使用 `chunk_id`
 作为证据锚点，因为它会随 chunk 参数变化。
+
+### 复现当前 pilot
+
+冻结语料和标注均已提交，运行 BM25 + Dense 评测不需要原始 PDF 或 LLM API key：
+
+```bash
+python scripts/validate_eval.py
+python scripts/check_annotation_plan.py
+python scripts/evaluate_retrieval.py --run-id <new-run-id>
+```
+
+当前 `pilot-12-v2` 包含 12 条标注，其中 9 条 confirmed。对 7 条 confirmed answerable 问题，
+BM25 的 Evidence Recall@3 为 0.7857、MRR@5 为 0.8571；Dense 分别为 0.6429 和 0.7429。
+这些数字只用于验证评测链路和暴露数据构造问题，样本量不足以支持方法优劣结论。完整配置、逐题结果、
+分层汇总及历史运行有效性说明见 [`results/runs/`](results/runs/README.md)。
 
 ## Docker 一键启动
 
@@ -100,7 +130,7 @@ docker compose up --build
 
 ## 项目状态
 
-Phase 1 MVP:上传 -> 解析 -> 切分 -> 向量检索 -> 问答 -> 引用溯源
+### Phase 1：RAG MVP（已完成）
 
 - [x] 文档解析（PDF/Markdown/txt）+ 段落切分
 - [x] Embedding + Chroma 向量检索（top-k）
@@ -111,12 +141,20 @@ Phase 1 MVP:上传 -> 解析 -> 切分 -> 向量检索 -> 问答 -> 引用溯源
 - [x] 架构图
 - [x] 功能截图（3 张：正常问答、拒答、跨文档命中）
 
-**Phase 1 MVP 全部完成。**
+### Phase 2：研究评测基线（进行中）
 
-Phase 2（9 月起）:混合检索(BM25 + 向量)、Rerank、评测集、轻量 Agent 节点
+- [x] 5 份 canonical 文档冻结、哈希校验和不可变 revision 管理
+- [x] active revision 选择与非 active 金标准拦截
+- [x] 12 题 pilot 标注（9 confirmed，3 needs_review）
+- [x] BM25 / Dense 基线与逐题、分层、双 cohort 汇总产物
+- [x] 推理类型与词汇重叠度两个独立分层轴
+- [ ] 对照文献定稿标注规范，并完成 30 题 dev 集
+- [ ] Hybrid、Rerank、Long-context 与 no-RAG 对照
+- [ ] 引用校验、证据覆盖与拒答机制评测
 
 ## 后续规划
 
-详见项目求职计划文档中的 Phase 2 迭代功能(混合检索、Rerank、多轮追问、评测集、日志与成本记录)。
+近期主线是完成文献对照与 30 题 dev 集，再扩展 Hybrid、Rerank 和生成可靠性评测。当前 pilot 的
+样本量刻意保持较小，避免在标注规范定稿前批量生产需要返工的数据。
 
 **已知技术债**：目前 FastAPI backend 只有 `/` 和 `/health` 两个占位路由，检索和问答逻辑由 `scripts/` 和 `frontend/streamlit_app.py` 直接 import `backend/app/rag/` 模块调用，尚未封装成 REST API。Phase 1 阶段这是合理的简化（本地单机场景下更快跑通），但严格的前后端分离（frontend 通过 HTTP 调用 backend）留作后续迭代。

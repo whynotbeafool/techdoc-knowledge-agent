@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 
 import pytest
-from app.corpus import load_canonical_document
+from app.corpus import load_active_revision_records, load_canonical_document
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CORPUS_DIR = PROJECT_ROOT / "data" / "corpus"
@@ -28,6 +28,7 @@ def _manifest_records() -> list[dict]:
 
 RECORDS = _manifest_records()
 RECORD_IDS = [f"{r['document_id']}@{r['revision']}" for r in RECORDS]
+ACTIVE_RECORDS = load_active_revision_records(CORPUS_DIR)
 
 
 @pytest.mark.skipif(not RECORDS, reason="no canonical corpus committed")
@@ -80,3 +81,18 @@ def test_page_spans_tile_the_canonical_text(record):
         assert previous["end_char"] <= current["start_char"]
     for span in spans:
         assert span["start_char"] < span["end_char"] <= len(document.text)
+
+
+def test_active_corpus_selects_real_pep8_revision():
+    pep8_record = next(
+        record for record in ACTIVE_RECORDS if record["document_id"] == "pep8"
+    )
+    document = load_canonical_document(
+        CORPUS_DIR,
+        document_id=pep8_record["document_id"],
+        revision=pep8_record["revision"],
+    )
+
+    assert pep8_record["revision"] == "v2"
+    assert document.text.startswith("PEP: 8\nTitle: Style Guide for Python Code")
+    assert "<title>Page not found" not in document.text
