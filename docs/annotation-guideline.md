@@ -457,5 +457,5 @@ inter-annotator agreement；同一人的稳定偏差可能在两轮中重复出�
 
 - [ ] `answerable` 与 `unanswerable` 两类能分别算出拒答相关指标
 - [x] 在评测代码中实现并测试 Recall@1/@3/@5 汇总、按 `reasoning_type` 分层及 MRR@5
-- [ ] 30 题全部通过 schema、偏移、哈希、词汇重叠与字段组合校验
-- [ ] 在查看新增 25 题的 baseline 输出前冻结 `qa.jsonl`，并建立 `reannotation-plan.md`
+- [x] 30 题全部通过 schema、偏移、哈希、词汇重叠与字段组合校验
+- [x] 在查看新增 25 题的 baseline 输出前冻结 `qa.jsonl`，并建立 `reannotation-plan.md`

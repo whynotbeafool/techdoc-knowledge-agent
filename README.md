@@ -115,7 +115,9 @@ python scripts/check_annotation_plan.py
 python scripts/evaluate_retrieval.py --run-id <new-run-id>
 ```
 
-当前 `pilot-12-v2` 包含 12 条标注，其中 9 条 confirmed。对 7 条 confirmed answerable 问题，
+当前已冻结第一版 30 题 dev 集（29 confirmed、1 needs_review），五类题型各 6 题；新的 30 题
+baseline 尚未运行。已发布的 `pilot-12-v2` 包含 12 条标注，其中 9 条 confirmed。对其中 7 条
+confirmed answerable 问题，
 BM25 的 Evidence Recall@3 为 0.7857、MRR@5 为 0.8571；Dense 分别为 0.6429 和 0.7429。
 这些数字只用于验证评测链路和暴露数据构造问题，样本量不足以支持方法优劣结论。完整配置、逐题结果、
 分层汇总及历史运行有效性说明见 [`results/runs/`](results/runs/README.md)。
@@ -145,10 +147,10 @@ docker compose up --build
 
 - [x] 5 份 canonical 文档冻结、哈希校验和不可变 revision 管理
 - [x] active revision 选择与非 active 金标准拦截
-- [x] 12 题 pilot 标注（9 confirmed，3 needs_review）
+- [x] 30 题 dev 集冻结（29 confirmed，1 needs_review；五类题型各 6 题）
 - [x] BM25 / Dense 基线与逐题、分层、双 cohort 汇总产物
 - [x] 推理类型与词汇重叠度两个独立分层轴
-- [ ] 对照文献定稿标注规范，并完成 30 题 dev 集
+- [x] 14 题延迟自我复标子集预先锁定（2026-09-09 起执行）
 - [ ] Hybrid、Rerank、Long-context 与 no-RAG 对照
 - [ ] 引用校验、证据覆盖与拒答机制评测
 

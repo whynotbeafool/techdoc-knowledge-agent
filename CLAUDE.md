@@ -52,9 +52,15 @@
   架构图、截图齐备。
 - **评测基础设施完成**：冻结语料（5 份文档，哈希校验）→ active revision 选择 → 标注校验 →
   BM25/Dense → Evidence Recall@K / 完整证据命中率 / MRR → 双 cohort 与双分层轴汇总。
-- **12 题 pilot 完成**：9 条 confirmed、3 条 needs_review；`pilot-12-v2` 已记录完整运行环境和语料选择。
+- **30 题 dev 集已冻结**：29 条 confirmed、1 条 needs_review；五类各 6 题，新增有证据题的
+  low / medium / high 为 7 / 7 / 6，五份 active 语料各覆盖 4 道新增有证据题。冻结哈希和
+  14 题正式复标子集见 `data/eval/reannotation-plan.md`。当前已发布的最新检索运行仍是
+  `pilot-12-v2`，新的 30 题 baseline 尚未运行。
+- **q016/q017 时间隔离裁决完成**：首标后间隔 19 天，均按现行必要中间实体规则保持
+  `multi_hop` 并转为 confirmed；这是提前质控，不替代 30 题冻结后预先抽取的 14 题正式复标。
 - **语料审计修复完成**：错误的 PEP 8 404 页面保留为历史 `v1`，有效正文加入为 `v2` 并设为 active。
-- **下一步**：读文献（见下）→ 定稿规范 → 批量标注剩余 18 题。
+- **下一步**：运行首个冻结 30 题 baseline；2026-09-09 起按 `reannotation-plan.md` 对 14 题做
+  延迟自我复标，并在完成后逐维报告一致性。
 
 ## 下一步任务清单
 
