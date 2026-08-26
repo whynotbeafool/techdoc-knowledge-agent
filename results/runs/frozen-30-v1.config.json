@@ -1,0 +1,56 @@
+{
+  "active_revisions_file": "data/corpus/active-revisions.json",
+  "active_revisions_hash": "sha256:203388e955c47416d0f78aadbeb5489ec128cebdf4ba8c602a2dbe8e743ce6af",
+  "chunk_count": 379,
+  "chunk_size": 800,
+  "corpus": [
+    {
+      "document_id": "rag_paper",
+      "revision": "v1",
+      "text_hash": "sha256:83e663b687893f552ab75710cc7748dc6c0d2b3697c4b669a9f1903497c86a4f"
+    },
+    {
+      "document_id": "autonomous_driving_survey",
+      "revision": "v1",
+      "text_hash": "sha256:96906840430aba16dfc784b7b947715127396f7f3d07067d119b3633778a49f8"
+    },
+    {
+      "document_id": "fastapi_first_steps",
+      "revision": "v1",
+      "text_hash": "sha256:6e909cc5cf438740cdc71dad49b8e2a513865a9c9c609b1944fe3de080ea081c"
+    },
+    {
+      "document_id": "kubernetes_overview",
+      "revision": "v1",
+      "text_hash": "sha256:4caf1cd3bfe590d9eb75d513d2024081338dc48523f81f9e06e3208e749f3c8c"
+    },
+    {
+      "document_id": "pep8",
+      "revision": "v2",
+      "text_hash": "sha256:5398fae01e6df3757181e63c79f12749336c89c7ca5728534174109e243a8833"
+    }
+  ],
+  "created_at": "2026-08-26T13:37:20.124399+00:00",
+  "methods": {
+    "bm25": {
+      "b": 0.75,
+      "k1": 1.5,
+      "tokenizer": "[A-Za-z0-9_]+"
+    },
+    "dense": {
+      "chromadb_version": "1.5.9",
+      "implementation": "chromadb.DefaultEmbeddingFunction",
+      "model": "all-MiniLM-L6-v2"
+    }
+  },
+  "python_version": "3.13.5",
+  "qa_file": "data/eval/qa.jsonl",
+  "qa_hash": "sha256:21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+  "question_count": 30,
+  "run_id": "frozen-30-v1",
+  "top_ks": [
+    1,
+    3,
+    5
+  ]
+}

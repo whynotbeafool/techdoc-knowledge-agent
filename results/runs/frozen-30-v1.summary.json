@@ -1,0 +1,894 @@
+{
+  "cells": [
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.2778,
+        "complete_evidence_hit_at_3": 0.5,
+        "complete_evidence_hit_at_5": 0.5,
+        "evidence_recall_at_1": 0.4167,
+        "evidence_recall_at_3": 0.6667,
+        "evidence_recall_at_5": 0.6667,
+        "reciprocal_rank_at_5": 0.6852
+      },
+      "n": 18,
+      "question_class": "answerable",
+      "stratum": "overall",
+      "stratum_kind": "overall"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 0.6667,
+        "complete_evidence_hit_at_5": 0.6667,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 0.6667,
+        "evidence_recall_at_5": 0.6667,
+        "reciprocal_rank_at_5": 0.5833
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "single_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.3333,
+        "complete_evidence_hit_at_3": 0.5,
+        "complete_evidence_hit_at_5": 0.5,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 0.75,
+        "evidence_recall_at_5": 0.75,
+        "reciprocal_rank_at_5": 0.8056
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "multi_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.0,
+        "complete_evidence_hit_at_3": 0.3333,
+        "complete_evidence_hit_at_5": 0.3333,
+        "evidence_recall_at_1": 0.25,
+        "evidence_recall_at_3": 0.5833,
+        "evidence_recall_at_5": 0.5833,
+        "reciprocal_rank_at_5": 0.6667
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "multi_hop",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.0,
+        "complete_evidence_hit_at_3": 0.1667,
+        "complete_evidence_hit_at_5": 0.1667,
+        "evidence_recall_at_1": 0.0833,
+        "evidence_recall_at_3": 0.3333,
+        "evidence_recall_at_5": 0.3333,
+        "reciprocal_rank_at_5": 0.3333
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "low",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.2,
+        "complete_evidence_hit_at_3": 0.4,
+        "complete_evidence_hit_at_5": 0.4,
+        "evidence_recall_at_1": 0.3,
+        "evidence_recall_at_3": 0.7,
+        "evidence_recall_at_5": 0.7,
+        "reciprocal_rank_at_5": 0.6667
+      },
+      "n": 5,
+      "question_class": "answerable",
+      "stratum": "medium",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 0.75,
+        "complete_evidence_hit_at_5": 0.75,
+        "evidence_recall_at_1": 0.75,
+        "evidence_recall_at_3": 0.875,
+        "evidence_recall_at_5": 0.875,
+        "reciprocal_rank_at_5": 1.0
+      },
+      "n": 4,
+      "question_class": "answerable",
+      "stratum": "high",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.2941,
+        "complete_evidence_hit_at_3": 0.4706,
+        "complete_evidence_hit_at_5": 0.4706,
+        "evidence_recall_at_1": 0.4118,
+        "evidence_recall_at_3": 0.6471,
+        "evidence_recall_at_5": 0.6471,
+        "reciprocal_rank_at_5": 0.6667
+      },
+      "n": 17,
+      "question_class": "answerable",
+      "stratum": "overall",
+      "stratum_kind": "overall"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 0.6667,
+        "complete_evidence_hit_at_5": 0.6667,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 0.6667,
+        "evidence_recall_at_5": 0.6667,
+        "reciprocal_rank_at_5": 0.5833
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "single_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.3333,
+        "complete_evidence_hit_at_3": 0.5,
+        "complete_evidence_hit_at_5": 0.5,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 0.75,
+        "evidence_recall_at_5": 0.75,
+        "reciprocal_rank_at_5": 0.8056
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "multi_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.0,
+        "complete_evidence_hit_at_3": 0.2,
+        "complete_evidence_hit_at_5": 0.2,
+        "evidence_recall_at_1": 0.2,
+        "evidence_recall_at_3": 0.5,
+        "evidence_recall_at_5": 0.5,
+        "reciprocal_rank_at_5": 0.6
+      },
+      "n": 5,
+      "question_class": "answerable",
+      "stratum": "multi_hop",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.0,
+        "complete_evidence_hit_at_3": 0.1667,
+        "complete_evidence_hit_at_5": 0.1667,
+        "evidence_recall_at_1": 0.0833,
+        "evidence_recall_at_3": 0.3333,
+        "evidence_recall_at_5": 0.3333,
+        "reciprocal_rank_at_5": 0.3333
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "low",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.2,
+        "complete_evidence_hit_at_3": 0.4,
+        "complete_evidence_hit_at_5": 0.4,
+        "evidence_recall_at_1": 0.3,
+        "evidence_recall_at_3": 0.7,
+        "evidence_recall_at_5": 0.7,
+        "reciprocal_rank_at_5": 0.6667
+      },
+      "n": 5,
+      "question_class": "answerable",
+      "stratum": "medium",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 0.75,
+        "complete_evidence_hit_at_5": 0.75,
+        "evidence_recall_at_1": 0.75,
+        "evidence_recall_at_3": 0.875,
+        "evidence_recall_at_5": 0.875,
+        "reciprocal_rank_at_5": 1.0
+      },
+      "n": 4,
+      "question_class": "answerable",
+      "stratum": "high",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.8333,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 0.8333,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 0.9167
+      },
+      "n": 6,
+      "question_class": "counter_evidence",
+      "stratum": "overall",
+      "stratum_kind": "overall"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.8333,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 0.8333,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 0.9167
+      },
+      "n": 6,
+      "question_class": "counter_evidence",
+      "stratum": "single_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": null,
+      "n": 0,
+      "question_class": "counter_evidence",
+      "stratum": "multi_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": null,
+      "n": 0,
+      "question_class": "counter_evidence",
+      "stratum": "multi_hop",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 1.0,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 1.0,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 1.0
+      },
+      "n": 1,
+      "question_class": "counter_evidence",
+      "stratum": "low",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 0.75
+      },
+      "n": 2,
+      "question_class": "counter_evidence",
+      "stratum": "medium",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 1.0,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 1.0,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 1.0
+      },
+      "n": 2,
+      "question_class": "counter_evidence",
+      "stratum": "high",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.8333,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 0.8333,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 0.9167
+      },
+      "n": 6,
+      "question_class": "counter_evidence",
+      "stratum": "overall",
+      "stratum_kind": "overall"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.8333,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 0.8333,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 0.9167
+      },
+      "n": 6,
+      "question_class": "counter_evidence",
+      "stratum": "single_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": null,
+      "n": 0,
+      "question_class": "counter_evidence",
+      "stratum": "multi_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": null,
+      "n": 0,
+      "question_class": "counter_evidence",
+      "stratum": "multi_hop",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 1.0,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 1.0,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 1.0
+      },
+      "n": 1,
+      "question_class": "counter_evidence",
+      "stratum": "low",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 0.75
+      },
+      "n": 2,
+      "question_class": "counter_evidence",
+      "stratum": "medium",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "bm25",
+      "metrics": {
+        "complete_evidence_hit_at_1": 1.0,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 1.0,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 1.0
+      },
+      "n": 2,
+      "question_class": "counter_evidence",
+      "stratum": "high",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.2222,
+        "complete_evidence_hit_at_3": 0.3889,
+        "complete_evidence_hit_at_5": 0.3889,
+        "evidence_recall_at_1": 0.3333,
+        "evidence_recall_at_3": 0.5278,
+        "evidence_recall_at_5": 0.5556,
+        "reciprocal_rank_at_5": 0.5667
+      },
+      "n": 18,
+      "question_class": "answerable",
+      "stratum": "overall",
+      "stratum_kind": "overall"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.1667,
+        "complete_evidence_hit_at_3": 0.3333,
+        "complete_evidence_hit_at_5": 0.3333,
+        "evidence_recall_at_1": 0.1667,
+        "evidence_recall_at_3": 0.3333,
+        "evidence_recall_at_5": 0.3333,
+        "reciprocal_rank_at_5": 0.25
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "single_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 0.6667,
+        "complete_evidence_hit_at_5": 0.6667,
+        "evidence_recall_at_1": 0.5833,
+        "evidence_recall_at_3": 0.75,
+        "evidence_recall_at_5": 0.75,
+        "reciprocal_rank_at_5": 0.75
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "multi_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.0,
+        "complete_evidence_hit_at_3": 0.1667,
+        "complete_evidence_hit_at_5": 0.1667,
+        "evidence_recall_at_1": 0.25,
+        "evidence_recall_at_3": 0.5,
+        "evidence_recall_at_5": 0.5833,
+        "reciprocal_rank_at_5": 0.7
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "multi_hop",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.1667,
+        "complete_evidence_hit_at_3": 0.3333,
+        "complete_evidence_hit_at_5": 0.3333,
+        "evidence_recall_at_1": 0.25,
+        "evidence_recall_at_3": 0.5,
+        "evidence_recall_at_5": 0.5,
+        "reciprocal_rank_at_5": 0.5
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "low",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.2,
+        "complete_evidence_hit_at_3": 0.2,
+        "complete_evidence_hit_at_5": 0.2,
+        "evidence_recall_at_1": 0.3,
+        "evidence_recall_at_3": 0.3,
+        "evidence_recall_at_5": 0.4,
+        "reciprocal_rank_at_5": 0.44
+      },
+      "n": 5,
+      "question_class": "answerable",
+      "stratum": "medium",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.25,
+        "complete_evidence_hit_at_3": 0.5,
+        "complete_evidence_hit_at_5": 0.5,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 0.625,
+        "evidence_recall_at_5": 0.625,
+        "reciprocal_rank_at_5": 0.75
+      },
+      "n": 4,
+      "question_class": "answerable",
+      "stratum": "high",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.2353,
+        "complete_evidence_hit_at_3": 0.4118,
+        "complete_evidence_hit_at_5": 0.4118,
+        "evidence_recall_at_1": 0.3529,
+        "evidence_recall_at_3": 0.5294,
+        "evidence_recall_at_5": 0.5588,
+        "reciprocal_rank_at_5": 0.5706
+      },
+      "n": 17,
+      "question_class": "answerable",
+      "stratum": "overall",
+      "stratum_kind": "overall"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.1667,
+        "complete_evidence_hit_at_3": 0.3333,
+        "complete_evidence_hit_at_5": 0.3333,
+        "evidence_recall_at_1": 0.1667,
+        "evidence_recall_at_3": 0.3333,
+        "evidence_recall_at_5": 0.3333,
+        "reciprocal_rank_at_5": 0.25
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "single_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 0.6667,
+        "complete_evidence_hit_at_5": 0.6667,
+        "evidence_recall_at_1": 0.5833,
+        "evidence_recall_at_3": 0.75,
+        "evidence_recall_at_5": 0.75,
+        "reciprocal_rank_at_5": 0.75
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "multi_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.0,
+        "complete_evidence_hit_at_3": 0.2,
+        "complete_evidence_hit_at_5": 0.2,
+        "evidence_recall_at_1": 0.3,
+        "evidence_recall_at_3": 0.5,
+        "evidence_recall_at_5": 0.6,
+        "reciprocal_rank_at_5": 0.74
+      },
+      "n": 5,
+      "question_class": "answerable",
+      "stratum": "multi_hop",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.1667,
+        "complete_evidence_hit_at_3": 0.3333,
+        "complete_evidence_hit_at_5": 0.3333,
+        "evidence_recall_at_1": 0.25,
+        "evidence_recall_at_3": 0.5,
+        "evidence_recall_at_5": 0.5,
+        "reciprocal_rank_at_5": 0.5
+      },
+      "n": 6,
+      "question_class": "answerable",
+      "stratum": "low",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.2,
+        "complete_evidence_hit_at_3": 0.2,
+        "complete_evidence_hit_at_5": 0.2,
+        "evidence_recall_at_1": 0.3,
+        "evidence_recall_at_3": 0.3,
+        "evidence_recall_at_5": 0.4,
+        "reciprocal_rank_at_5": 0.44
+      },
+      "n": 5,
+      "question_class": "answerable",
+      "stratum": "medium",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.25,
+        "complete_evidence_hit_at_3": 0.5,
+        "complete_evidence_hit_at_5": 0.5,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 0.625,
+        "evidence_recall_at_5": 0.625,
+        "reciprocal_rank_at_5": 0.75
+      },
+      "n": 4,
+      "question_class": "answerable",
+      "stratum": "high",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.6667,
+        "complete_evidence_hit_at_3": 0.6667,
+        "complete_evidence_hit_at_5": 0.6667,
+        "evidence_recall_at_1": 0.6667,
+        "evidence_recall_at_3": 0.6667,
+        "evidence_recall_at_5": 0.6667,
+        "reciprocal_rank_at_5": 0.6667
+      },
+      "n": 6,
+      "question_class": "counter_evidence",
+      "stratum": "overall",
+      "stratum_kind": "overall"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.6667,
+        "complete_evidence_hit_at_3": 0.6667,
+        "complete_evidence_hit_at_5": 0.6667,
+        "evidence_recall_at_1": 0.6667,
+        "evidence_recall_at_3": 0.6667,
+        "evidence_recall_at_5": 0.6667,
+        "reciprocal_rank_at_5": 0.6667
+      },
+      "n": 6,
+      "question_class": "counter_evidence",
+      "stratum": "single_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": null,
+      "n": 0,
+      "question_class": "counter_evidence",
+      "stratum": "multi_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": null,
+      "n": 0,
+      "question_class": "counter_evidence",
+      "stratum": "multi_hop",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.0,
+        "complete_evidence_hit_at_3": 0.0,
+        "complete_evidence_hit_at_5": 0.0,
+        "evidence_recall_at_1": 0.0,
+        "evidence_recall_at_3": 0.0,
+        "evidence_recall_at_5": 0.0,
+        "reciprocal_rank_at_5": 0.0
+      },
+      "n": 1,
+      "question_class": "counter_evidence",
+      "stratum": "low",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 1.0,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 1.0,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 1.0
+      },
+      "n": 2,
+      "question_class": "counter_evidence",
+      "stratum": "medium",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "all_annotations",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 0.5,
+        "complete_evidence_hit_at_5": 0.5,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 0.5,
+        "evidence_recall_at_5": 0.5,
+        "reciprocal_rank_at_5": 0.5
+      },
+      "n": 2,
+      "question_class": "counter_evidence",
+      "stratum": "high",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.6667,
+        "complete_evidence_hit_at_3": 0.6667,
+        "complete_evidence_hit_at_5": 0.6667,
+        "evidence_recall_at_1": 0.6667,
+        "evidence_recall_at_3": 0.6667,
+        "evidence_recall_at_5": 0.6667,
+        "reciprocal_rank_at_5": 0.6667
+      },
+      "n": 6,
+      "question_class": "counter_evidence",
+      "stratum": "overall",
+      "stratum_kind": "overall"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.6667,
+        "complete_evidence_hit_at_3": 0.6667,
+        "complete_evidence_hit_at_5": 0.6667,
+        "evidence_recall_at_1": 0.6667,
+        "evidence_recall_at_3": 0.6667,
+        "evidence_recall_at_5": 0.6667,
+        "reciprocal_rank_at_5": 0.6667
+      },
+      "n": 6,
+      "question_class": "counter_evidence",
+      "stratum": "single_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": null,
+      "n": 0,
+      "question_class": "counter_evidence",
+      "stratum": "multi_evidence",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": null,
+      "n": 0,
+      "question_class": "counter_evidence",
+      "stratum": "multi_hop",
+      "stratum_kind": "reasoning_type"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.0,
+        "complete_evidence_hit_at_3": 0.0,
+        "complete_evidence_hit_at_5": 0.0,
+        "evidence_recall_at_1": 0.0,
+        "evidence_recall_at_3": 0.0,
+        "evidence_recall_at_5": 0.0,
+        "reciprocal_rank_at_5": 0.0
+      },
+      "n": 1,
+      "question_class": "counter_evidence",
+      "stratum": "low",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 1.0,
+        "complete_evidence_hit_at_3": 1.0,
+        "complete_evidence_hit_at_5": 1.0,
+        "evidence_recall_at_1": 1.0,
+        "evidence_recall_at_3": 1.0,
+        "evidence_recall_at_5": 1.0,
+        "reciprocal_rank_at_5": 1.0
+      },
+      "n": 2,
+      "question_class": "counter_evidence",
+      "stratum": "medium",
+      "stratum_kind": "lexical_overlap"
+    },
+    {
+      "cohort": "confirmed_only",
+      "method": "dense",
+      "metrics": {
+        "complete_evidence_hit_at_1": 0.5,
+        "complete_evidence_hit_at_3": 0.5,
+        "complete_evidence_hit_at_5": 0.5,
+        "evidence_recall_at_1": 0.5,
+        "evidence_recall_at_3": 0.5,
+        "evidence_recall_at_5": 0.5,
+        "reciprocal_rank_at_5": 0.5
+      },
+      "n": 2,
+      "question_class": "counter_evidence",
+      "stratum": "high",
+      "stratum_kind": "lexical_overlap"
+    }
+  ],
+  "run_id": "frozen-30-v1",
+  "schema_version": "2"
+}
