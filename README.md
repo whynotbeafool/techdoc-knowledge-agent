@@ -17,7 +17,7 @@ RAG 问答 MVP，让用户通过自然语言获得带来源的答案；另一方
 - 语料版本化：manifest 保留历史 revision，`active-revisions.json` 明确选择每次实验采用的版本。
 - 可复现实验：运行产物记录 QA、active revision、语料、Python、Chroma 和检索参数。
 - 分层评测：分别按推理类型和词汇重叠度汇总 Evidence Recall、完整证据命中率与 MRR。
-- 工程质量：104 项自动化测试，GitHub Actions 持续运行 Ruff、测试与覆盖率检查。
+- 工程质量：126 项自动化测试，GitHub Actions 持续运行 Ruff、测试与覆盖率检查。
 
 ## 技术栈
 
@@ -115,12 +115,24 @@ python scripts/check_annotation_plan.py
 python scripts/evaluate_retrieval.py --run-id <new-run-id>
 ```
 
-当前已冻结第一版 30 题 dev 集（29 confirmed、1 needs_review），五类题型各 6 题；新的 30 题
-baseline 尚未运行。已发布的 `pilot-12-v2` 包含 12 条标注，其中 9 条 confirmed。对其中 7 条
-confirmed answerable 问题，
-BM25 的 Evidence Recall@3 为 0.7857、MRR@5 为 0.8571；Dense 分别为 0.6429 和 0.7429。
-这些数字只用于验证评测链路和暴露数据构造问题，样本量不足以支持方法优劣结论。完整配置、逐题结果、
-分层汇总及历史运行有效性说明见 [`results/runs/`](results/runs/README.md)。
+当前已冻结第一版 30 题 dev 集（29 confirmed、1 needs_review），五类题型各 6 题；首个检索 baseline
+`frozen-30-v1` 已运行。历史 `pilot-12-v2` 只用于验证早期评测链路，不能代替冻结集结论。
+当前数据量和分层样本仍不足以支持方法优劣的普遍结论。完整配置、逐题结果、分层汇总及历史运行有效性
+说明见 [`results/runs/`](results/runs/README.md)。
+
+### 批量生成与拒答行为评测
+
+生成评测从已冻结的检索运行恢复原始 canonical chunk，避免重新检索造成输入漂移。脚本会记录 QA 与
+检索产物哈希、模型、Prompt 哈希和拒答契约，不写入 API key，并拒绝覆盖已有 run ID：
+
+```bash
+python scripts/evaluate_generation.py \
+  --run-id frozen-30-bm25-deepseek-v1 \
+  --method bm25
+```
+
+完整运行会产生真实模型调用和费用，执行前必须确认 provider、模型和预算。产物说明见
+[`results/generation/`](results/generation/README.md)。
 
 ## Docker 一键启动
 
@@ -151,8 +163,12 @@ docker compose up --build
 - [x] BM25 / Dense 基线与逐题、分层、双 cohort 汇总产物
 - [x] 推理类型与词汇重叠度两个独立分层轴
 - [x] 14 题延迟自我复标子集预先锁定（2026-09-09 起执行）
+- [x] 确定性拒答响应契约与逐题拒答行为指标；生成系统错误不计入拒答准确率
+- [x] 从冻结检索结果恢复 canonical chunk 的批量生成脚本与拒答汇总产物
+- [x] 首轮真实生成误差归因，并增加“错误前提应纠正而非拒答”的独立 Prompt 指令
+- [x] 按 Top-5 完整证据命中分层汇总非拒答题，拆分检索受限与生成协议问题
 - [ ] Hybrid、Rerank、Long-context 与 no-RAG 对照
-- [ ] 引用校验、证据覆盖与拒答机制评测
+- [ ] 执行首个真实批量生成运行，并增加引用校验与答案—证据支持度评测
 
 ## 后续规划
 

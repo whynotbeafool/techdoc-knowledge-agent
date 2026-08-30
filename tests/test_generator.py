@@ -1,7 +1,14 @@
 from unittest.mock import MagicMock, patch
 
 import openai
-from app.rag.generator import build_context, generate_answer
+from app.core.response_contract import PREMISE_CORRECTION_INSTRUCTION, REFUSAL_PREFIX
+from app.rag.generator import SYSTEM_PROMPT, build_context, generate_answer
+
+
+def test_system_prompt_requires_the_shared_refusal_prefix():
+    assert REFUSAL_PREFIX in SYSTEM_PROMPT
+    assert f"以“{REFUSAL_PREFIX}”开头" in SYSTEM_PROMPT
+    assert PREMISE_CORRECTION_INSTRUCTION in SYSTEM_PROMPT
 
 
 def test_build_context_formats_chunks_with_citation_labels():

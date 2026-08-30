@@ -1,0 +1,20 @@
+{
+  "base_url": "https://api.deepseek.com",
+  "created_at": "2026-08-30T07:27:27.414505+00:00",
+  "method": "bm25",
+  "model": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "python_version": "3.13.5",
+  "qa_file": "data/eval/qa.jsonl",
+  "qa_hash": "sha256:21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+  "question_count": 30,
+  "refusal_prefix": "当前资料依据不足",
+  "retrieval_run_file": "results/runs/frozen-30-v1.jsonl",
+  "retrieval_run_hash": "sha256:594773c8a2eca00bef3d7f545e3bb4ce0f69027cffbec2a7411cefa0b5ca1b9d",
+  "retrieval_run_ids": [
+    "frozen-30-v1"
+  ],
+  "run_id": "frozen-30-bm25-deepseek-v1",
+  "schema_version": "1",
+  "system_prompt_hash": "sha256:51d8717cafafe6c35299b966f10738e803332f6fd4d8977beb38cad43c3d3c7a"
+}

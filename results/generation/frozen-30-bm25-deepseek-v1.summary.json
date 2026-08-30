@@ -1,0 +1,34 @@
+{
+  "cells": [
+    {
+      "cohort": "all_annotations",
+      "evaluated_n": 30,
+      "method": "bm25",
+      "metrics": {
+        "generation_system_error_rate": 0.0,
+        "refusal_accuracy": 0.7,
+        "refusal_false_positive_rate": 0.375,
+        "refusal_precision": 0.4,
+        "refusal_recall": 1.0
+      },
+      "n": 30,
+      "system_error_n": 0
+    },
+    {
+      "cohort": "confirmed_only",
+      "evaluated_n": 29,
+      "method": "bm25",
+      "metrics": {
+        "generation_system_error_rate": 0.0,
+        "refusal_accuracy": 0.6897,
+        "refusal_false_positive_rate": 0.3913,
+        "refusal_precision": 0.4,
+        "refusal_recall": 1.0
+      },
+      "n": 29,
+      "system_error_n": 0
+    }
+  ],
+  "run_id": "frozen-30-bm25-deepseek-v1",
+  "schema_version": "1"
+}
