@@ -48,4 +48,7 @@ The raw behavior metric is end-to-end and must not be interpreted as a generator
 1. Completed after this run: add an explicit `correct_premise` instruction without weakening out-of-scope refusal. The changed Prompt has a new hash and requires a new run ID for evaluation.
 2. Report behavior metrics conditioned on retrieval completeness, while retaining the raw end-to-end metric.
 3. Re-run under a new immutable run ID; never overwrite this baseline.
-4. Keep q016/q017 in the delayed reannotation plan before using low-overlap strata for claims.
+4. q016/q017 received a separate 19-day time-isolated ruling and were promoted to
+   `confirmed`, which breaks the previous perfect confounding between annotation quality
+   and the low-overlap stratum. Do not count this targeted ruling as part of the separately
+   pre-registered 14-question blinded reannotation sample.
