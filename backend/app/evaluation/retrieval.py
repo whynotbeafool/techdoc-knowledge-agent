@@ -72,6 +72,66 @@ class BM25Retriever:
         return inverse_document_frequency * frequency * (self.k1 + 1) / denominator
 
 
+class ReciprocalRankFusionRetriever:
+    """Fuse ranked lists without comparing their incompatible raw scores."""
+
+    def __init__(
+        self,
+        retrievers: dict[str, object],
+        *,
+        rank_constant: int = 60,
+        candidate_depth: int = 20,
+    ):
+        if len(retrievers) < 2:
+            raise ValueError("RRF requires at least two retrievers")
+        if rank_constant < 0:
+            raise ValueError("rank_constant must be non-negative")
+        if candidate_depth < 1:
+            raise ValueError("candidate_depth must be positive")
+        self.retrievers = retrievers
+        self.rank_constant = rank_constant
+        self.candidate_depth = candidate_depth
+
+    def query_chunks(self, question: str, top_k: int = 5) -> list[dict]:
+        if top_k < 1:
+            return []
+
+        candidates: dict[str, dict] = {}
+        depth = max(top_k, self.candidate_depth)
+        for method, retriever in self.retrievers.items():
+            ranked = retriever.query_chunks(question, top_k=depth)
+            seen = set()
+            for rank, chunk in enumerate(ranked, start=1):
+                chunk_id = chunk["chunk_id"]
+                if chunk_id in seen:
+                    continue
+                seen.add(chunk_id)
+                candidate = candidates.setdefault(
+                    chunk_id,
+                    {
+                        "chunk": chunk,
+                        "rrf_score": 0.0,
+                        "component_ranks": {},
+                    },
+                )
+                candidate["rrf_score"] += 1 / (self.rank_constant + rank)
+                candidate["component_ranks"][method] = rank
+
+        ordered = sorted(
+            candidates.items(),
+            key=lambda item: (-item[1]["rrf_score"], item[0]),
+        )
+        results = []
+        for _, candidate in ordered[:top_k]:
+            result = dict(candidate["chunk"])
+            result.pop("score", None)
+            result.pop("distance", None)
+            result["rrf_score"] = candidate["rrf_score"]
+            result["component_ranks"] = candidate["component_ranks"]
+            results.append(result)
+        return results
+
+
 def retrieval_metrics(qa_record: dict, ranked_chunks: list[dict], ks=(1, 3, 5)) -> dict:
     cutoff = max(ks)
     evidence = qa_record["evidence"]

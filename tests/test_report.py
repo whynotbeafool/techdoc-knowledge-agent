@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import pytest
 from app.evaluation.report import build_markdown_report, lexical_series
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -86,19 +87,20 @@ def test_lexical_series_keeps_stratum_order_and_skips_cells_without_data():
     assert series["bm25"] == [("low", 3, 0.2), ("high", 1, 0.9)]
 
 
-def test_committed_report_matches_the_committed_run():
+@pytest.mark.parametrize("run_id", ["frozen-30-v1", "frozen-30-hybrid-rrf-v1"])
+def test_committed_report_matches_the_committed_run(run_id):
     """The report must be regenerable, never hand-edited.
 
     If someone tweaks a number in the Markdown, this fails: the rendered text
     is compared against what the committed summary and config actually produce.
     """
-    summary_path = RUNS_DIR / "frozen-30-v1.summary.json"
-    report_path = PROJECT_ROOT / "docs" / "results-frozen-30-v1.md"
+    summary_path = RUNS_DIR / f"{run_id}.summary.json"
+    report_path = PROJECT_ROOT / "docs" / f"results-{run_id}.md"
     if not (summary_path.exists() and report_path.exists()):
         return
 
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
-    config = json.loads((RUNS_DIR / "frozen-30-v1.config.json").read_text(encoding="utf-8"))
+    config = json.loads((RUNS_DIR / f"{run_id}.config.json").read_text(encoding="utf-8"))
     expected = build_markdown_report(summary, config)
     actual = report_path.read_text(encoding="utf-8")
 

@@ -98,3 +98,44 @@ def test_evaluation_checks_unanswerable_candidate_revisions_too():
     assert MODULE._active_revision_mismatches(qa_records, active_records) == [
         "q002: guide@v1 is not active (selected revision: v2)"
     ]
+
+
+def test_evaluate_method_preserves_rrf_audit_fields():
+    class FakeHybrid:
+        def query_chunks(self, question, top_k=5):
+            return [
+                {
+                    "chunk_id": "chunk-a",
+                    "document_id": "doc",
+                    "revision": "v1",
+                    "start_char": 0,
+                    "end_char": 10,
+                    "rrf_score": 0.03,
+                    "component_ranks": {"bm25": 1, "dense": 4},
+                }
+            ]
+
+    qa_records = [
+        {
+            "question_id": "q001",
+            "question": "question",
+            "annotation_status": "confirmed",
+            "expected_behavior": "answer",
+            "reasoning_type": "single_evidence",
+            "lexical_overlap": {"stratum": "low"},
+            "evidence": [
+                {
+                    "document_id": "doc",
+                    "revision": "v1",
+                    "start_char": 0,
+                    "end_char": 10,
+                }
+            ],
+        }
+    ]
+
+    row = MODULE._evaluate_method("run", "hybrid_rrf", FakeHybrid(), qa_records)[0]
+
+    assert row["retrieved"][0]["rrf_score"] == 0.03
+    assert row["retrieved"][0]["component_ranks"] == {"bm25": 1, "dense": 4}
+    assert row["metrics"]["complete_evidence_hit_at_5"] is True

@@ -17,7 +17,7 @@ RAG 问答 MVP，让用户通过自然语言获得带来源的答案；另一方
 - 语料版本化：manifest 保留历史 revision，`active-revisions.json` 明确选择每次实验采用的版本。
 - 可复现实验：运行产物记录 QA、active revision、语料、Python、Chroma 和检索参数。
 - 分层评测：分别按推理类型和词汇重叠度汇总 Evidence Recall、完整证据命中率与 MRR。
-- 工程质量：126 项自动化测试，GitHub Actions 持续运行 Ruff、测试与覆盖率检查。
+- 工程质量：132 项自动化测试，GitHub Actions 持续运行 Ruff、测试与覆盖率检查。
 
 ## 技术栈
 
@@ -107,7 +107,7 @@ python scripts/build_canonical.py data/raw_docs/rag_paper.pdf \
 
 ### 复现当前 pilot
 
-冻结语料和标注均已提交，运行 BM25 + Dense 评测不需要原始 PDF 或 LLM API key：
+冻结语料和标注均已提交，运行 BM25 + Dense + Hybrid-RRF 评测不需要原始 PDF 或 LLM API key：
 
 ```bash
 python scripts/validate_eval.py
@@ -116,7 +116,8 @@ python scripts/evaluate_retrieval.py --run-id <new-run-id>
 ```
 
 当前已冻结第一版 30 题 dev 集（29 confirmed、1 needs_review），五类题型各 6 题；首个检索 baseline
-`frozen-30-v1` 已运行。历史 `pilot-12-v2` 只用于验证早期评测链路，不能代替冻结集结论。
+`frozen-30-v1` 已运行；`frozen-30-hybrid-rrf-v1` 在相同输入上增加了预先固定参数的等权 RRF
+对照。历史 `pilot-12-v2` 只用于验证早期评测链路，不能代替冻结集结论。
 当前数据量和分层样本仍不足以支持方法优劣的普遍结论。完整配置、逐题结果、分层汇总及历史运行有效性
 说明见 [`results/runs/`](results/runs/README.md)。
 
@@ -160,19 +161,21 @@ docker compose up --build
 - [x] 5 份 canonical 文档冻结、哈希校验和不可变 revision 管理
 - [x] active revision 选择与非 active 金标准拦截
 - [x] 30 题 dev 集冻结（29 confirmed，1 needs_review；五类题型各 6 题）
-- [x] BM25 / Dense 基线与逐题、分层、双 cohort 汇总产物
+- [x] BM25 / Dense / Hybrid-RRF 基线与逐题、分层、双 cohort 汇总产物
 - [x] 推理类型与词汇重叠度两个独立分层轴
 - [x] 14 题延迟自我复标子集预先锁定（2026-09-09 起执行）
 - [x] 确定性拒答响应契约与逐题拒答行为指标；生成系统错误不计入拒答准确率
 - [x] 从冻结检索结果恢复 canonical chunk 的批量生成脚本与拒答汇总产物
 - [x] 首轮真实生成误差归因，并增加“错误前提应纠正而非拒答”的独立 Prompt 指令
 - [x] 按 Top-5 完整证据命中分层汇总非拒答题，拆分检索受限与生成协议问题
-- [ ] Hybrid、Rerank、Long-context 与 no-RAG 对照
-- [ ] 执行首个真实批量生成运行，并增加引用校验与答案—证据支持度评测
+- [x] 等权 Hybrid-RRF 受控对照；记录候选深度、融合常数和组件名次
+- [ ] Rerank、Long-context 与 no-RAG 对照
+- [x] 执行首个真实批量生成运行
+- [ ] 增加引用校验与答案—证据支持度评测
 
 ## 后续规划
 
-近期主线是完成文献对照与 30 题 dev 集，再扩展 Hybrid、Rerank 和生成可靠性评测。当前 pilot 的
-样本量刻意保持较小，避免在标注规范定稿前批量生产需要返工的数据。
+近期主线是在冻结 30 题上继续 Rerank 和生成可靠性评测，并于 2026-09-09 起执行预先锁定的
+延迟复标。当前样本量刻意保持较小，所有方法结果都只作为诊断性基线，不作普遍优劣结论。
 
 **已知技术债**：目前 FastAPI backend 只有 `/` 和 `/health` 两个占位路由，检索和问答逻辑由 `scripts/` 和 `frontend/streamlit_app.py` 直接 import `backend/app/rag/` 模块调用，尚未封装成 REST API。Phase 1 阶段这是合理的简化（本地单机场景下更快跑通），但严格的前后端分离（frontend 通过 HTTP 调用 backend）留作后续迭代。

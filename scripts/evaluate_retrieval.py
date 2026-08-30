@@ -1,4 +1,4 @@
-"""Run isolated BM25 and Dense retrieval on the frozen evaluation set."""
+"""Run isolated BM25, Dense, and Hybrid-RRF retrieval on the frozen evaluation set."""
 
 import argparse
 import hashlib
@@ -19,12 +19,18 @@ from app.corpus import (  # noqa: E402
     load_canonical_document,
 )
 from app.evaluation.dataset import load_qa_jsonl, validate_qa_dataset  # noqa: E402
-from app.evaluation.retrieval import BM25Retriever, retrieval_metrics  # noqa: E402
+from app.evaluation.retrieval import (  # noqa: E402
+    BM25Retriever,
+    ReciprocalRankFusionRetriever,
+    retrieval_metrics,
+)
 from app.evaluation.summary import build_run_summary  # noqa: E402
 from app.rag.chunker import chunk_canonical_document  # noqa: E402
 from app.rag.retriever import ChromaRetriever  # noqa: E402
 
 DEFAULT_TOP_KS = (1, 3, 5)
+RRF_RANK_CONSTANT = 60
+RRF_CANDIDATE_DEPTH = 20
 
 
 def main() -> int:
@@ -70,6 +76,8 @@ def main() -> int:
             print(f"ERROR {mismatch}")
         return 1
 
+    args.results_dir.mkdir(parents=True, exist_ok=True)
+
     chunks = []
     for record in manifest_records:
         document = load_canonical_document(
@@ -86,15 +94,23 @@ def main() -> int:
     rows.extend(_evaluate_method(args.run_id, "bm25", bm25, qa_records))
 
     # A fresh temporary Chroma store prevents stale chunk IDs from contaminating runs.
-    with tempfile.TemporaryDirectory(prefix="techdoc-dense-") as dense_store:
+    with tempfile.TemporaryDirectory(
+        prefix=".techdoc-dense-",
+        dir=args.results_dir,
+    ) as dense_store:
         dense = ChromaRetriever(dense_store)
         try:
             dense.index_chunks(chunks)
             rows.extend(_evaluate_method(args.run_id, "dense", dense, qa_records))
+            hybrid = ReciprocalRankFusionRetriever(
+                {"bm25": bm25, "dense": dense},
+                rank_constant=RRF_RANK_CONSTANT,
+                candidate_depth=RRF_CANDIDATE_DEPTH,
+            )
+            rows.extend(_evaluate_method(args.run_id, "hybrid_rrf", hybrid, qa_records))
         finally:
             dense.close()
 
-    args.results_dir.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8", newline="\n") as stream:
         for row in rows:
             stream.write(
@@ -129,6 +145,13 @@ def main() -> int:
                 "implementation": "chromadb.DefaultEmbeddingFunction",
                 "model": "all-MiniLM-L6-v2",
                 "chromadb_version": version("chromadb"),
+            },
+            "hybrid_rrf": {
+                "implementation": "reciprocal_rank_fusion",
+                "components": ["bm25", "dense"],
+                "weights": "equal",
+                "rank_constant": RRF_RANK_CONSTANT,
+                "candidate_depth_per_component": RRF_CANDIDATE_DEPTH,
             },
         },
         "python_version": platform.python_version(),
@@ -230,6 +253,8 @@ def _evaluate_method(
                             "end_char",
                             "score",
                             "distance",
+                            "rrf_score",
+                            "component_ranks",
                         )
                         if chunk.get(key) is not None
                     }
