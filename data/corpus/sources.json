@@ -1,0 +1,73 @@
+{
+  "schema_version": "0.2",
+  "note": "Where each frozen source document came from. Deliberately records no hashes: documents.jsonl holds the authoritative source_hash, and scripts/verify_sources.py joins on (document_id, revision) to check that the URL still serves exactly those bytes. Duplicating a hash here would create a second place for it to be wrong. GitHub URLs are pinned to a commit rather than a branch, because the fastapi branch URL no longer reproduces the frozen source.",
+  "documents": [
+    {
+      "document_id": "rag_paper",
+      "revision": "v1",
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "url": "https://arxiv.org/pdf/2005.11401",
+      "url_kind": "arxiv_pdf",
+      "retrieved_at": "2026-07-02",
+      "last_verified_at": "2026-09-18",
+      "last_verified_result": "match"
+    },
+    {
+      "document_id": "autonomous_driving_survey",
+      "revision": "v1",
+      "title": "End-to-end Autonomous Driving: Challenges and Frontiers",
+      "url": "https://arxiv.org/pdf/2306.16927",
+      "url_kind": "arxiv_pdf",
+      "retrieved_at": "2026-07-02",
+      "last_verified_at": "2026-09-18",
+      "last_verified_result": "match"
+    },
+    {
+      "document_id": "fastapi_first_steps",
+      "revision": "v1",
+      "title": "FastAPI tutorial: First Steps",
+      "url": "https://raw.githubusercontent.com/fastapi/fastapi/da9d05bc7abe2803db8d892ae3d856b0d93739cb/docs/en/docs/tutorial/first-steps.md",
+      "url_kind": "github_pinned_commit",
+      "superseded_moving_ref": "https://raw.githubusercontent.com/fastapi/fastapi/master/docs/en/docs/tutorial/first-steps.md",
+      "note": "The master URL served 14155 bytes on 2026-09-18 against 13757 frozen, so it no longer reproduces the source. Commit da9d05bc was the last change to this file before the 2026-07-02 retrieval date and does reproduce it.",
+      "retrieved_at": "2026-07-02",
+      "last_verified_at": "2026-09-18",
+      "last_verified_result": "match"
+    },
+    {
+      "document_id": "kubernetes_overview",
+      "revision": "v1",
+      "title": "Kubernetes documentation: Overview",
+      "url": "https://raw.githubusercontent.com/kubernetes/website/87593be7e2afcb31cbf3bfe9f1414e71428890d0/content/en/docs/concepts/overview/_index.md",
+      "url_kind": "github_pinned_commit",
+      "superseded_moving_ref": "https://raw.githubusercontent.com/kubernetes/website/main/content/en/docs/concepts/overview/_index.md",
+      "note": "The main URL still reproduced the frozen bytes on 2026-09-18; pinned anyway, since that is not guaranteed to keep holding.",
+      "retrieved_at": "2026-07-02",
+      "last_verified_at": "2026-09-18",
+      "last_verified_result": "match"
+    },
+    {
+      "document_id": "pep8",
+      "revision": "v1",
+      "title": "NOT PEP 8: an HTTP 404 page served by peps.python.org",
+      "url": "https://peps.python.org/pep-0008.txt",
+      "url_kind": "http_error_page",
+      "note": "Superseded by pep8@v2. This URL returned a 404 HTML page large enough (5407 bytes) to pass a size sanity check, and it entered the corpus unnoticed. The error page has itself changed since (5442 bytes on 2026-09-18), so not even the failure is byte-reproducible. Retained because pilot-5-v0 and pilot-9-v1 ran against it. On 2026-09-18 the URL returns an HTTP 404 status rather than a 200 with a body, so the fetch now fails outright instead of silently yielding a plausible file.",
+      "retrieved_at": "2026-07-02",
+      "last_verified_at": "2026-09-18",
+      "last_verified_result": "fetch_failed"
+    },
+    {
+      "document_id": "pep8",
+      "revision": "v2",
+      "title": "PEP 8: Style Guide for Python Code",
+      "url": "https://raw.githubusercontent.com/python/peps/5514795ade79a5bf6f3c08c562b02689d0a9feb2/peps/pep-0008.rst",
+      "url_kind": "github_pinned_commit",
+      "note": "The main URL still reproduced the frozen bytes on 2026-09-18; pinned to commit 5514795a, the last change to this file before the 2026-08-25 retrieval date, so the provenance does not depend on the branch staying put.",
+      "retrieved_at": "2026-08-25",
+      "last_verified_at": "2026-09-18",
+      "last_verified_result": "match",
+      "superseded_moving_ref": "https://raw.githubusercontent.com/python/peps/main/peps/pep-0008.rst"
+    }
+  ]
+}
