@@ -52,8 +52,8 @@ Related Work 不是文献清单，是**一个论证**：读完之后，读者应
 
 BEIR 关于 **annotation selection bias** 的那条观察要在这里点明并接到自己的方法上：
 qrels 常由特定 lexical pool 形成，会系统性不利于非词汇方法。这是你引入
-question–evidence 词汇重叠度量与 low/medium/high 配额的**直接理由**，也是你能主张
-自己的对比不是标注机制产物的依据。
+question–evidence 词汇重叠度量与 low/medium/high 配额的相关动机，但 pooling bias 与
+问题措辞的构造偏差必须分开；配额不能证明自己的对比不是标注机制的产物。
 
 ### 第 4 组：人工事实性标注协议
 
@@ -70,7 +70,7 @@ question–evidence 词汇重叠度量与 low/medium/high 配额的**直接理�
 1. 冻结语料 + 字符偏移 gold evidence（第 2、3 组缺）
 2. 同一批题上隔离比较检索方法（第 1 组缺）
 3. 把 refuse 与 correct_premise 作为不同的预期行为分别评（全部四组都缺）
-4. 用词汇重叠分层控制 BM25 的构造性优势（第 3 组自己提出但未实施的告诫）
+4. 用词汇重叠分层控制题目措辞的构造偏差。2026-09-11 核查修正：BEIR §6 已补标 980 对 TREC-COVID 查询—文档并重算结果；不能声称它只提出告诫而未实施。Pooling bias 与本项目的措辞分层是不同控制对象。
 
 ## 自查清单
 
