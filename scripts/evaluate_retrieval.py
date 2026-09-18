@@ -100,6 +100,7 @@ def main() -> int:
     ) as dense_store:
         dense = ChromaRetriever(dense_store)
         try:
+            dense_settings = dense.describe()
             dense.index_chunks(chunks)
             rows.extend(_evaluate_method(args.run_id, "dense", dense, qa_records))
             hybrid = ReciprocalRankFusionRetriever(
@@ -141,11 +142,9 @@ def main() -> int:
         "top_ks": list(DEFAULT_TOP_KS),
         "methods": {
             "bm25": {"k1": 1.5, "b": 0.75, "tokenizer": "[A-Za-z0-9_]+"},
-            "dense": {
-                "implementation": "chromadb.DefaultEmbeddingFunction",
-                "model": "all-MiniLM-L6-v2",
-                "chromadb_version": version("chromadb"),
-            },
+            # Read from the live collection and embedder, never typed in;
+            # see ChromaRetriever.describe() for what each field guards.
+            "dense": {**dense_settings, "chromadb_version": version("chromadb")},
             "hybrid_rrf": {
                 "implementation": "reciprocal_rank_fusion",
                 "components": ["bm25", "dense"],
