@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-23",
+  "thread_id": "01a0c9f4-2374-77c3-82ff-333f3f0c6ffe",
+  "previous_reannotation_sha256": "3d1da93d2ee3a595d07df7c99c6b8fe111dc124684a2e4c7d6f7bb4cc6f9dc7c",
+  "previous_record_count": 2,
+  "appended_record_count": 14,
+  "appended_annotations_sha256": "2a08f19d49cb010aacf79274ea64b6f45b6edd3786703a41746d8c25b9507ded",
+  "combined_reannotation_sha256": "52a178037200f189c45b4df891c6920a8f516b82817ba157d9a540383d4befbd",
+  "first_pass_sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+  "lock_sha256": "8ce67cb822f47c932adc98420285fc9d3130bbfee285ea8640deb966e5e3295d",
+  "input_manifest_sha256": "ae6ef65633b14b8ba4b945c0f251ee643aa25f1be341c1a5bedb7a891e0b4451",
+  "tampered_artifact_rejected": true,
+  "archived_packet_note": "input/ is an exact portable copy of the successful input package; LOCK paths preserve original execution paths."
+}

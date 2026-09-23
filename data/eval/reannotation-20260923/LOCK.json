@@ -1,0 +1,61 @@
+{
+  "schema_version": "1",
+  "status": "locked",
+  "locked_at_utc": "2026-09-23T03:12:15.987167+00:00",
+  "locked_at_local": "2026-09-23T13:12:15.987167+10:00",
+  "timezone": "Australia/Sydney",
+  "input_package": "D:\\111求职准备\\reannotation-blind-20260923-v2",
+  "input_manifest_sha256": "ae6ef65633b14b8ba4b945c0f251ee643aa25f1be341c1a5bedb7a891e0b4451",
+  "artifacts": {
+    "annotations.jsonl": {
+      "path": "D:\\111求职准备\\reannotation-blind-20260923-v2\\output\\annotations.jsonl",
+      "sha256": "2a08f19d49cb010aacf79274ea64b6f45b6edd3786703a41746d8c25b9507ded"
+    },
+    "dimensions.jsonl": {
+      "path": "D:\\111求职准备\\reannotation-blind-20260923-v2\\output\\dimensions.jsonl",
+      "sha256": "03b4fd4f1b122801b59340372b922a333c750a43557a38eb8d12501fc925035c"
+    },
+    "hesitations.md": {
+      "path": "D:\\111求职准备\\reannotation-blind-20260923-v2\\output\\hesitations.md",
+      "sha256": "c1ffa1c2527e5f08463bda2b53a60e394182ca39569c33ca66a93a04c1e04a29"
+    }
+  },
+  "validation": {
+    "status": "passed",
+    "annotation_records": 14,
+    "dimension_records": 14,
+    "unique_ids": 14,
+    "exact_original_questions": true,
+    "manifest_files_verified": 12,
+    "corpus_text_hashes_verified": 5,
+    "evidence_spans_verified": 17,
+    "candidate_spans_verified": 10,
+    "active_revisions_verified": true,
+    "unicode_codepoint_offsets_and_quotes_verified": true,
+    "pages_verified": true,
+    "field_combinations_verified": true,
+    "lexical_values_recomputed": true,
+    "out_of_scope_all_document_audits_verified": 3,
+    "needs_review_ids": [
+      "q021"
+    ]
+  },
+  "executor": {
+    "annotator": "codex_main_assistant",
+    "kind": "AI main assistant",
+    "product": "Codex",
+    "known_model_family": "GPT-6 per session instructions; exact backend identifier not independently verified",
+    "subagents_used": false,
+    "user_performed_annotation": false,
+    "human_review_claimed": false,
+    "first_pass_annotator_identity": "unknown; not inferred"
+  },
+  "prohibited_information_exposed": false,
+  "exposure_events": [],
+  "allowed_package_metadata_note": "START.md includes a first-pass digest and planned earliest date. Neither per-question first-pass annotations nor comparison results were accessed.",
+  "research_read_scope": "Only D:/111求职准备/reannotation-blind-20260923-v2/; no other tasks, original repository, parent/sibling research directories, or web answers.",
+  "comparison_performed": false,
+  "agreement_computed": false,
+  "post_lock_policy": "No modification of the three artifacts or this lock after creation.",
+  "protocol_limitation": "AI reannotation only. No claim of independent human double annotation. Intra-annotator temporal consistency eligibility remains for separate identity/protocol review."
+}

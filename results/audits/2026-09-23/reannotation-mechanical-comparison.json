@@ -1,0 +1,329 @@
+{
+  "lock_sha256": "8ce67cb822f47c932adc98420285fc9d3130bbfee285ea8640deb966e5e3295d",
+  "artifact_sha256": {
+    "annotations.jsonl": "2a08f19d49cb010aacf79274ea64b6f45b6edd3786703a41746d8c25b9507ded",
+    "dimensions.jsonl": "03b4fd4f1b122801b59340372b922a333c750a43557a38eb8d12501fc925035c",
+    "hesitations.md": "c1ffa1c2527e5f08463bda2b53a60e394182ca39569c33ca66a93a04c1e04a29"
+  },
+  "warning_messages": [
+    "e001 quote exceeds provisional 300-character limit"
+  ],
+  "support": {
+    "matches": 14,
+    "n": 14,
+    "raw_agreement": 1.0,
+    "cohen_kappa": 1.0
+  },
+  "topology": {
+    "matches": 12,
+    "n": 14,
+    "raw_agreement": 0.8571428571428571,
+    "cohen_kappa": 0.8055555555555556
+  },
+  "rows": [
+    {
+      "question_id": "q006",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "single_evidence",
+      "second_topology": "single_evidence",
+      "first_answer": "It may be at most 79 characters wide.",
+      "second_answer": "An ordinary Python source line should be no more than 79 characters long under the default style-guide limit.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.0,
+        "stratum": "low"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.0,
+        "stratum": "low"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": true
+    },
+    {
+      "question_id": "q008",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "single_evidence",
+      "second_topology": "single_evidence",
+      "first_answer": "Swagger UI supplies it.",
+      "second_answer": "Swagger UI supplies the automatic interactive API documentation.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.3,
+        "stratum": "medium"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.3,
+        "stratum": "medium"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": true
+    },
+    {
+      "question_id": "q010",
+      "support_equal": true,
+      "topology_equal": false,
+      "first_topology": "single_evidence",
+      "second_topology": "multi_evidence",
+      "first_answer": "PEP 8 generally discourages them.",
+      "second_answer": "PEP 8 generally discourages multiple statements on one line. A short if/for/while body may sometimes share a line, but multi-clause statements must not; avoid folding long statements onto one line.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.5,
+        "stratum": "high"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.5,
+        "stratum": "high"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": false
+    },
+    {
+      "question_id": "q011",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "multi_evidence",
+      "second_topology": "multi_evidence",
+      "first_answer": "The primary interactive reference is at http://127.0.0.1:8000/docs and is provided by Swagger UI; the alternative is at http://127.0.0.1:8000/redoc and is provided by ReDoc.",
+      "second_answer": "Open http://127.0.0.1:8000/docs for the interactive documentation provided by Swagger UI, and http://127.0.0.1:8000/redoc for the alternative documentation provided by ReDoc.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.1176,
+        "stratum": "low"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.1176,
+        "stratum": "low"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": true
+    },
+    {
+      "question_id": "q013",
+      "support_equal": true,
+      "topology_equal": false,
+      "first_topology": "multi_evidence",
+      "second_topology": "single_evidence",
+      "first_answer": "RAG's knowledge can be updated easily at test time, and its grounding offers more control and interpretability.",
+      "second_answer": "Its raw-text memory is human-writable, so knowledge can be updated by editing the document index, and human-readable, giving the model a form of interpretability through inspectable memory.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.3571,
+        "stratum": "medium"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.2143,
+        "stratum": "low"
+      },
+      "each_first_span_overlaps_second": false,
+      "each_second_span_overlaps_first": false
+    },
+    {
+      "question_id": "q014",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "multi_evidence",
+      "second_topology": "multi_evidence",
+      "first_answer": "Kubernetes exposes a container through a DNS name or its own IP and distributes heavy network traffic to keep the deployment stable. For rollouts, it changes the actual state toward the declared desired state at a controlled rate.",
+      "second_answer": "Kubernetes exposes a container through a DNS name or its own IP address and can distribute high network traffic to keep the deployment stable. For automated rollouts, you describe the desired state and Kubernetes changes the actual state toward it at a controlled rate.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.7143,
+        "stratum": "high"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.5714,
+        "stratum": "high"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": true
+    },
+    {
+      "question_id": "q018",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "multi_hop",
+      "second_topology": "multi_hop",
+      "first_answer": "RAG-Token; it may be especially effective because Jeopardy questions often contain two separate pieces of information, and RAG-Token can combine content from several documents.",
+      "second_answer": "RAG-Token can predict each target token from a different document. It may be especially effective for Jeopardy because those questions often contain two separate pieces of information, and RAG-Token can combine content from several documents.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.4375,
+        "stratum": "medium"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.4375,
+        "stratum": "medium"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": true
+    },
+    {
+      "question_id": "q019",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "multi_hop",
+      "second_topology": "multi_hop",
+      "first_answer": "LBC; it adopts DAgger and resamples data with higher loss more frequently.",
+      "second_answer": "LBC creates the command-conditioned imaginary supervision with a privileged agent. It adopts DAgger and resamples higher-loss data more frequently.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.4167,
+        "stratum": "medium"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.4167,
+        "stratum": "medium"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": true
+    },
+    {
+      "question_id": "q020",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "multi_hop",
+      "second_topology": "multi_hop",
+      "first_answer": "Roach; it trains a stronger privileged expert with reinforcement learning, eliminating the upper bound of behavior cloning.",
+      "second_answer": "Roach trains the privileged BEV-based RL agent and uses its policy to collect the downstream IL dataset. According to the survey, it eliminates the upper bound of behavior cloning by training a stronger privileged expert with reinforcement learning.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.75,
+        "stratum": "high"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.75,
+        "stratum": "high"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": true
+    },
+    {
+      "question_id": "q021",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "not_applicable",
+      "second_topology": "not_applicable",
+      "first_answer": null,
+      "second_answer": null,
+      "first_status": "confirmed",
+      "second_status": "needs_review",
+      "first_lexical": null,
+      "second_lexical": null,
+      "each_first_span_overlaps_second": null,
+      "each_second_span_overlaps_first": null
+    },
+    {
+      "question_id": "q023",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "not_applicable",
+      "second_topology": "not_applicable",
+      "first_answer": null,
+      "second_answer": null,
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": null,
+      "second_lexical": null,
+      "each_first_span_overlaps_second": null,
+      "each_second_span_overlaps_first": null
+    },
+    {
+      "question_id": "q025",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "not_applicable",
+      "second_topology": "not_applicable",
+      "first_answer": null,
+      "second_answer": null,
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": null,
+      "second_lexical": null,
+      "each_first_span_overlaps_second": null,
+      "each_second_span_overlaps_first": null
+    },
+    {
+      "question_id": "q026",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "single_evidence",
+      "second_topology": "single_evidence",
+      "first_answer": "It does not lock the response to one source: RAG-Token can base each target token on a different document.",
+      "second_answer": "It does not lock the entire response to one retrieved source. RAG-Token can predict each target token based on a different document.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.1111,
+        "stratum": "low"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.1111,
+        "stratum": "low"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": true
+    },
+    {
+      "question_id": "q029",
+      "support_equal": true,
+      "topology_equal": true,
+      "first_topology": "single_evidence",
+      "second_topology": "single_evidence",
+      "first_answer": "It does neither: Kubernetes can update secrets and application configuration without rebuilding container images and without exposing secrets in stack configuration.",
+      "second_answer": "Kubernetes does not require those actions: it lets you deploy and update secrets and application configuration without rebuilding container images or exposing secrets in stack configuration.",
+      "first_status": "confirmed",
+      "second_status": "confirmed",
+      "first_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.5455,
+        "stratum": "high"
+      },
+      "second_lexical": {
+        "metric": "question_content_token_recall_in_evidence",
+        "score": 0.5455,
+        "stratum": "high"
+      },
+      "each_first_span_overlaps_second": true,
+      "each_second_span_overlaps_first": true
+    }
+  ],
+  "limitations": [
+    "Lock exposure/identity declarations require reviewer inspection.",
+    "A has no explicit first-pass quality judgments: no retrospective agreement rate.",
+    "D semantic coverage and E semantic sufficiency are not automatically scored.",
+    "Span overlap is geometric only; refusal candidate locations are not gold evidence."
+  ]
+}

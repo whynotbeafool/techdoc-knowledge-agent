@@ -1,0 +1,12 @@
+{
+  "retrieval_rows_compared": 90,
+  "same_row_order": true,
+  "exact_equal_excluding_run_id": true,
+  "different_rows": [],
+  "generation_old_schema": "1",
+  "generation_new_schema": "2",
+  "generation_main_cells_equal": true,
+  "generation_added_fields": [
+    "retrieval_conditioned_cells"
+  ]
+}

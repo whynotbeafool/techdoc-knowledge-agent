@@ -4,3 +4,9 @@
 # recorded text_hash and character offset. Never convert line endings here.
 /data/corpus/canonical/** -text
 /data/corpus/documents.jsonl text eol=lf
+
+# Locked reannotation hashes cover exact input and output bytes, including
+# Markdown rules and JSONL line endings. Preserve them on every platform;
+# archived source whitespace is checked by hashes, not formatting rules.
+/data/eval/reannotation-20260923/** -text -whitespace
+/data/eval/reannotation.jsonl -text

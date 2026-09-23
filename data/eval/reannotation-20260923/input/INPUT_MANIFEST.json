@@ -1,0 +1,17 @@
+{
+  "schema_version": "2",
+  "files": {
+    "AGENTS.md": "21b3e140782120f00fbf0855eb80c81b0d52c08b58dbe47af6c3cbc05f233e56",
+    "corpus/active-revisions.json": "203388e955c47416d0f78aadbeb5489ec128cebdf4ba8c602a2dbe8e743ce6af",
+    "corpus/canonical/autonomous_driving_survey/v1.txt": "96906840430aba16dfc784b7b947715127396f7f3d07067d119b3633778a49f8",
+    "corpus/canonical/fastapi_first_steps/v1.txt": "6e909cc5cf438740cdc71dad49b8e2a513865a9c9c609b1944fe3de080ea081c",
+    "corpus/canonical/kubernetes_overview/v1.txt": "4caf1cd3bfe590d9eb75d513d2024081338dc48523f81f9e06e3208e749f3c8c",
+    "corpus/canonical/pep8/v2.txt": "5398fae01e6df3757181e63c79f12749336c89c7ca5728534174109e243a8833",
+    "corpus/canonical/rag_paper/v1.txt": "83e663b687893f552ab75710cc7748dc6c0d2b3697c4b669a9f1903497c86a4f",
+    "corpus/documents.jsonl": "de10014927fb3db1548649164c3f4a305add049b13f2fecc2cea6472499a99c3",
+    "guideline.md": "3316078ef61bfce4217445aab60d3d0364c0e46ef34d3e745f6168a557278c6b",
+    "lexical-rule.json": "df5219b2a28343d2805d898e7d51f6721bb7b94bf2c55e1e6cc19eb4b69ed25a",
+    "questions.jsonl": "957da65d3b52589aa942fe71e03513404609bc930f74b1fccf0086fb6877ce1c",
+    "START.md": "cd1d877ac15b66123af641ac3b4f340c5589f55c45179b31cf24f9d3e2c571ab"
+  }
+}

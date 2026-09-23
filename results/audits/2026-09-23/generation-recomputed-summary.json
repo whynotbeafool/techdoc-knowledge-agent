@@ -1,0 +1,96 @@
+{
+  "schema_version": "2",
+  "run_id": "frozen-30-bm25-deepseek-v1",
+  "cells": [
+    {
+      "method": "bm25",
+      "cohort": "all_annotations",
+      "n": 30,
+      "evaluated_n": 30,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": 0.7,
+        "refusal_precision": 0.4,
+        "refusal_recall": 1.0,
+        "refusal_false_positive_rate": 0.375,
+        "generation_system_error_rate": 0.0
+      }
+    },
+    {
+      "method": "bm25",
+      "cohort": "confirmed_only",
+      "n": 29,
+      "evaluated_n": 29,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": 0.6897,
+        "refusal_precision": 0.4,
+        "refusal_recall": 1.0,
+        "refusal_false_positive_rate": 0.3913,
+        "generation_system_error_rate": 0.0
+      }
+    }
+  ],
+  "retrieval_conditioned_cells": [
+    {
+      "method": "bm25",
+      "cohort": "all_annotations",
+      "n": 0,
+      "evaluated_n": 0,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": null,
+        "refusal_precision": null,
+        "refusal_recall": null,
+        "refusal_false_positive_rate": null,
+        "generation_system_error_rate": null
+      },
+      "retrieval_condition": "complete_evidence"
+    },
+    {
+      "method": "bm25",
+      "cohort": "all_annotations",
+      "n": 0,
+      "evaluated_n": 0,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": null,
+        "refusal_precision": null,
+        "refusal_recall": null,
+        "refusal_false_positive_rate": null,
+        "generation_system_error_rate": null
+      },
+      "retrieval_condition": "incomplete_evidence"
+    },
+    {
+      "method": "bm25",
+      "cohort": "confirmed_only",
+      "n": 0,
+      "evaluated_n": 0,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": null,
+        "refusal_precision": null,
+        "refusal_recall": null,
+        "refusal_false_positive_rate": null,
+        "generation_system_error_rate": null
+      },
+      "retrieval_condition": "complete_evidence"
+    },
+    {
+      "method": "bm25",
+      "cohort": "confirmed_only",
+      "n": 0,
+      "evaluated_n": 0,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": null,
+        "refusal_precision": null,
+        "refusal_recall": null,
+        "refusal_false_positive_rate": null,
+        "generation_system_error_rate": null
+      },
+      "retrieval_condition": "incomplete_evidence"
+    }
+  ]
+}
