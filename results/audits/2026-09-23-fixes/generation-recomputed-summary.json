@@ -1,0 +1,98 @@
+{
+  "schema_version": "2",
+  "run_id": "frozen-30-bm25-deepseek-v1",
+  "metric_scope": "refusal_prefix_contract; not semantic answer correctness",
+  "retrieval_conditioning_missing_n": 0,
+  "cells": [
+    {
+      "method": "bm25",
+      "cohort": "all_annotations",
+      "n": 30,
+      "evaluated_n": 30,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": 0.7,
+        "refusal_precision": 0.4,
+        "refusal_recall": 1.0,
+        "refusal_false_positive_rate": 0.375,
+        "generation_system_error_rate": 0.0
+      }
+    },
+    {
+      "method": "bm25",
+      "cohort": "confirmed_only",
+      "n": 29,
+      "evaluated_n": 29,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": 0.6897,
+        "refusal_precision": 0.4,
+        "refusal_recall": 1.0,
+        "refusal_false_positive_rate": 0.3913,
+        "generation_system_error_rate": 0.0
+      }
+    }
+  ],
+  "retrieval_conditioned_cells": [
+    {
+      "method": "bm25",
+      "cohort": "all_annotations",
+      "n": 15,
+      "evaluated_n": 15,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": 0.8,
+        "refusal_precision": 0.0,
+        "refusal_recall": null,
+        "refusal_false_positive_rate": 0.2,
+        "generation_system_error_rate": 0.0
+      },
+      "retrieval_condition": "complete_evidence"
+    },
+    {
+      "method": "bm25",
+      "cohort": "all_annotations",
+      "n": 9,
+      "evaluated_n": 9,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": 0.3333,
+        "refusal_precision": 0.0,
+        "refusal_recall": null,
+        "refusal_false_positive_rate": 0.6667,
+        "generation_system_error_rate": 0.0
+      },
+      "retrieval_condition": "incomplete_evidence"
+    },
+    {
+      "method": "bm25",
+      "cohort": "confirmed_only",
+      "n": 14,
+      "evaluated_n": 14,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": 0.7857,
+        "refusal_precision": 0.0,
+        "refusal_recall": null,
+        "refusal_false_positive_rate": 0.2143,
+        "generation_system_error_rate": 0.0
+      },
+      "retrieval_condition": "complete_evidence"
+    },
+    {
+      "method": "bm25",
+      "cohort": "confirmed_only",
+      "n": 9,
+      "evaluated_n": 9,
+      "system_error_n": 0,
+      "metrics": {
+        "refusal_accuracy": 0.3333,
+        "refusal_precision": 0.0,
+        "refusal_recall": null,
+        "refusal_false_positive_rate": 0.6667,
+        "generation_system_error_rate": 0.0
+      },
+      "retrieval_condition": "incomplete_evidence"
+    }
+  ]
+}

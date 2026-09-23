@@ -5,9 +5,9 @@
 ## 仓库与环境
 
 - 仓库：`https://github.com/whynotbeafool/techdoc-knowledge-agent.git`。
-- HEAD：`48dc9cf1bd4942ab34ba5dcd783aa540227c1800`。
+- 原盘点起点：`48dc9cf1bd4942ab34ba5dcd783aa540227c1800`；该盘点及归档已在 `c29a0f4` 提交并推送。下文原盘点命令与结果保留作为历史记录。
 - Windows / Python 3.13.5；Chroma 1.5.9、pypdf 6.14.2、OpenAI Python 2.44.0、pytest 9.1.1、ruff 0.15.22。
-- 起始工作区不干净：上次留下 `data/eval/hesitations.md`、`docs/paper/discussion.md`、`docs/paper/manuscript.md` 修改及 `data/eval/blind-reannotation/` 新目录，本次保留。当前变化未提交、未推送。
+- 起始工作区不干净：上次留下 `data/eval/hesitations.md`、`docs/paper/discussion.md`、`docs/paper/manuscript.md` 修改及 `data/eval/blind-reannotation/` 新目录，本次保留。这些起始变化已随 `c29a0f4` 提交并推送。
 - 未发现适用 AGENTS.md；沿用已读取的 CLAUDE.md 约束。CLAUDE.md 的“30 题 baseline 尚未运行”等状态已过时，应以本盘点和原始产物为准。
 - `backend/requirements.txt` 未固定版本；本次证明当前环境可运行，不证明新环境可精确重建。
 
@@ -73,3 +73,10 @@ python scripts/evaluate_retrieval.py --run-id audit-2026-09-23 --results-dir res
 4. 可选：迁移第二检索器、更大数据量、证据冲突类别。投稿模板排在实证结果之后。
 
 本次不新增付费调用，不扩数据，不调整检索参数，不把审阅指南当作整套实验的执行授权。指南审阅及方法学冲突详见 [GUIDE_REVIEW.md](GUIDE_REVIEW.md)。
+
+
+## fix-report 核查修复
+
+本次修复保留冻结 QA、原计划、全部原始运行和 LOCK 覆盖的文件。哈希异常是 7 个 CRLF 的 Git 规范化，不是标签内容差异；兼容两个确证字节身份。新审计见 `results/audits/2026-09-23-fixes/`，可用 `python scripts/rebuild_saved_audit.py --output-dir <新目录>` 重建。
+
+原审计的 retrieval_conditioned_cells 全空，不能视为已完成条件分析。补关联原检索记录后为 15/9（全体）与 14/9（confirmed-only）；不改历史生成分数。复标 A 标签、分母、事后复核边界与 q017 敏感性已补报。完整修复范围和验证见 `research/FIX_REPORT_RESOLUTION.md`。

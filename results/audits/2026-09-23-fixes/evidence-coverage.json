@@ -1,0 +1,1012 @@
+{
+  "run_id": "frozen-30-hybrid-rrf-v1",
+  "qa_hash": "sha256:21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+  "qa_identity": {
+    "actual_sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+    "exact_run_match": true
+  },
+  "run_hash": "f2300d926a60215ad9161d63d93afd43a8ef5e6f6bb596eb856002a24536f64d",
+  "cells": [
+    {
+      "method": "bm25",
+      "class": "answer",
+      "cohort": "confirmed_only",
+      "k": 1,
+      "n": 17,
+      "any_recall": 0.411765,
+      "full_recall": 0.382353,
+      "any_complete": 0.294118,
+      "full_complete": 0.235294,
+      "mean_gold_fraction": 0.408642
+    },
+    {
+      "method": "bm25",
+      "class": "answer",
+      "cohort": "confirmed_only",
+      "k": 3,
+      "n": 17,
+      "any_recall": 0.647059,
+      "full_recall": 0.588235,
+      "any_complete": 0.470588,
+      "full_complete": 0.352941,
+      "mean_gold_fraction": 0.640609
+    },
+    {
+      "method": "bm25",
+      "class": "answer",
+      "cohort": "confirmed_only",
+      "k": 5,
+      "n": 17,
+      "any_recall": 0.647059,
+      "full_recall": 0.588235,
+      "any_complete": 0.470588,
+      "full_complete": 0.352941,
+      "mean_gold_fraction": 0.64353
+    },
+    {
+      "method": "bm25",
+      "class": "answer",
+      "cohort": "all_annotations",
+      "k": 1,
+      "n": 18,
+      "any_recall": 0.416667,
+      "full_recall": 0.361111,
+      "any_complete": 0.277778,
+      "full_complete": 0.222222,
+      "mean_gold_fraction": 0.403738
+    },
+    {
+      "method": "bm25",
+      "class": "answer",
+      "cohort": "all_annotations",
+      "k": 3,
+      "n": 18,
+      "any_recall": 0.666667,
+      "full_recall": 0.583333,
+      "any_complete": 0.5,
+      "full_complete": 0.333333,
+      "mean_gold_fraction": 0.650595
+    },
+    {
+      "method": "bm25",
+      "class": "answer",
+      "cohort": "all_annotations",
+      "k": 5,
+      "n": 18,
+      "any_recall": 0.666667,
+      "full_recall": 0.583333,
+      "any_complete": 0.5,
+      "full_complete": 0.333333,
+      "mean_gold_fraction": 0.653354
+    },
+    {
+      "method": "bm25",
+      "class": "correct_premise",
+      "cohort": "confirmed_only",
+      "k": 1,
+      "n": 6,
+      "any_recall": 0.833333,
+      "full_recall": 0.666667,
+      "any_complete": 0.833333,
+      "full_complete": 0.666667,
+      "mean_gold_fraction": 0.80202
+    },
+    {
+      "method": "bm25",
+      "class": "correct_premise",
+      "cohort": "confirmed_only",
+      "k": 3,
+      "n": 6,
+      "any_recall": 1,
+      "full_recall": 1,
+      "any_complete": 1.0,
+      "full_complete": 1.0,
+      "mean_gold_fraction": 1.0
+    },
+    {
+      "method": "bm25",
+      "class": "correct_premise",
+      "cohort": "confirmed_only",
+      "k": 5,
+      "n": 6,
+      "any_recall": 1,
+      "full_recall": 1,
+      "any_complete": 1.0,
+      "full_complete": 1.0,
+      "mean_gold_fraction": 1.0
+    },
+    {
+      "method": "bm25",
+      "class": "correct_premise",
+      "cohort": "all_annotations",
+      "k": 1,
+      "n": 6,
+      "any_recall": 0.833333,
+      "full_recall": 0.666667,
+      "any_complete": 0.833333,
+      "full_complete": 0.666667,
+      "mean_gold_fraction": 0.80202
+    },
+    {
+      "method": "bm25",
+      "class": "correct_premise",
+      "cohort": "all_annotations",
+      "k": 3,
+      "n": 6,
+      "any_recall": 1,
+      "full_recall": 1,
+      "any_complete": 1.0,
+      "full_complete": 1.0,
+      "mean_gold_fraction": 1.0
+    },
+    {
+      "method": "bm25",
+      "class": "correct_premise",
+      "cohort": "all_annotations",
+      "k": 5,
+      "n": 6,
+      "any_recall": 1,
+      "full_recall": 1,
+      "any_complete": 1.0,
+      "full_complete": 1.0,
+      "mean_gold_fraction": 1.0
+    },
+    {
+      "method": "dense",
+      "class": "answer",
+      "cohort": "confirmed_only",
+      "k": 1,
+      "n": 17,
+      "any_recall": 0.352941,
+      "full_recall": 0.294118,
+      "any_complete": 0.235294,
+      "full_complete": 0.117647,
+      "mean_gold_fraction": 0.346491
+    },
+    {
+      "method": "dense",
+      "class": "answer",
+      "cohort": "confirmed_only",
+      "k": 3,
+      "n": 17,
+      "any_recall": 0.529412,
+      "full_recall": 0.45098,
+      "any_complete": 0.411765,
+      "full_complete": 0.235294,
+      "mean_gold_fraction": 0.522807
+    },
+    {
+      "method": "dense",
+      "class": "answer",
+      "cohort": "confirmed_only",
+      "k": 5,
+      "n": 17,
+      "any_recall": 0.558824,
+      "full_recall": 0.509804,
+      "any_complete": 0.411765,
+      "full_complete": 0.294118,
+      "mean_gold_fraction": 0.555547
+    },
+    {
+      "method": "dense",
+      "class": "answer",
+      "cohort": "all_annotations",
+      "k": 1,
+      "n": 18,
+      "any_recall": 0.333333,
+      "full_recall": 0.277778,
+      "any_complete": 0.222222,
+      "full_complete": 0.111111,
+      "mean_gold_fraction": 0.327242
+    },
+    {
+      "method": "dense",
+      "class": "answer",
+      "cohort": "all_annotations",
+      "k": 3,
+      "n": 18,
+      "any_recall": 0.527778,
+      "full_recall": 0.453704,
+      "any_complete": 0.388889,
+      "full_complete": 0.222222,
+      "mean_gold_fraction": 0.52154
+    },
+    {
+      "method": "dense",
+      "class": "answer",
+      "cohort": "all_annotations",
+      "k": 5,
+      "n": 18,
+      "any_recall": 0.555556,
+      "full_recall": 0.509259,
+      "any_complete": 0.388889,
+      "full_complete": 0.277778,
+      "mean_gold_fraction": 0.552461
+    },
+    {
+      "method": "dense",
+      "class": "correct_premise",
+      "cohort": "confirmed_only",
+      "k": 1,
+      "n": 6,
+      "any_recall": 0.666667,
+      "full_recall": 0.5,
+      "any_complete": 0.666667,
+      "full_complete": 0.5,
+      "mean_gold_fraction": 0.635354
+    },
+    {
+      "method": "dense",
+      "class": "correct_premise",
+      "cohort": "confirmed_only",
+      "k": 3,
+      "n": 6,
+      "any_recall": 0.666667,
+      "full_recall": 0.5,
+      "any_complete": 0.666667,
+      "full_complete": 0.5,
+      "mean_gold_fraction": 0.635354
+    },
+    {
+      "method": "dense",
+      "class": "correct_premise",
+      "cohort": "confirmed_only",
+      "k": 5,
+      "n": 6,
+      "any_recall": 0.666667,
+      "full_recall": 0.666667,
+      "any_complete": 0.666667,
+      "full_complete": 0.666667,
+      "mean_gold_fraction": 0.666667
+    },
+    {
+      "method": "dense",
+      "class": "correct_premise",
+      "cohort": "all_annotations",
+      "k": 1,
+      "n": 6,
+      "any_recall": 0.666667,
+      "full_recall": 0.5,
+      "any_complete": 0.666667,
+      "full_complete": 0.5,
+      "mean_gold_fraction": 0.635354
+    },
+    {
+      "method": "dense",
+      "class": "correct_premise",
+      "cohort": "all_annotations",
+      "k": 3,
+      "n": 6,
+      "any_recall": 0.666667,
+      "full_recall": 0.5,
+      "any_complete": 0.666667,
+      "full_complete": 0.5,
+      "mean_gold_fraction": 0.635354
+    },
+    {
+      "method": "dense",
+      "class": "correct_premise",
+      "cohort": "all_annotations",
+      "k": 5,
+      "n": 6,
+      "any_recall": 0.666667,
+      "full_recall": 0.666667,
+      "any_complete": 0.666667,
+      "full_complete": 0.666667,
+      "mean_gold_fraction": 0.666667
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "answer",
+      "cohort": "confirmed_only",
+      "k": 1,
+      "n": 17,
+      "any_recall": 0.411765,
+      "full_recall": 0.352941,
+      "any_complete": 0.294118,
+      "full_complete": 0.176471,
+      "mean_gold_fraction": 0.405315
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "answer",
+      "cohort": "confirmed_only",
+      "k": 3,
+      "n": 17,
+      "any_recall": 0.5,
+      "full_recall": 0.441176,
+      "any_complete": 0.352941,
+      "full_complete": 0.235294,
+      "mean_gold_fraction": 0.49355
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "answer",
+      "cohort": "confirmed_only",
+      "k": 5,
+      "n": 17,
+      "any_recall": 0.647059,
+      "full_recall": 0.617647,
+      "any_complete": 0.529412,
+      "full_complete": 0.470588,
+      "mean_gold_fraction": 0.646857
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "answer",
+      "cohort": "all_annotations",
+      "k": 1,
+      "n": 18,
+      "any_recall": 0.416667,
+      "full_recall": 0.361111,
+      "any_complete": 0.277778,
+      "full_complete": 0.166667,
+      "mean_gold_fraction": 0.410575
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "answer",
+      "cohort": "all_annotations",
+      "k": 3,
+      "n": 18,
+      "any_recall": 0.527778,
+      "full_recall": 0.444444,
+      "any_complete": 0.388889,
+      "full_complete": 0.222222,
+      "mean_gold_fraction": 0.511706
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "answer",
+      "cohort": "all_annotations",
+      "k": 5,
+      "n": 18,
+      "any_recall": 0.666667,
+      "full_recall": 0.611111,
+      "any_complete": 0.555556,
+      "full_complete": 0.444444,
+      "mean_gold_fraction": 0.656496
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "correct_premise",
+      "cohort": "confirmed_only",
+      "k": 1,
+      "n": 6,
+      "any_recall": 0.833333,
+      "full_recall": 0.666667,
+      "any_complete": 0.833333,
+      "full_complete": 0.666667,
+      "mean_gold_fraction": 0.80202
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "correct_premise",
+      "cohort": "confirmed_only",
+      "k": 3,
+      "n": 6,
+      "any_recall": 0.833333,
+      "full_recall": 0.666667,
+      "any_complete": 0.833333,
+      "full_complete": 0.666667,
+      "mean_gold_fraction": 0.80202
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "correct_premise",
+      "cohort": "confirmed_only",
+      "k": 5,
+      "n": 6,
+      "any_recall": 1,
+      "full_recall": 1,
+      "any_complete": 1.0,
+      "full_complete": 1.0,
+      "mean_gold_fraction": 1.0
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "correct_premise",
+      "cohort": "all_annotations",
+      "k": 1,
+      "n": 6,
+      "any_recall": 0.833333,
+      "full_recall": 0.666667,
+      "any_complete": 0.833333,
+      "full_complete": 0.666667,
+      "mean_gold_fraction": 0.80202
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "correct_premise",
+      "cohort": "all_annotations",
+      "k": 3,
+      "n": 6,
+      "any_recall": 0.833333,
+      "full_recall": 0.666667,
+      "any_complete": 0.833333,
+      "full_complete": 0.666667,
+      "mean_gold_fraction": 0.80202
+    },
+    {
+      "method": "hybrid_rrf",
+      "class": "correct_premise",
+      "cohort": "all_annotations",
+      "k": 5,
+      "n": 6,
+      "any_recall": 1,
+      "full_recall": 1,
+      "any_complete": 1.0,
+      "full_complete": 1.0,
+      "mean_gold_fraction": 1.0
+    }
+  ],
+  "partial_cases": [
+    {
+      "method": "bm25",
+      "question_id": "q005",
+      "status": "needs_review",
+      "class": "answer",
+      "k": 1,
+      "any_recall": 0.5,
+      "any_complete": 0.0,
+      "full_recall": 0,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.3203592814371258,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 107,
+          "length": 167,
+          "missing_text": "An-\nother common problem with BC is causal confusion, where\n",
+          "missing_nonwhitespace": 50
+        }
+      ]
+    },
+    {
+      "method": "bm25",
+      "question_id": "q005",
+      "status": "needs_review",
+      "class": "answer",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.8203592814371258,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 107,
+          "length": 167,
+          "missing_text": "An-\nother common problem with BC is causal confusion, where\n",
+          "missing_nonwhitespace": 50
+        }
+      ]
+    },
+    {
+      "method": "bm25",
+      "question_id": "q005",
+      "status": "needs_review",
+      "class": "answer",
+      "k": 5,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.8203592814371258,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 107,
+          "length": 167,
+          "missing_text": "An-\nother common problem with BC is causal confusion, where\n",
+          "missing_nonwhitespace": 50
+        }
+      ]
+    },
+    {
+      "method": "bm25",
+      "question_id": "q012",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9434306569343065,
+      "partial_spans": [
+        {
+          "evidence_id": "e002",
+          "covered": 243,
+          "length": 274,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "bm25",
+      "question_id": "q012",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 5,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9434306569343065,
+      "partial_spans": [
+        {
+          "evidence_id": "e002",
+          "covered": 243,
+          "length": 274,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "bm25",
+      "question_id": "q029",
+      "status": "confirmed",
+      "class": "correct_premise",
+      "k": 1,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.8121212121212121,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 134,
+          "length": 165,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "bm25",
+      "question_id": "q014",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 1,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.946917808219178,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 261,
+          "length": 292,
+          "missing_text": "Kubernetes provides you with:\n\n",
+          "missing_nonwhitespace": 26
+        }
+      ]
+    },
+    {
+      "method": "bm25",
+      "question_id": "q014",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.946917808219178,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 261,
+          "length": 292,
+          "missing_text": "Kubernetes provides you with:\n\n",
+          "missing_nonwhitespace": 26
+        }
+      ]
+    },
+    {
+      "method": "bm25",
+      "question_id": "q014",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 5,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9965753424657534,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 290,
+          "length": 292,
+          "missing_text": "\n\n",
+          "missing_nonwhitespace": 0
+        }
+      ]
+    },
+    {
+      "method": "dense",
+      "question_id": "q012",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 1,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9434306569343065,
+      "partial_spans": [
+        {
+          "evidence_id": "e002",
+          "covered": 243,
+          "length": 274,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "dense",
+      "question_id": "q012",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9434306569343065,
+      "partial_spans": [
+        {
+          "evidence_id": "e002",
+          "covered": 243,
+          "length": 274,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "dense",
+      "question_id": "q017",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.6666666666666666,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9973753280839895,
+      "partial_spans": [
+        {
+          "evidence_id": "e002",
+          "covered": 252,
+          "length": 254,
+          "missing_text": "\n\n",
+          "missing_nonwhitespace": 0
+        }
+      ]
+    },
+    {
+      "method": "dense",
+      "question_id": "q017",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 5,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.6666666666666666,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9973753280839895,
+      "partial_spans": [
+        {
+          "evidence_id": "e002",
+          "covered": 252,
+          "length": 254,
+          "missing_text": "\n\n",
+          "missing_nonwhitespace": 0
+        }
+      ]
+    },
+    {
+      "method": "dense",
+      "question_id": "q029",
+      "status": "confirmed",
+      "class": "correct_premise",
+      "k": 1,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.8121212121212121,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 134,
+          "length": 165,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "dense",
+      "question_id": "q029",
+      "status": "confirmed",
+      "class": "correct_premise",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.8121212121212121,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 134,
+          "length": 165,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "dense",
+      "question_id": "q014",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 1,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.946917808219178,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 261,
+          "length": 292,
+          "missing_text": "Kubernetes provides you with:\n\n",
+          "missing_nonwhitespace": 26
+        }
+      ]
+    },
+    {
+      "method": "dense",
+      "question_id": "q014",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.946917808219178,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 261,
+          "length": 292,
+          "missing_text": "Kubernetes provides you with:\n\n",
+          "missing_nonwhitespace": 26
+        }
+      ]
+    },
+    {
+      "method": "dense",
+      "question_id": "q014",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 5,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.946917808219178,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 261,
+          "length": 292,
+          "missing_text": "Kubernetes provides you with:\n\n",
+          "missing_nonwhitespace": 26
+        }
+      ]
+    },
+    {
+      "method": "hybrid_rrf",
+      "question_id": "q005",
+      "status": "needs_review",
+      "class": "answer",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.8203592814371258,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 107,
+          "length": 167,
+          "missing_text": "An-\nother common problem with BC is causal confusion, where\n",
+          "missing_nonwhitespace": 50
+        }
+      ]
+    },
+    {
+      "method": "hybrid_rrf",
+      "question_id": "q005",
+      "status": "needs_review",
+      "class": "answer",
+      "k": 5,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.8203592814371258,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 107,
+          "length": 167,
+          "missing_text": "An-\nother common problem with BC is causal confusion, where\n",
+          "missing_nonwhitespace": 50
+        }
+      ]
+    },
+    {
+      "method": "hybrid_rrf",
+      "question_id": "q012",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 1,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9434306569343065,
+      "partial_spans": [
+        {
+          "evidence_id": "e002",
+          "covered": 243,
+          "length": 274,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "hybrid_rrf",
+      "question_id": "q012",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9434306569343065,
+      "partial_spans": [
+        {
+          "evidence_id": "e002",
+          "covered": 243,
+          "length": 274,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "hybrid_rrf",
+      "question_id": "q029",
+      "status": "confirmed",
+      "class": "correct_premise",
+      "k": 1,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.8121212121212121,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 134,
+          "length": 165,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "hybrid_rrf",
+      "question_id": "q029",
+      "status": "confirmed",
+      "class": "correct_premise",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.8121212121212121,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 134,
+          "length": 165,
+          "missing_text": "ts in your stack configuration.",
+          "missing_nonwhitespace": 27
+        }
+      ]
+    },
+    {
+      "method": "hybrid_rrf",
+      "question_id": "q014",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 1,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.946917808219178,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 261,
+          "length": 292,
+          "missing_text": "Kubernetes provides you with:\n\n",
+          "missing_nonwhitespace": 26
+        }
+      ]
+    },
+    {
+      "method": "hybrid_rrf",
+      "question_id": "q014",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 3,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.946917808219178,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 261,
+          "length": 292,
+          "missing_text": "Kubernetes provides you with:\n\n",
+          "missing_nonwhitespace": 26
+        }
+      ]
+    },
+    {
+      "method": "hybrid_rrf",
+      "question_id": "q014",
+      "status": "confirmed",
+      "class": "answer",
+      "k": 5,
+      "any_recall": 1,
+      "any_complete": 1.0,
+      "full_recall": 0.5,
+      "full_complete": 0.0,
+      "mean_gold_fraction": 0.9965753424657534,
+      "partial_spans": [
+        {
+          "evidence_id": "e001",
+          "covered": 290,
+          "length": 292,
+          "missing_text": "\n\n",
+          "missing_nonwhitespace": 0
+        }
+      ]
+    }
+  ]
+}

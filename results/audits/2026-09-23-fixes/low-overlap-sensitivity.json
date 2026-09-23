@@ -1,0 +1,150 @@
+{
+  "input": {
+    "path": "results/runs/frozen-30-hybrid-rrf-v1.jsonl",
+    "sha256": "f2300d926a60215ad9161d63d93afd43a8ef5e6f6bb596eb856002a24536f64d"
+  },
+  "cells": [
+    {
+      "method": "bm25",
+      "excluded": [],
+      "question_ids": [
+        "q016",
+        "q011",
+        "q012",
+        "q017",
+        "q006",
+        "q007"
+      ],
+      "n": 6,
+      "evidence_recall_at_5": 0.3333333333333333,
+      "complete_evidence_hit_at_5": 0.16666666666666666
+    },
+    {
+      "method": "dense",
+      "excluded": [],
+      "question_ids": [
+        "q016",
+        "q011",
+        "q012",
+        "q017",
+        "q006",
+        "q007"
+      ],
+      "n": 6,
+      "evidence_recall_at_5": 0.5,
+      "complete_evidence_hit_at_5": 0.3333333333333333
+    },
+    {
+      "method": "hybrid_rrf",
+      "excluded": [],
+      "question_ids": [
+        "q016",
+        "q011",
+        "q012",
+        "q017",
+        "q006",
+        "q007"
+      ],
+      "n": 6,
+      "evidence_recall_at_5": 0.3333333333333333,
+      "complete_evidence_hit_at_5": 0.16666666666666666
+    },
+    {
+      "method": "bm25",
+      "excluded": [
+        "q017"
+      ],
+      "question_ids": [
+        "q016",
+        "q011",
+        "q012",
+        "q006",
+        "q007"
+      ],
+      "n": 5,
+      "evidence_recall_at_5": 0.4,
+      "complete_evidence_hit_at_5": 0.2
+    },
+    {
+      "method": "dense",
+      "excluded": [
+        "q017"
+      ],
+      "question_ids": [
+        "q016",
+        "q011",
+        "q012",
+        "q006",
+        "q007"
+      ],
+      "n": 5,
+      "evidence_recall_at_5": 0.4,
+      "complete_evidence_hit_at_5": 0.2
+    },
+    {
+      "method": "hybrid_rrf",
+      "excluded": [
+        "q017"
+      ],
+      "question_ids": [
+        "q016",
+        "q011",
+        "q012",
+        "q006",
+        "q007"
+      ],
+      "n": 5,
+      "evidence_recall_at_5": 0.4,
+      "complete_evidence_hit_at_5": 0.2
+    },
+    {
+      "method": "bm25",
+      "excluded": [
+        "q016",
+        "q017"
+      ],
+      "question_ids": [
+        "q011",
+        "q012",
+        "q006",
+        "q007"
+      ],
+      "n": 4,
+      "evidence_recall_at_5": 0.375,
+      "complete_evidence_hit_at_5": 0.25
+    },
+    {
+      "method": "dense",
+      "excluded": [
+        "q016",
+        "q017"
+      ],
+      "question_ids": [
+        "q011",
+        "q012",
+        "q006",
+        "q007"
+      ],
+      "n": 4,
+      "evidence_recall_at_5": 0.375,
+      "complete_evidence_hit_at_5": 0.25
+    },
+    {
+      "method": "hybrid_rrf",
+      "excluded": [
+        "q016",
+        "q017"
+      ],
+      "question_ids": [
+        "q011",
+        "q012",
+        "q006",
+        "q007"
+      ],
+      "n": 4,
+      "evidence_recall_at_5": 0.375,
+      "complete_evidence_hit_at_5": 0.25
+    }
+  ],
+  "scope": "Post-hoc sensitivity; original full-sample results retained."
+}

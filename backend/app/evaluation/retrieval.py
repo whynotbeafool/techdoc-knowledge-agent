@@ -32,6 +32,8 @@ class BM25Retriever:
             self.document_frequencies.update(term_frequency.keys())
 
     def query_chunks(self, question: str, top_k: int = 5) -> list[dict]:
+        if top_k < 1:
+            return []
         query_terms = _tokenize(question)
         ranked = []
         for chunk, term_frequency, document_length in zip(

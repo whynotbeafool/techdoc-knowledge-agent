@@ -24,3 +24,8 @@ jobs:
 
       - name: Run tests with coverage
         run: pytest tests/ -v --cov=backend/app --cov-report=term-missing
+
+      - name: Validate frozen QA and locked reannotation
+        run: |
+          python scripts/validate_eval.py
+          python scripts/check_locked_reannotation.py --packet data/eval/reannotation-20260923/input --output-dir data/eval/reannotation-20260923

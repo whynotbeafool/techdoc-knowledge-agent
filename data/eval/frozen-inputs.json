@@ -1,0 +1,13 @@
+{
+  "schema_version": "1",
+  "qa": {
+    "original_sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+    "legacy_git_lf_sha256": "1e9190c77a9d4f1b64cbbbf9323663a8d22995846e2831d98c3bc89afcf8d3ec",
+    "provenance": "Original frozen experimental bytes contain 7 CRLF line endings. c29a0f4 Git blob normalized exactly those endings to LF; JSON records are identical. Only these two exact byte identities are accepted; historical run configs and locked inputs remain untouched."
+  },
+  "lf_normalized_sha256": {
+    "data/corpus/active-revisions.json": "203388e955c47416d0f78aadbeb5489ec128cebdf4ba8c602a2dbe8e743ce6af",
+    "data/corpus/sources.json": "b2af03a0bb2a881fde8e48dcf95e06b93f1dd7500bc6ef079eb5f07dc0807ed4"
+  },
+  "auxiliary_scope": "Integrity snapshot after source URL remediation, not a historical experiment lock."
+}

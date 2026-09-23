@@ -13,6 +13,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "backend"))
 
+from app.rag.citations import format_page  # noqa: E402
 from app.rag.generator import generate_answer  # noqa: E402
 from app.rag.retriever import ChromaRetriever  # noqa: E402
 
@@ -25,8 +26,8 @@ def main():
     parser.add_argument("--top-k", type=int, default=5)
     args = parser.parse_args()
 
-    retriever = ChromaRetriever(str(VECTOR_STORE_DIR))
-    chunks = retriever.query_chunks(args.question, top_k=args.top_k)
+    with ChromaRetriever(str(VECTOR_STORE_DIR)) as retriever:
+        chunks = retriever.query_chunks(args.question, top_k=args.top_k)
 
     if not chunks:
         print("检索不到任何相关资料，请先运行 scripts/build_index.py 建立索引。")
@@ -38,7 +39,7 @@ def main():
     print(f"回答:\n{answer}\n")
     print("引用来源:")
     for c in chunks:
-        print(f"  - {c['source']} 第{c['page']}页 (chunk_id={c['chunk_id']})")
+        print(f"  - {c['source']} {format_page(c.get('page'))} (chunk_id={c['chunk_id']})")
 
 
 if __name__ == "__main__":

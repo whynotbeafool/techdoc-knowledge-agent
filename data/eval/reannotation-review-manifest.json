@@ -1,0 +1,10 @@
+{
+  "schema_version": "1",
+  "scope": "Post-lock review integrity snapshot, created during fix-report remediation. This is not a pre-annotation lock or independent attestation of blindness.",
+  "files": {
+    "data/eval/reannotation-20260923/LOCK.json": "8ce67cb822f47c932adc98420285fc9d3130bbfee285ea8640deb966e5e3295d",
+    "data/eval/reannotation-20260923/semantic-review.json": "476b30df076c394e7fccd0ead382d6f269e00369e27113314336d4964bf00218",
+    "data/eval/reannotation-20260923/intake-receipt.json": "f3ed82037b0074f1dc9ef47ab2971df03633842313824f133442f8bd52ef244c",
+    "data/eval/reannotation.jsonl": "52a178037200f189c45b4df891c6920a8f516b82817ba157d9a540383d4befbd"
+  }
+}

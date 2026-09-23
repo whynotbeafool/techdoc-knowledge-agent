@@ -3,6 +3,7 @@ from openai import OpenAI
 
 from app.core.config import get_llm_config
 from app.core.response_contract import PREMISE_CORRECTION_INSTRUCTION, REFUSAL_PREFIX
+from app.rag.citations import format_page
 
 SYSTEM_PROMPT = (
     "你是一个技术文档知识库助手。只根据下面提供的资料回答问题，不要编造资料中没有的信息。"
@@ -15,7 +16,10 @@ SYSTEM_PROMPT = (
 def build_context(chunks: list[dict]) -> str:
     parts = []
     for i, c in enumerate(chunks, start=1):
-        parts.append(f"[资料{i}] 来源: {c['source']} 第{c['page']}页 (chunk_id={c['chunk_id']})\n{c['text']}")
+        parts.append(
+            f"[资料{i}] 来源: {c['source']} {format_page(c.get('page'))} "
+            f"(chunk_id={c['chunk_id']})\n{c['text']}"
+        )
     return "\n\n".join(parts)
 
 

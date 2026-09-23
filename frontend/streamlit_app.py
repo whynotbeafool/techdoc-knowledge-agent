@@ -7,9 +7,11 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT / "backend"))
 
 from app.rag.chunker import chunk_pages  # noqa: E402
+from app.rag.citations import format_page  # noqa: E402
 from app.rag.generator import generate_answer  # noqa: E402
 from app.rag.loader import load_document  # noqa: E402
 from app.rag.retriever import ChromaRetriever  # noqa: E402
+from app.rag.uploads import upload_destination  # noqa: E402
 
 VECTOR_STORE_DIR = PROJECT_ROOT / "data" / "vector_store"
 UPLOADED_DOCS_DIR = PROJECT_ROOT / "data" / "uploaded_docs"
@@ -36,12 +38,11 @@ if uploaded_files:
 
     if build_clicked:
         with st.spinner("正在解析、切分并写入向量库..."):
-            retriever = ChromaRetriever(str(VECTOR_STORE_DIR))
             all_chunks = []
             for f in uploaded_files:
-                dest = UPLOADED_DOCS_DIR / f.name
-                dest.write_bytes(f.getbuffer())
                 try:
+                    dest = upload_destination(UPLOADED_DOCS_DIR, f.name)
+                    dest.write_bytes(f.getbuffer())
                     pages = load_document(dest)
                     chunks = chunk_pages(pages)
                 except Exception as e:
@@ -50,7 +51,8 @@ if uploaded_files:
                 all_chunks.extend(chunks)
 
             if all_chunks:
-                retriever.index_chunks(all_chunks)
+                with ChromaRetriever(str(VECTOR_STORE_DIR)) as retriever:
+                    retriever.index_chunks(all_chunks)
                 msg = (
                     f"已建立索引：{len(all_chunks)} 个 chunk，"
                     f"来自 {len(uploaded_files)} 个文件。现在可以直接提问。"
@@ -67,8 +69,8 @@ ask_clicked = st.button("提问")
 # --- 回答区 + 引用区 ---
 if ask_clicked and question:
     with st.spinner("正在检索并生成回答..."):
-        retriever = ChromaRetriever(str(VECTOR_STORE_DIR))
-        chunks = retriever.query_chunks(question, top_k=5)
+        with ChromaRetriever(str(VECTOR_STORE_DIR)) as retriever:
+            chunks = retriever.query_chunks(question, top_k=5)
 
         if not chunks:
             st.write("检索不到任何相关资料，请先运行 scripts/build_index.py 建立索引。")
@@ -80,4 +82,4 @@ if ask_clicked and question:
 
             st.markdown("### 引用来源")
             for c in chunks:
-                st.write(f"- {c['source']} 第{c['page']}页 (chunk_id={c['chunk_id']})")
+                st.write(f"- {c['source']} {format_page(c.get('page'))} (chunk_id={c['chunk_id']})")

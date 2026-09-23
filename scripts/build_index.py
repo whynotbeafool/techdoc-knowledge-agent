@@ -34,8 +34,8 @@ def main():
         all_chunks.extend(chunks)
         print(f"{path.name}: {len(chunks)} chunk(s)")
 
-    retriever = ChromaRetriever(str(VECTOR_STORE_DIR))
-    retriever.index_chunks(all_chunks)
+    with ChromaRetriever(str(VECTOR_STORE_DIR)) as retriever:
+        retriever.index_chunks(all_chunks)
     print(f"\nIndexed {len(all_chunks)} chunks into {VECTOR_STORE_DIR}")
 
 

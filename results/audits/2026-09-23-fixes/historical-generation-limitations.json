@@ -1,0 +1,119 @@
+{
+  "input": {
+    "path": "results/generation/frozen-30-bm25-deepseek-v1.jsonl",
+    "sha256": "b477b94104c1847236c59020e4c8a9b22f2c26f49397dca87dafff4d76371e5a"
+  },
+  "metric_scope": "refusal-prefix contract only",
+  "false_positive_ids": [
+    "q003",
+    "q006",
+    "q007",
+    "q011",
+    "q013",
+    "q017",
+    "q019",
+    "q027",
+    "q029"
+  ],
+  "correct_premise_prefix_refusal_ids": [
+    "q003",
+    "q027",
+    "q029"
+  ],
+  "page_issue_rows": [
+    {
+      "question_id": "q002",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q003",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q004",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q005",
+      "invalid_page_chunks": 1
+    },
+    {
+      "question_id": "q006",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q008",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q009",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q010",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q011",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q012",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q014",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q015",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q017",
+      "invalid_page_chunks": 3
+    },
+    {
+      "question_id": "q019",
+      "invalid_page_chunks": 1
+    },
+    {
+      "question_id": "q022",
+      "invalid_page_chunks": 2
+    },
+    {
+      "question_id": "q023",
+      "invalid_page_chunks": 3
+    },
+    {
+      "question_id": "q024",
+      "invalid_page_chunks": 4
+    },
+    {
+      "question_id": "q025",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q026",
+      "invalid_page_chunks": 2
+    },
+    {
+      "question_id": "q027",
+      "invalid_page_chunks": 2
+    },
+    {
+      "question_id": "q028",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q029",
+      "invalid_page_chunks": 5
+    },
+    {
+      "question_id": "q030",
+      "invalid_page_chunks": 5
+    }
+  ],
+  "page_provenance": "Reconstructed from saved retrieval inputs and historical formatter; raw prompts were not saved.",
+  "semantic_rescoring": "Not performed; no keyword heuristic relabeling."
+}

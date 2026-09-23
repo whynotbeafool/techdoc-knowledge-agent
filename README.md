@@ -17,7 +17,7 @@ RAG 问答 MVP，让用户通过自然语言获得带来源的答案；另一方
 - 语料版本化：manifest 保留历史 revision，`active-revisions.json` 明确选择每次实验采用的版本。
 - 可复现实验：运行产物记录 QA、active revision、语料、Python、Chroma 和检索参数。
 - 分层评测：分别按推理类型和词汇重叠度汇总 Evidence Recall、完整证据命中率与 MRR。
-- 工程质量：132 项自动化测试，GitHub Actions 持续运行 Ruff、测试与覆盖率检查。
+- 工程质量：自动化测试覆盖标注、检索、生成协议与冻结产物完整性；GitHub Actions 运行 Ruff、测试并报告 backend/app 覆盖率（未设置覆盖率失败阈值）。
 
 ## 技术栈
 

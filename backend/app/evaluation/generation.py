@@ -16,8 +16,7 @@ def build_generation_row(
     question_id = qa_record["question_id"]
     if retrieval_row.get("question_id") != question_id:
         raise ValueError(
-            "question_id mismatch: "
-            f"qa={question_id}, retrieval={retrieval_row.get('question_id')}"
+            f"question_id mismatch: qa={question_id}, retrieval={retrieval_row.get('question_id')}"
         )
     if not isinstance(retrieval_row.get("retrieved"), list):
         raise ValueError(f"retrieval row for {question_id} has no retrieved list")
@@ -50,8 +49,7 @@ def build_generation_summary(rows: list[dict], *, run_id: str) -> dict:
             cohort_rows = [
                 row
                 for row in method_rows
-                if cohort == "all_annotations"
-                or row["annotation_status"] == "confirmed"
+                if cohort == "all_annotations" or row["annotation_status"] == "confirmed"
             ]
             cells.append(_summary_cell(method, cohort, cohort_rows))
             for condition, complete in (
@@ -63,8 +61,7 @@ def build_generation_summary(rows: list[dict], *, run_id: str) -> dict:
                     for row in cohort_rows
                     if row["expected_behavior"] != "refuse"
                     and isinstance(row.get("retrieval_metrics"), dict)
-                    and row["retrieval_metrics"].get("complete_evidence_hit_at_5")
-                    is complete
+                    and row["retrieval_metrics"].get("complete_evidence_hit_at_5") is complete
                 ]
                 conditioned_cell = _summary_cell(method, cohort, conditioned_rows)
                 conditioned_cell["retrieval_condition"] = condition
@@ -73,24 +70,27 @@ def build_generation_summary(rows: list[dict], *, run_id: str) -> dict:
     return {
         "schema_version": "2",
         "run_id": run_id,
+        "metric_scope": "refusal_prefix_contract; not semantic answer correctness",
+        "retrieval_conditioning_missing_n": sum(
+            row["expected_behavior"] != "refuse"
+            and (
+                not isinstance(row.get("retrieval_metrics"), dict)
+                or type(row["retrieval_metrics"].get("complete_evidence_hit_at_5")) is not bool
+            )
+            for row in rows
+        ),
         "cells": cells,
         "retrieval_conditioned_cells": retrieval_conditioned_cells,
     }
 
 
 def _summary_cell(method: str, cohort: str, rows: list[dict]) -> dict:
-    evaluated = [
-        row for row in rows if row["metrics"]["refusal_correct"] is not None
-    ]
+    evaluated = [row for row in rows if row["metrics"]["refusal_correct"] is not None]
     true_positive = _count(evaluated, "refusal_true_positive")
     false_positive = _count(evaluated, "refusal_false_positive")
     false_negative = _count(evaluated, "refusal_false_negative")
-    true_negative = (
-        len(evaluated) - true_positive - false_positive - false_negative
-    )
-    system_error_n = sum(
-        1 for row in rows if row["metrics"]["generation_system_error"]
-    )
+    true_negative = len(evaluated) - true_positive - false_positive - false_negative
+    system_error_n = sum(1 for row in rows if row["metrics"]["generation_system_error"])
 
     return {
         "method": method,
@@ -128,3 +128,35 @@ def _ratio(numerator: int, denominator: int) -> float | None:
     if denominator == 0:
         return None
     return round(numerator / denominator, 4)
+
+
+def join_retrieval_metrics(rows: list[dict], retrieval_rows: list[dict]) -> list[dict]:
+    """Join historical rows only to their exact saved retrieval run and ranked list."""
+    index = {}
+    for row in retrieval_rows:
+        key = row["run_id"], row["method"], row["question_id"]
+        if key in index:
+            raise ValueError(f"Duplicate retrieval row: {key}")
+        index[key] = row
+    joined = []
+    seen = set()
+    for row in rows:
+        key = row["retrieval_run_id"], row["method"], row["question_id"]
+        if key in seen:
+            raise ValueError(f"Duplicate generation row: {key}")
+        seen.add(key)
+        if key not in index:
+            raise ValueError(f"Missing retrieval row: {key}")
+        original = index[key]
+        if row["retrieved"] != original["retrieved"]:
+            raise ValueError(f"Ranked retrieval inputs differ: {key}")
+        metrics = original["metrics"]
+        if (
+            row["expected_behavior"] != "refuse"
+            and type(metrics.get("complete_evidence_hit_at_5")) is not bool
+        ):
+            raise ValueError(f"Missing complete-evidence metric: {key}")
+        if row.get("retrieval_metrics") is not None and row["retrieval_metrics"] != metrics:
+            raise ValueError(f"Conflicting retrieval metrics: {key}")
+        joined.append({**row, "retrieval_metrics": dict(metrics)})
+    return joined

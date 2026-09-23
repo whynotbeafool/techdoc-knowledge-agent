@@ -15,7 +15,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "backend"))
 
+from app.corpus import load_active_revision_records  # noqa: E402
 from app.evaluation.dataset import load_qa_jsonl, validate_qa_dataset  # noqa: E402
+from app.evaluation.integrity import verify_auxiliary_inputs, verify_frozen_qa  # noqa: E402
 
 
 def digest(path):
@@ -23,12 +25,9 @@ def digest(path):
 
 
 def overlap(left, right):
-    return (
-        (left["document_id"], left["revision"])
-        == (right["document_id"], right["revision"])
-        and max(left["start_char"], right["start_char"])
-        < min(left["end_char"], right["end_char"])
-    )
+    return (left["document_id"], left["revision"]) == (right["document_id"], right["revision"]) and max(
+        left["start_char"], right["start_char"]
+    ) < min(left["end_char"], right["end_char"])
 
 
 def agreement(left, right):
@@ -38,7 +37,9 @@ def agreement(left, right):
     expected = sum(lc[k] * rc[k] for k in lc.keys() | rc.keys()) / n**2
     observed = matches / n
     return {
-        "matches": matches, "n": n, "raw_agreement": observed,
+        "matches": matches,
+        "n": n,
+        "raw_agreement": observed,
         "cohen_kappa": (observed - expected) / (1 - expected) if expected < 1 else None,
     }
 
@@ -75,6 +76,56 @@ def main():
     for name, records in (("annotations", second), ("dimensions", dimensions)):
         if len(records) != 14 or {r["question_id"] for r in records} != set(ids):
             raise ValueError(f"Incomplete/duplicate {name}")
+    question_by_id = {q["question_id"]: q["question"] for q in questions}
+    if any(r["question"] != question_by_id[r["question_id"]] for r in dimensions):
+        raise ValueError("Dimensions changed a frozen question")
+    main_records = load_active_revision_records(ROOT / "data/corpus")
+    packet_records = load_qa_jsonl(packet / "corpus/documents.jsonl")
+
+    def key(r):
+        return r["document_id"], r["revision"]
+
+    if sorted(main_records, key=key) != sorted(packet_records, key=key):
+        raise ValueError("Packet corpus differs from main active revisions")
+    if json.loads((packet / "corpus/active-revisions.json").read_text(encoding="utf-8")) != json.loads(
+        (ROOT / "data/corpus/active-revisions.json").read_text(encoding="utf-8")
+    ):
+        raise ValueError("Active revisions differ")
+    for record in packet_records:
+        name = record["canonical_text_file"]
+        if (packet / "corpus" / name).read_bytes() != (ROOT / "data/corpus" / name).read_bytes():
+            raise ValueError(f"Canonical bytes differ: {name}")
+    review_manifest = json.loads(
+        (ROOT / "data/eval/reannotation-review-manifest.json").read_text(encoding="utf-8")
+    )
+    for name, expected in review_manifest["files"].items():
+        target = (ROOT / name).resolve()
+        if not target.is_relative_to(ROOT) or digest(target) != expected:
+            raise ValueError(f"Post-lock review hash mismatch: {name}")
+    receipt = json.loads((out / "intake-receipt.json").read_text(encoding="utf-8"))
+    combined = ROOT / "data/eval/reannotation.jsonl"
+    previous_n = receipt["previous_record_count"]
+    combined_rows = load_qa_jsonl(combined)
+    if (
+        receipt["appended_record_count"] != len(second)
+        or combined_rows[previous_n:] != second
+        or len(combined_rows) != previous_n + len(second)
+    ):
+        raise ValueError("Cumulative reannotation differs from locked batch")
+    previous_bytes = b"".join(combined.read_bytes().splitlines(keepends=True)[:previous_n])
+    if hashlib.sha256(previous_bytes).hexdigest() != receipt["previous_reannotation_sha256"]:
+        raise ValueError("Historical reannotation prefix changed")
+    receipt_checks = {
+        "combined_reannotation_sha256": digest(combined),
+        "appended_annotations_sha256": digest(out / "annotations.jsonl"),
+        "lock_sha256": digest(out / "LOCK.json"),
+        "input_manifest_sha256": digest(manifest_path),
+    }
+    if any(receipt[k] != value for k, value in receipt_checks.items()):
+        raise ValueError("Intake receipt disagrees with artifacts")
+    review = json.loads((out / "semantic-review.json").read_text(encoding="utf-8"))
+    if len(review["rows"]) != 14 or {r["question_id"] for r in review["rows"]} != set(ids):
+        raise ValueError("Incomplete semantic review")
     by_id = {r["question_id"]: r for r in second}
     if any(by_id[q["question_id"]]["question"] != q["question"] for q in questions):
         raise ValueError("Second pass changed a frozen question")
@@ -83,8 +134,8 @@ def main():
         raise ValueError(str(issues))
     # First-pass labels are opened only after lock and independent input checks.
     first_path = ROOT / "data/eval/qa.jsonl"
-    if digest(first_path) != "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975":
-        raise ValueError("Frozen first-pass hash mismatch")
+    first_identity = verify_frozen_qa(first_path, receipt["first_pass_sha256"])
+    verify_auxiliary_inputs()
     first = {r["question_id"]: r for r in load_qa_jsonl(first_path)}
     if any(first[q["question_id"]]["question"] != q["question"] for q in questions):
         raise ValueError("Input packet differs from frozen first-pass questions")
@@ -92,29 +143,54 @@ def main():
     for qid in ids:
         a, b = first[qid], by_id[qid]
         ea, eb = a["evidence"], b["evidence"]
-        comparison.append({
-            "question_id": qid,
-            "support_equal": (a["answerability"], a["unanswerable_reason"])
-            == (b["answerability"], b["unanswerable_reason"]),
-            "topology_equal": a["reasoning_type"] == b["reasoning_type"],
-            "first_topology": a["reasoning_type"], "second_topology": b["reasoning_type"],
-            "first_answer": a["reference_answer"], "second_answer": b["reference_answer"],
-            "first_status": a["annotation_status"], "second_status": b["annotation_status"],
-            "first_lexical": a.get("lexical_overlap"), "second_lexical": b.get("lexical_overlap"),
-            "each_first_span_overlaps_second": all(any(overlap(x, y) for y in eb) for x in ea)
-            if ea and eb else None,
-            "each_second_span_overlaps_first": all(any(overlap(x, y) for x in ea) for y in eb)
-            if ea and eb else None,
-        })
+        comparison.append(
+            {
+                "question_id": qid,
+                "support_equal": (a["answerability"], a["unanswerable_reason"])
+                == (b["answerability"], b["unanswerable_reason"]),
+                "topology_equal": a["reasoning_type"] == b["reasoning_type"],
+                "first_topology": a["reasoning_type"],
+                "second_topology": b["reasoning_type"],
+                "first_answer": a["reference_answer"],
+                "second_answer": b["reference_answer"],
+                "first_status": a["annotation_status"],
+                "second_status": b["annotation_status"],
+                "first_lexical": a.get("lexical_overlap"),
+                "second_lexical": b.get("lexical_overlap"),
+                "each_first_span_overlaps_second": all(any(overlap(x, y) for y in eb) for x in ea)
+                if ea and eb
+                else None,
+                "each_second_span_overlaps_first": all(any(overlap(x, y) for x in ea) for y in eb)
+                if ea and eb
+                else None,
+            }
+        )
+
     def support(record):
         return record["answerability"], record["unanswerable_reason"]
 
     report = {
-        "lock_sha256": digest(out / "LOCK.json"), "artifact_sha256": artifacts,
+        "lock_sha256": digest(out / "LOCK.json"),
+        "artifact_sha256": artifacts,
         "warning_messages": [i.message for i in issues if i.severity == "warning"],
         "support": agreement([support(first[i]) for i in ids], [support(by_id[i]) for i in ids]),
-        "topology": agreement([first[i]["reasoning_type"] for i in ids],
-                              [by_id[i]["reasoning_type"] for i in ids]),
+        "topology": agreement(
+            [first[i]["reasoning_type"] for i in ids], [by_id[i]["reasoning_type"] for i in ids]
+        ),
+        "first_pass_identity": first_identity,
+        "topology_evidence_bearing": agreement(
+            [first[i]["reasoning_type"] for i in ids if by_id[i]["evidence"]],
+            [by_id[i]["reasoning_type"] for i in ids if by_id[i]["evidence"]],
+        ),
+        "annotation_status": agreement(
+            [first[i]["annotation_status"] for i in ids], [by_id[i]["annotation_status"] for i in ids]
+        ),
+        "second_A_counts": dict(Counter(r["A"]["judgment"] for r in dimensions)),
+        "exact_reference_answers": {
+            "matches": sum(first[i]["reference_answer"] == by_id[i]["reference_answer"] for i in ids),
+            "n": len(ids),
+            "note": "All exact matches are null refusal answers; not a semantic score.",
+        },
         "rows": comparison,
         "limitations": [
             "Lock exposure/identity declarations require reviewer inspection.",

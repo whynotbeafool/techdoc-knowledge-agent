@@ -7,8 +7,13 @@ No model calls, annotation changes, or modifications to saved runs are made.
 import argparse
 import hashlib
 import json
+import sys
 from pathlib import Path
 from statistics import mean
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "backend"))
+from app.evaluation.integrity import verify_frozen_qa  # noqa: E402
 
 
 def covered_length(start, end, intervals):
@@ -34,8 +39,10 @@ def main():
     args = parser.parse_args()
     config = json.loads(args.run.with_suffix(".config.json").read_text(encoding="utf-8"))
     qa_hash = "sha256:" + hashlib.sha256(args.qa.read_bytes()).hexdigest()
-    if config["qa_hash"] != qa_hash:
-        raise ValueError("QA hash differs from the saved run")
+    if config["qa_hash"] == qa_hash:
+        qa_identity = {"actual_sha256": qa_hash.removeprefix("sha256:"), "exact_run_match": True}
+    else:
+        qa_identity = verify_frozen_qa(args.qa, config["qa_hash"])
     qa_rows = read_rows(args.qa)
     qa = {row["question_id"]: row for row in qa_rows}
     if len(qa) != len(qa_rows):
@@ -101,6 +108,7 @@ def main():
                                       for metric in ("any_recall", "full_recall", "any_complete",
                                                      "full_complete", "mean_gold_fraction")}})
     print(json.dumps({"run_id": config["run_id"], "qa_hash": qa_hash,
+                      "qa_identity": qa_identity,
                       "run_hash": hashlib.sha256(args.run.read_bytes()).hexdigest(),
                       "cells": cells, "partial_cases": affected}, indent=2))
 

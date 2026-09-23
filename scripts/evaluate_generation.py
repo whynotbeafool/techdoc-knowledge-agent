@@ -101,7 +101,8 @@ def main() -> int:
         )
 
     config = {
-        "schema_version": "1",
+        "schema_version": "2",
+        "metric_scope": "refusal_prefix_contract; not semantic answer correctness",
         "run_id": args.run_id,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "qa_file": _portable_path(args.qa),

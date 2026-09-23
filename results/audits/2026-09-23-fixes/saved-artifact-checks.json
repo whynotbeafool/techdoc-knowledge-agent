@@ -1,0 +1,110 @@
+{
+  "qa_identity": {
+    "actual_sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+    "original_sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+    "legacy_lf_serialization": false
+  },
+  "runs": [
+    {
+      "path": "results/runs/frozen-30-hybrid-rrf-v1.jsonl",
+      "sha256": "f2300d926a60215ad9161d63d93afd43a8ef5e6f6bb596eb856002a24536f64d",
+      "row_count": 90,
+      "historical_cells": {
+        "comparable": true,
+        "matching": 84,
+        "n": 84,
+        "current_cell_count": 84,
+        "note": "Compare historical cell metrics/counts by key; stratum_kind is later metadata. Current code also emits lexical cells absent from early schemas."
+      },
+      "saved_summary": {
+        "path": "results/runs/frozen-30-hybrid-rrf-v1.summary.json",
+        "sha256": "d3efabc8d81d0d26e1086868c1b5c0dc60231775187bca331c7095295d0c8d1e"
+      },
+      "summary_recomputed_equal": true,
+      "current_schema_compatible": true,
+      "explanation": "Current aggregation compared to historical schema; no rows changed."
+    },
+    {
+      "path": "results/runs/frozen-30-v1.jsonl",
+      "sha256": "594773c8a2eca00bef3d7f545e3bb4ce0f69027cffbec2a7411cefa0b5ca1b9d",
+      "row_count": 60,
+      "historical_cells": {
+        "comparable": true,
+        "matching": 56,
+        "n": 56,
+        "current_cell_count": 56,
+        "note": "Compare historical cell metrics/counts by key; stratum_kind is later metadata. Current code also emits lexical cells absent from early schemas."
+      },
+      "saved_summary": {
+        "path": "results/runs/frozen-30-v1.summary.json",
+        "sha256": "5c714c7b8072e117c4e875429a8618aec86d745463a58f9f234cde51b165378b"
+      },
+      "summary_recomputed_equal": true,
+      "current_schema_compatible": true,
+      "explanation": "Current aggregation compared to historical schema; no rows changed."
+    },
+    {
+      "path": "results/runs/pilot-12-v2.jsonl",
+      "sha256": "9cd62fbdce6f7f9b3158f6b711e012026d0f7a3906f23dd7da5a2601b372fafc",
+      "row_count": 24,
+      "historical_cells": {
+        "comparable": true,
+        "matching": 56,
+        "n": 56,
+        "current_cell_count": 56,
+        "note": "Compare historical cell metrics/counts by key; stratum_kind is later metadata. Current code also emits lexical cells absent from early schemas."
+      },
+      "saved_summary": {
+        "path": "results/runs/pilot-12-v2.summary.json",
+        "sha256": "b62c759a93da63f5c63a374be070508aa6ab47ffd4322da42aeab4552fd3e6a5"
+      },
+      "summary_recomputed_equal": true,
+      "current_schema_compatible": true,
+      "explanation": "Current aggregation compared to historical schema; no rows changed."
+    },
+    {
+      "path": "results/runs/pilot-5-v0.jsonl",
+      "sha256": "648399ded6226b53d6f0d68a454896d36cd96f6312cdcefcf7b30d05d4d228c6",
+      "row_count": 10,
+      "historical_cells": {
+        "comparable": false
+      },
+      "saved_summary": null,
+      "summary_recomputed_equal": null,
+      "current_schema_compatible": false,
+      "explanation": "No historical summary was committed."
+    },
+    {
+      "path": "results/runs/pilot-9-v1.jsonl",
+      "sha256": "c34287d7cda764562a83f2a7fad472fb9045895a4caefebc4a91d2ddf73c3d69",
+      "row_count": 18,
+      "historical_cells": {
+        "comparable": true,
+        "matching": 32,
+        "n": 32,
+        "current_cell_count": 56,
+        "note": "Compare historical cell metrics/counts by key; stratum_kind is later metadata. Current code also emits lexical cells absent from early schemas."
+      },
+      "saved_summary": {
+        "path": "results/runs/pilot-9-v1.summary.json",
+        "sha256": "da2ed3f05e8b160ee28219acf3a60677ff648a7cb7654c1a0ab79635ae3f828b"
+      },
+      "summary_recomputed_equal": false,
+      "current_schema_compatible": true,
+      "explanation": "Current aggregation compared to historical schema; no rows changed."
+    },
+    {
+      "path": "results/generation/frozen-30-bm25-deepseek-v1.jsonl",
+      "sha256": "b477b94104c1847236c59020e4c8a9b22f2c26f49397dca87dafff4d76371e5a",
+      "row_count": 30,
+      "retrieval_input": {
+        "path": "results/runs/frozen-30-v1.jsonl",
+        "sha256": "594773c8a2eca00bef3d7f545e3bb4ce0f69027cffbec2a7411cefa0b5ca1b9d"
+      },
+      "behavior_rows_recomputed_equal": true,
+      "main_cells_equal": true,
+      "summary_recomputed_equal": false,
+      "explanation": "Schema 1 to 2: join exact retrieval inputs, add conditioning and metric-scope metadata. Original prefix-contract metrics retained."
+    }
+  ]
+}

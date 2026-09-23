@@ -1,0 +1,17 @@
+{
+  "scope": "Post-hoc integrity manifest, not external attestation. Does not hash itself.",
+  "generator": {
+    "path": "scripts/rebuild_saved_audit.py",
+    "sha256": "d9e95754ffc49cc358bc75c7d47d498f49bbf56186c6827be511c4824caf90fe"
+  },
+  "outputs": {
+    "saved-artifact-checks.json": "860a505320960bd6970e9b632feddd9bab4afd2c59a4cc2955d7c53263951df9",
+    "generation-recomputed-summary.json": "c8a9d78e784240ffc9e406435ac4f612c8ad070ce1c10ff2d77bbbe87d7d4e42",
+    "low-overlap-sensitivity.json": "477df02ee0cbbff7315a85035a8cd219f38ac8f8ff482b64cb6854ed9e4097c9",
+    "reproduction-comparison.json": "bad78790b8d5d5a79ede17f1eb1bb338eb3770ef58992ed17ed58699ff9e1b9f",
+    "historical-generation-limitations.json": "e21ce927c61f5d577ba990a126e27ca6442c956a3ed0ad653d477c312305b4ad",
+    "reannotation-mechanical-comparison.json": "65e24d559c7d274f4bf8ec26a8a1a137c44cb70025556b9a0c390f6443f09ba9",
+    "embedding-truncation.json": "b3ad02d0c7c889da8f7a7505c155c5fc1ec3361b8a14a93c204c1002874379c5",
+    "evidence-coverage.json": "96f1669560b52c34040bcf3d091e98b8bc82e7a1d1f03d55682e0fd5b2b427c8"
+  }
+}

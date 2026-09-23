@@ -1,10 +1,12 @@
-fastapi
-uvicorn[standard]
-streamlit
-python-dotenv
-pypdf
-chromadb
-openai
-pytest
-pytest-cov
-ruff
+# Direct dependencies pinned to the verified local environment.
+# Transitive resolution and other OS/Python combinations are not a full lock.
+fastapi==0.139.0
+uvicorn[standard]==0.49.0
+streamlit==1.58.0
+python-dotenv==1.2.2
+pypdf==6.14.2
+chromadb==1.5.9
+openai==2.44.0
+pytest==9.1.1
+pytest-cov==7.1.0
+ruff==0.15.22

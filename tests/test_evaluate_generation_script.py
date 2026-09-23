@@ -135,6 +135,7 @@ def test_main_writes_immutable_generation_artifacts_without_secrets(
     summary = json.loads(
         (results_dir / "generation-v1.summary.json").read_text(encoding="utf-8")
     )
+    assert json.loads(config_text)["schema_version"] == summary["schema_version"] == "2"
     assert "must-not-be-written" not in config_text
     assert json.loads(output_text)["metrics"]["refusal_true_positive"] is True
     assert summary["cells"][0]["metrics"]["refusal_recall"] == 1.0

@@ -36,7 +36,7 @@ class ChromaRetriever:
             {
                 "chunk_id": chunk_id,
                 "source": meta["source"],
-                "page": meta["page"],
+                "page": meta.get("page") or None,
                 "text": doc,
                 "distance": dist,
                 "start_char": meta.get("start_char"),
@@ -50,6 +50,12 @@ class ChromaRetriever:
     def close(self) -> None:
         """Release persistent index files, required before cleanup on Windows."""
         self.client.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
 
     def describe(self) -> dict:
         """Report the dense settings that actually govern this collection.
@@ -100,7 +106,9 @@ def _resolve_embedder(function):
 
 
 def _chunk_metadata(chunk: Chunk) -> dict:
-    metadata = {"source": chunk.source, "page": chunk.page or 0}
+    metadata = {"source": chunk.source}
+    if chunk.page is not None and chunk.page > 0:
+        metadata["page"] = chunk.page
     for field in (
         "start_char",
         "end_char",

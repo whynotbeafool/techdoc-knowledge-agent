@@ -25,7 +25,7 @@ def test_index_and_query_returns_matching_chunk(tmp_path):
     assert len(results) == 1
     assert results[0]["chunk_id"] == "doc.txt_p0_0"
     assert results[0]["source"] == "doc.txt"
-    assert results[0]["page"] == 0  # page=None is stored as 0 — Chroma metadata can't hold None
+    assert results[0]["page"] is None
     assert results[0]["start_char"] == 10
     assert results[0]["end_char"] == 50
     assert results[0]["document_id"] == "doc"

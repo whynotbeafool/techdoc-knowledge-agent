@@ -1,0 +1,41 @@
+{
+  "model_max_tokens": 256,
+  "chunk_size": 800,
+  "chunk_count": 379,
+  "token_length": {
+    "min": 27,
+    "median": 177,
+    "mean": 187.1,
+    "max": 360
+  },
+  "truncated_chunks": 59,
+  "truncated_fraction": 0.1557,
+  "worst_truncations": [
+    {
+      "chunk_id": "fastapi_first_steps.md_p0_3",
+      "tokens": 360,
+      "lost_tokens": 104
+    },
+    {
+      "chunk_id": "autonomous_driving_survey.pdf_p17_136",
+      "tokens": 317,
+      "lost_tokens": 61
+    },
+    {
+      "chunk_id": "autonomous_driving_survey.pdf_p17_144",
+      "tokens": 317,
+      "lost_tokens": 61
+    },
+    {
+      "chunk_id": "autonomous_driving_survey.pdf_p20_167",
+      "tokens": 317,
+      "lost_tokens": 61
+    },
+    {
+      "chunk_id": "autonomous_driving_survey.pdf_p18_148",
+      "tokens": 311,
+      "lost_tokens": 55
+    }
+  ],
+  "gold_evidence_hidden_by_truncation": []
+}
