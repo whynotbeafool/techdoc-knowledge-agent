@@ -1,5 +1,8 @@
 """Semantic-label aggregation; never infers correctness from response prefixes."""
 
+import hashlib
+import math
+
 BEHAVIORS = {"answer", "correction", "partial", "refusal"}
 ATTEMPTS = {"answer", "correction", "partial"}
 LABELS = ("corpus_supported", "context_sufficient", "correct", "complete", "supported")
@@ -84,9 +87,19 @@ def selective_summary(rows: list[dict]) -> dict:
     }
 
 
-def validate_group_split(records: list[dict]) -> None:
+def group_split(group_id: str, *, previously_exposed: bool) -> str:
+    if not isinstance(group_id, str) or not group_id or type(previously_exposed) is not bool:
+        raise ValueError("Explicit group identity and exposure declaration required")
+    if previously_exposed or group_id == "legacy-exposed-30":
+        return "dev"
+    value = int(hashlib.sha256(("selective-v0.1|" + group_id).encode("utf-8")).hexdigest(), 16)
+    return "test" if value % 5 == 0 else "dev"
+
+
+def validate_group_split(records: list[dict], *, enforce_assignment: bool = False) -> None:
     legacy_ids = {f"q{i:03d}" for i in range(1, 31)}
     groups = {}
+    exposures = {}
     ids = set()
     for row in records:
         qid, group, split = row["question_id"], row["group_id"], row["split"]
@@ -95,20 +108,60 @@ def validate_group_split(records: list[dict]) -> None:
         ids.add(qid)
         if split not in {"dev", "test"}:
             raise ValueError("Invalid split")
-        if split == "test" and (qid in legacy_ids or row.get("previously_exposed") is not False):
+        if split == "test" and (
+            qid in legacy_ids
+            or group == "legacy-exposed-30"
+            or row.get("previously_exposed") is not False
+            or row.get("group_previously_exposed") is not False
+        ):
             raise ValueError("Test questions require an explicit unexposed declaration")
         if group in groups and groups[group] != split:
             raise ValueError("A source group crosses dev/test")
         groups[group] = split
+        if enforce_assignment:
+            exposure = row.get("group_previously_exposed")
+            if type(row.get("previously_exposed")) is not bool or type(exposure) is not bool:
+                raise ValueError("Question and group exposure declarations required")
+            if row["previously_exposed"] and not exposure:
+                raise ValueError("Exposed question contradicts group declaration")
+            if group in exposures and exposures[group] != exposure:
+                raise ValueError("Inconsistent group exposure declarations")
+            exposures[group] = exposure
+            expected = "dev" if qid in legacy_ids else group_split(group, previously_exposed=exposure)
+            if split != expected:
+                raise ValueError("Split differs from deterministic group assignment")
 
 
 def select_working_point(candidates: list[dict], *, split: str, min_coverage: float = 0.5) -> dict:
     """Choose a development working point; never retune on a heldout split."""
     if split != "dev":
         raise ValueError("Threshold selection is development-only")
-    if not 0 <= min_coverage <= 1:
+    if (
+        type(min_coverage) not in (int, float)
+        or not math.isfinite(min_coverage)
+        or not 0 <= min_coverage <= 1
+    ):
         raise ValueError("Invalid coverage target")
     eligible = []
+    # Validate all inputs before an early incomplete-label return can mask malformed candidates.
+    for candidate in candidates:
+        for name in ("score_threshold", "lexical_threshold"):
+            value = candidate[name]
+            if type(value) not in (int, float) or not math.isfinite(value):
+                raise ValueError("Candidate thresholds must be finite numeric values")
+        if not 0 <= candidate["lexical_threshold"] <= 1:
+            raise ValueError("Lexical threshold must be in [0,1]")
+        if type(candidate["generation_call_n"]) is not int or candidate["generation_call_n"] < 0:
+            raise ValueError("Generation call count must be a nonnegative integer")
+        for name in ("answer_coverage", "selective_risk"):
+            metric = candidate["summary"]["metrics"][name]
+            value = metric["value"]
+            if value is not None and (
+                type(value) not in (int, float) or not math.isfinite(value) or not 0 <= value <= 1
+            ):
+                raise ValueError("Candidate metric must be null or a finite rate")
+            if type(metric["missing_label_rows"]) is not int or metric["missing_label_rows"] < 0:
+                raise ValueError("Invalid missing-label count")
     for candidate in candidates:
         metrics = candidate["summary"]["metrics"]
         coverage, risk = metrics["answer_coverage"], metrics["selective_risk"]

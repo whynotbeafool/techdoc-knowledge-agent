@@ -27,5 +27,6 @@ jobs:
 
       - name: Validate frozen QA and locked reannotation
         run: |
+          python scripts/audit_evidence_coverage.py --run results/runs/frozen-30-hybrid-rrf-v1.jsonl
           python scripts/validate_eval.py
           python scripts/check_locked_reannotation.py --packet data/eval/reannotation-20260923/input --output-dir data/eval/reannotation-20260923

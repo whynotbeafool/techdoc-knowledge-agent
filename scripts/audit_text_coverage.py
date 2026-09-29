@@ -19,9 +19,19 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def lf_digest(path):
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
+def aggregate_values(values):
+    valid = [v for v in values if v is not None]
+    return {"n": len(valid), "sum": sum(valid), "mean": mean(valid) if valid else None}
+
+
 def audit(run, qa_path, corpus):
     config_path = run.with_suffix(".config.json")
     config = json.loads(config_path.read_text(encoding="utf-8"))
+    identity = verify_frozen_qa(qa_path, config["qa_hash"])
     qa_hash = digest(qa_path)
     if config["qa_hash"] != "sha256:" + qa_hash:
         verify_frozen_qa(qa_path, config["qa_hash"])
@@ -107,12 +117,7 @@ def audit(run, qa_path, corpus):
                     ]
                     metrics = {}
                     for field in fields:
-                        values = [r[field] for r in selected if r[field] is not None]
-                        metrics[field] = {
-                            "n": len(values),
-                            "sum": sum(values),
-                            "mean": mean(values) if values else None,
-                        }
+                        metrics[field] = aggregate_values([r[field] for r in selected])
                     cells.append(
                         {
                             "method": method,
@@ -129,9 +134,18 @@ def audit(run, qa_path, corpus):
         "whitespace_policy": "Python str.isspace; no other normalization",
         "python_version": sys.version.split()[0],
         "inputs": {
-            "run": {"name": run.name, "sha256": digest(run)},
-            "config": {"name": config_path.name, "sha256": digest(config_path)},
-            "qa": {"name": qa_path.name, "sha256": qa_hash},
+            "run": {"name": run.name, "sha256": lf_digest(run), "hash_policy": "LF-normalized bytes"},
+            "config": {
+                "name": config_path.name,
+                "sha256": lf_digest(config_path),
+                "hash_policy": "LF-normalized bytes",
+            },
+            "qa": {
+                "name": qa_path.name,
+                "sha256": identity["original_sha256"],
+                "actual_sha256": qa_hash,
+                "hash_policy": "registered original identity; actual bytes separately recorded",
+            },
         },
         "implementation": {
             "script_sha256": digest(Path(__file__)),

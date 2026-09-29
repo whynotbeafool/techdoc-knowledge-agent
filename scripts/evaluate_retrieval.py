@@ -85,9 +85,7 @@ def main() -> int:
             document_id=record["document_id"],
             revision=record["revision"],
         )
-        chunks.extend(
-            chunk_canonical_document(document, max_chars=args.chunk_size)
-        )
+        chunks.extend(chunk_canonical_document(document, max_chars=args.chunk_size))
 
     rows = []
     bm25 = BM25Retriever(chunks)
@@ -129,14 +127,9 @@ def main() -> int:
         "created_at": datetime.now(timezone.utc).isoformat(),
         "qa_file": _portable_path(args.qa),
         "qa_hash": f"sha256:{hashlib.sha256(args.qa.read_bytes()).hexdigest()}",
-        "active_revisions_file": _portable_path(
-            args.corpus_dir / ACTIVE_REVISIONS_FILENAME
-        ),
+        "active_revisions_file": _portable_path(args.corpus_dir / ACTIVE_REVISIONS_FILENAME),
         "active_revisions_hash": (
-            "sha256:"
-            + hashlib.sha256(
-                (args.corpus_dir / ACTIVE_REVISIONS_FILENAME).read_bytes()
-            ).hexdigest()
+            "sha256:" + hashlib.sha256((args.corpus_dir / ACTIVE_REVISIONS_FILENAME).read_bytes()).hexdigest()
         ),
         "chunk_size": args.chunk_size,
         "top_ks": list(DEFAULT_TOP_KS),
@@ -175,6 +168,7 @@ def main() -> int:
         )
         + "\n",
         encoding="utf-8",
+        newline="\n",
     )
 
     summary = build_run_summary(rows, run_id=args.run_id)
@@ -188,6 +182,7 @@ def main() -> int:
         )
         + "\n",
         encoding="utf-8",
+        newline="\n",
     )
 
     _print_summary(summary)
@@ -197,13 +192,9 @@ def main() -> int:
     return 0
 
 
-def _active_revision_mismatches(
-    qa_records: list[dict], active_records: list[dict]
-) -> list[str]:
+def _active_revision_mismatches(qa_records: list[dict], active_records: list[dict]) -> list[str]:
     """Find gold or audit spans that do not belong to the active corpus."""
-    active_by_document = {
-        record["document_id"]: record["revision"] for record in active_records
-    }
+    active_by_document = {record["document_id"]: record["revision"] for record in active_records}
     mismatches = []
     for record in qa_records:
         references = list(record.get("evidence", []))
@@ -322,11 +313,7 @@ def _format_summary_metric(cell: dict) -> str:
 
 
 def _load_jsonl(path: Path) -> list[dict]:
-    return [
-        json.loads(line)
-        for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def _portable_path(path: Path) -> str:

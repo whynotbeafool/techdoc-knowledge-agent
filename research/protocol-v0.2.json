@@ -1,0 +1,72 @@
+{
+  "protocol_version": "selective-v0.2-dev",
+  "status": "development_only_not_evaluation_frozen",
+  "created_at": "2026-09-29",
+  "current_dataset": {
+    "file": "data/eval/qa.jsonl",
+    "sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+    "split": "dev",
+    "previously_exposed": true
+  },
+  "retrieval": {
+    "method": "bm25",
+    "k1": 1.5,
+    "b": 0.75,
+    "chunk_size": 800,
+    "top_k": 5
+  },
+  "candidate_lexical_thresholds": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "selection": {
+    "split": "dev",
+    "min_answer_coverage": 0.5,
+    "selected_thresholds": null
+  },
+  "budget": {
+    "approved_remote_calls": 0,
+    "proposed_pilot_calls": 30,
+    "proposed_max_input_tokens_per_call": 4096,
+    "proposed_max_output_tokens_per_call": 512,
+    "provider": null,
+    "model": null,
+    "currency_cost_estimate": null
+  },
+  "artifacts_sha256": {
+    "research/PROTOCOL.md": "4160363a99be3785a042476e5bf7b8598378bd235b2b40388d797eeee6d9e922",
+    "research/SEMANTIC_RUBRIC.md": "1c62f2b80d4b4ca3099ca0f5caf790c1d8367375ee160b4c9195a7f3369c22ae",
+    "research/REPLAY_INPUTS.md": "048ee785573dbe0598205178e672a2d11d707ea984debe2b9c35d7fcc32fcb52",
+    "backend/app/rag/gating.py": "6477760172b5b32aab46999c4ffc69f4175570740b121d6f42d12aa58f69d61e",
+    "backend/app/evaluation/selective.py": "cf18091ae0432e2ebd8eb127e7c407473ab0d7e4aa7b0f807b5875e1d3106973",
+    "backend/app/evaluation/replay.py": "80dd6e012d207f33c320aea209ea061924104ac1d17a9dfbcdcdd68a3e862505",
+    "scripts/replay_selective.py": "70863272a53a286bef2a8abf265cbe2f3c4cd60b38f8fc8353d9db553d38f499",
+    "scripts/prepare_selective_dev.py": "74d6c8df8bc2639adf6c8d0532c29d90218321a78b35cdef76a2de39a81ce531",
+    "scripts/audit_text_coverage.py": "486ed6df1957b43c83d029d4709247ab25745fa594a421c497b01b309f8632d5",
+    "scripts/check_locked_reannotation.py": "96f11f38edc885b5e8a132d166db401932d1eba7788e43f37af09617356c1fd5",
+    "scripts/evaluate_retrieval.py": "9373b899d8dad7868d1eca0ed6ac5b40d8f3dee74f49a08ba7203410507fdf3a"
+  },
+  "outstanding_before_evaluation_freeze": [
+    "new_group_split_manifest",
+    "semantic_review_arrangements_and_labels",
+    "provider_model_prompt_snapshot",
+    "token_and_price_preflight_and_budget",
+    "real_cache_review_validation_and_provider_logging_adapter"
+  ],
+  "note": "This checksum snapshot is not preregistration or proof of independent review.",
+  "previous_snapshot": {
+    "path": "research/protocol-v0.1.json",
+    "source_commit": "44888d4a26098f1497a593ad69f40d4ef54fd5da"
+  },
+  "group_split_hash_prefix": "selective-v0.1|",
+  "bootstrap": {
+    "resamples": 2000,
+    "seed": 20260928,
+    "minimum_groups_for_computation": 2,
+    "undefined_fraction_interval_cutoff": 0.5,
+    "note": "Computation guard only; not evidence of sufficient statistical power."
+  }
+}

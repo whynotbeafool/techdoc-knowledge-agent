@@ -1,6 +1,6 @@
-# Selective answering protocol — v0.1-dev
+# Selective answering protocol — v0.2-dev
 
-Date: 2026-09-28. Status: **development protocol, not a frozen confirmatory experiment**. Implementation may be exercised offline now. A final evaluation freeze requires a new dataset/group manifest, complete semantic annotation arrangements, exact provider/model/prompt configuration and an explicit paid-call budget. No current result supports a claim that C improves risk.
+Date: 2026-09-29. Supersedes development v0.1 at Git commit `44888d4`; historical checksum snapshots remain tied to that commit. Status: **development protocol, not a frozen confirmatory experiment**. Implementation may be exercised offline now. A final evaluation freeze requires a new dataset/group manifest, complete semantic annotation arrangements, exact provider/model/prompt configuration and an explicit paid-call budget. No current result supports a claim that C improves risk.
 
 ## Question and hypotheses
 
@@ -34,14 +34,14 @@ Do not select thresholds until development generations and semantic labels exist
 
 Evaluate B's score grid and C's Cartesian grid on paired cached baseline outputs and fixed gate-refusal outputs. Main development working point: among candidates with observed substantive answer coverage >= .50 and complete labels, minimize selective risk; ties prefer higher answer coverage, then lower expected generation-call count, then lexicographically smaller (t,u). If no candidate meets .50, record the working point as infeasible; do not silently lower the target. Also report the whole dev curve and .25/.75 coverage constraints as secondary diagnostics. This is threshold development, not an unbiased effect estimate.
 
-Apply selected numeric thresholds unchanged to a future heldout set and report its actual coverage, even if different. Do not tune a heldout threshold for a more favorable matched-coverage comparison. Unresolved labels make a candidate unevaluable, not better-performing. The pure development selector and tie rules are implemented in `selective.py`; it rejects test selection and blocks selection when a candidate depends on missing semantic labels. An end-to-end candidate-grid/replay runner remains to be connected to real judged generations before the evaluation freeze.
+Apply selected numeric thresholds unchanged to a future heldout set and report its actual coverage, even if different. Do not tune a heldout threshold for a more favorable matched-coverage comparison. Unresolved labels make a candidate unevaluable, not better-performing. The pure development selector and tie rules are implemented in `selective.py`; it rejects test selection and blocks selection when a candidate depends on missing semantic labels. The offline candidate-grid/replay runner is implemented in `scripts/replay_selective.py`, including a heldout mode consuming saved dev working points without retuning. Real linked generations/reviews and the provider logging adapter still need to be collected and validated before evaluation freeze.
 
 ## Dataset grouping, exclusions and splitting
 
 - Existing q001–q030 stay dev permanently. The preflight conservatively places all 30 in one `legacy-exposed-30` group; this is bookkeeping, not a claim that there are 30 independent samples.
 - Before seeing new system outputs, group paraphrases, descendants of the same original question, and questions sharing necessary evidence facts. Take transitive closure. A group connected to any exposed question goes to dev; superficial disjoint offsets cannot establish independence.
 - For otherwise eligible, new, unexposed groups, assign test when `int(SHA256('selective-v0.1|' + group_id),16) % 5 == 0`, dev otherwise. Freeze stable group IDs and the complete manifest before model/threshold development; do not rename groups to change their allocation. Report actual group counts and type distributions without outcome-driven rebalancing. Same-document sharing remains a limitation.
-- Validate no group crosses dev/test and all test entries explicitly declare no previous exposure. The current validator also rejects the legacy IDs even if their exposure flag is false. Renaming a leaked question does not make it unexposed; this still needs provenance review.
+- Validate no group crosses dev/test and all test entries explicitly declare no previous exposure. The validator rejects legacy IDs and the reserved legacy group even if their exposure flags are false. Test rows require both question-level `previously_exposed=false` and group-level `group_previously_exposed=false`. The runner enforces the deterministic hash allocation and consistent exposure declarations; heldout IDs/groups must not overlap the saved development manifest. The hash prefix remains `selective-v0.1|` in v0.2 to avoid changing assignments. Renaming a leaked question does not make it unexposed; this still needs provenance review.
 - Exclude text-extraction/layout failures and genuinely unresolved question scope before outcome inspection, with reason and count. Do not exclude hard failures after seeing outputs. Existing q005/q010/q021 remain in historical diagnostics; unresolved semantics must be labeled unknown rather than guessed.
 - No new test set or evidence groups have been constructed in this turn. Do not retroactively split the existing 30 questions.
 
@@ -57,7 +57,7 @@ Use the explicit denominators in coverage-v1 §6. Report numerator, denominator,
 
 Primary analysis: answer coverage together with selective risk, not one headline accuracy. Secondary: unsupported-answer rate, valid response rate on corpus-supported targets, false-refusal rate on sufficient contexts, service failures and costs. Keep the old prefix-contract metrics under their old names. Any-overlap and text coverage are offline diagnostics, not gating inputs.
 
-For a heldout comparison, pair the same groups across methods. Report effect sizes and group-resampled uncertainty if enough independent groups exist, with 2,000 resamples and seed 20260928; a resample with no answered cases has undefined risk, not zero. Disclose the undefined fraction and do not issue a conventional interval if it becomes dominated by undefined samples. Shared-document dependence and small group counts still limit inference; this procedure alone does not establish statistical power. No CI is computed on the one-group current preflight.
+For a heldout comparison, pair the same groups across methods. Report effect sizes and group-resampled uncertainty if enough independent groups exist, with 2,000 resamples and seed 20260928; a resample with no answered cases has undefined risk, not zero. Disclose the undefined fraction; v0.2 withholds the 95% descriptive percentile interval if at least 50% of draws are undefined or any original required metric labels are missing. Fewer than two groups yields `insufficient_groups`. Shared group draws are used for each strategy and their paired differences; normal input IDs must remain unique. These are implementation safeguards, not a power threshold. Shared-document dependence and small group counts still limit inference; this procedure alone does not establish statistical power. No CI is computed on the one-group current preflight.
 
 ## Generation, reuse, cost and logging
 
@@ -67,7 +67,7 @@ Cache keys must include corpus/context hash, question, retrieval config, full pr
 
 Current authorized remote-call budget for this protocol: **0**. Offline preparation needs no model calls. Proposed 30-question pilot envelope, to be approved before execution: one shared baseline call per question, maximum 4,096 input tokens and 512 output tokens, at most 30 calls (no automatic retries). This bounds tokens at 122,880 input / 15,360 output; it is not a measured tokenizer count or a dollar quote. Estimated cost is `(122880 * input_price_per_million + 15360 * output_price_per_million) / 1e6`, using the selected provider's verified prices at execution time. If packing exceeds the envelope, stop and version the packing policy rather than silently changing only one strategy. No extra LLM calls are used by the proposed C gate.
 
-Provider/model selection, prompt snapshot, real token preflight, budget approval, label completion, new group manifest, candidate-grid/replay integration and heldout runner are required before the evaluation freeze. Model versions cannot be inferred from historical run names. Until these are resolved, the status remains dev-ready, not preregistered/confirmed.
+Provider/model selection, prompt snapshot, real token preflight, budget approval, label completion, new group manifest, real-cache validation of the replay integration and heldout runner are required before the evaluation freeze. Model versions cannot be inferred from historical run names. Until these are resolved, the status remains dev-ready, not preregistered/confirmed.
 
 ## Executable pieces
 
@@ -77,3 +77,11 @@ Provider/model selection, prompt snapshot, real token preflight, budget approval
 - `tests/test_selective.py`: input boundary, ablation, ties, missing labels, all-refusal, failures, group leakage and legacy-test contamination.
 
 The current stage is an executable offline prototype plus a reviewable protocol. A/B/C end-to-end generation comparison, effectiveness, independent annotation and a heldout result are not yet delivered.
+
+## Offline replay input contract (v0.2)
+
+See `REPLAY_INPUTS.md` for separate cache, semantic review and split files. The runner checks exact ID sets, linked cache/context/response hashes, nonempty review provenance, fixed provider/model/prompt-template/decoding/retrieval/corpus configuration, split rules, finite thresholds, and no-overwrite output. It does not certify the truth of reviewer declarations or silently infer labels. Gates accept at most five chunks in descending BM25 score order; fewer are allowed when retrieval returns fewer.
+
+The original `protocol-v0.1.json` and 2026-09-28 preflight hashes refer to commit `44888d4`; they are not assertions about revised source bytes. Current implementation is snapshotted separately in `protocol-v0.2.json`. No empirical selective-answering result is produced without real cache/review inputs.
+
+2026-09-29 release review: saved development working points are validated against their candidate grid and deterministic selection, implementation/version identity, dev-only manifest and question/event counts before heldout use. Review rubric versions must match. Missing labels withhold only the bootstrap metrics and paired differences that depend on those labels. This does not authenticate the supplied report or establish prior registration.

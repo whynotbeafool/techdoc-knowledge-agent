@@ -41,10 +41,11 @@ def main():
             "group_id": "legacy-exposed-30",
             "split": "dev",
             "previously_exposed": True,
+            "group_previously_exposed": True,
         }
         for r in public
     ]
-    validate_group_split(split)
+    validate_group_split(split, enforce_assignment=True)
     chunks = []
     corpus = ROOT / "data/corpus"
     active_records = load_active_revision_records(corpus)
@@ -67,7 +68,7 @@ def main():
     write_jsonl(args.output_dir / "split.jsonl", split)
     write_jsonl(args.output_dir / "runtime-features.jsonl", rows)
     manifest = {
-        "protocol_version": "selective-v0.1-dev",
+        "protocol_version": "selective-v0.2-dev",
         "status": "features_only_no_generation",
         "qa_identity": identity,
         "question_n": len(public),

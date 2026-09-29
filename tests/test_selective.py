@@ -102,7 +102,13 @@ def test_group_split_leakage_and_exposed_test_rejected():
         validate_group_split(
             [
                 {"question_id": "1", "group_id": "same", "split": "dev"},
-                {"question_id": "2", "group_id": "same", "split": "test", "previously_exposed": False},
+                {
+                    "question_id": "2",
+                    "group_id": "same",
+                    "split": "test",
+                    "previously_exposed": False,
+                    "group_previously_exposed": False,
+                },
             ]
         )
     with pytest.raises(ValueError, match="unexposed"):
@@ -112,7 +118,15 @@ def test_group_split_leakage_and_exposed_test_rejected():
 def test_legacy_ids_cannot_be_relabelled_as_unexposed_test():
     with pytest.raises(ValueError, match="unexposed"):
         validate_group_split(
-            [{"question_id": "q001", "group_id": "new-name", "split": "test", "previously_exposed": False}]
+            [
+                {
+                    "question_id": "q001",
+                    "group_id": "new-name",
+                    "split": "test",
+                    "previously_exposed": False,
+                    "group_previously_exposed": False,
+                }
+            ]
         )
 
 

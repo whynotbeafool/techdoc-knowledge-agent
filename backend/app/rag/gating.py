@@ -31,6 +31,8 @@ def runtime_features(question: str, chunks: list[ContextChunk]) -> dict:
         for c in chunks
     ):
         raise ValueError("Context text and finite numeric scores are required")
+    if len(chunks) > 5 or any(a.score < b.score for a, b in zip(chunks, chunks[1:])):
+        raise ValueError("Expected at most five chunks ranked by descending BM25 score")
     tokens = set(TOKEN_PATTERN.findall(question.lower())) - STOPWORDS
     context_tokens = set(TOKEN_PATTERN.findall(" ".join(c.text for c in chunks).lower()))
     return {

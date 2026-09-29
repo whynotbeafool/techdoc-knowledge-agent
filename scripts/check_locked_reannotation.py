@@ -8,6 +8,7 @@ still require a separate semantic review; geometric overlap is not that review.
 import argparse
 import hashlib
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -44,6 +45,15 @@ def agreement(left, right):
     }
 
 
+def validate_planned_ids(ids, plan_path):
+    """Compare to the predeclared table, not merely a 14-of-30 cardinality."""
+    planned = re.findall(r"^\| (q\d{3}) \|", plan_path.read_text(encoding="utf-8"), re.MULTILINE)
+    if len(planned) != 14 or len(set(planned)) != 14:
+        raise ValueError("Invalid predeclared reannotation subset")
+    if len(ids) != 14 or set(ids) != set(planned):
+        raise ValueError("Question IDs differ from predeclared reannotation subset")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--packet", required=True, type=Path)
@@ -71,6 +81,7 @@ def main():
     second = load_qa_jsonl(out / "annotations.jsonl")
     dimensions = load_qa_jsonl(out / "dimensions.jsonl")
     ids = [r["question_id"] for r in questions]
+    validate_planned_ids(ids, ROOT / "data/eval/reannotation-plan.md")
     if len(ids) != 14 or len(set(ids)) != 14:
         raise ValueError("Expected 14 unique input questions")
     for name, records in (("annotations", second), ("dimensions", dimensions)):

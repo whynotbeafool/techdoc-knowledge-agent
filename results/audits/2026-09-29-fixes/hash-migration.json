@@ -1,0 +1,42 @@
+{
+  "date": "2026-09-29",
+  "base_commit": "44888d4a26098f1497a593ad69f40d4ef54fd5da",
+  "policy": "Historical receipts unchanged. Result text now LF; new text-coverage input hashes explicitly normalize CRLF to LF. Frozen QA uses only its two registered identities.",
+  "files": [
+    {
+      "path": "results/runs/frozen-30-hybrid-rrf-v1.summary.json",
+      "historical_recorded_sha256": "d3efabc8d81d0d26e1086868c1b5c0dc60231775187bca331c7095295d0c8d1e",
+      "lf_sha256": "94b2e524d882834bc7ece680e34aea092f4b79605a3e01c5f0543ab4e44f5cc1",
+      "crlf_variant_sha256": "d3efabc8d81d0d26e1086868c1b5c0dc60231775187bca331c7095295d0c8d1e",
+      "historical_matches_crlf": true
+    },
+    {
+      "path": "results/runs/frozen-30-v1.summary.json",
+      "historical_recorded_sha256": "5c714c7b8072e117c4e875429a8618aec86d745463a58f9f234cde51b165378b",
+      "lf_sha256": "40ad2cdd2b5adf247a2243da1a95815c1751f6b678bd9a0aeb4ff364802adf60",
+      "crlf_variant_sha256": "5c714c7b8072e117c4e875429a8618aec86d745463a58f9f234cde51b165378b",
+      "historical_matches_crlf": true
+    },
+    {
+      "path": "results/runs/pilot-12-v2.summary.json",
+      "historical_recorded_sha256": "b62c759a93da63f5c63a374be070508aa6ab47ffd4322da42aeab4552fd3e6a5",
+      "lf_sha256": "a96201b41d42615d27ce4a4f266796421b4d179a83e9ada310eb83a878b3e9b8",
+      "crlf_variant_sha256": "b62c759a93da63f5c63a374be070508aa6ab47ffd4322da42aeab4552fd3e6a5",
+      "historical_matches_crlf": true
+    },
+    {
+      "path": "results/runs/pilot-9-v1.summary.json",
+      "historical_recorded_sha256": "da2ed3f05e8b160ee28219acf3a60677ff648a7cb7654c1a0ab79635ae3f828b",
+      "lf_sha256": "e3f1010f1da6132ac09a0cae1775e86a3f4d8388ab82d7e1c62e0f043542153e",
+      "crlf_variant_sha256": "da2ed3f05e8b160ee28219acf3a60677ff648a7cb7654c1a0ab79635ae3f828b",
+      "historical_matches_crlf": true
+    },
+    {
+      "path": "results/runs/frozen-30-hybrid-rrf-v1.config.json",
+      "historical_recorded_sha256": "5eb1ae8b77cb50279dfe247209c2b020817962c222a5304f10735772e95e5934",
+      "lf_sha256": "81af0cd4adc43e8cfc7a0bb48c96119ed48b617785b3d93ad45fdfb4fe70cf54",
+      "crlf_variant_sha256": "5eb1ae8b77cb50279dfe247209c2b020817962c222a5304f10735772e95e5934",
+      "historical_matches_crlf": true
+    }
+  ]
+}

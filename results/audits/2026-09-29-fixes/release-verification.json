@@ -1,0 +1,11 @@
+{
+  "date": "2026-09-29",
+  "base_commit": "44888d4a26098f1497a593ad69f40d4ef54fd5da",
+  "full_suite": "241 passed",
+  "ruff": "passed",
+  "frozen_qa_reannotation_lock_hashes_unchanged": true,
+  "protocol_snapshot_sha256": "9765d8b302ffef9ef3d88e235d5809411131a98ed64b8093c0f92e3fd1616f81",
+  "new_remote_calls": 0,
+  "new_semantic_labels": 0,
+  "scope": "Local pre-commit validation, not remote CI or empirical effectiveness."
+}

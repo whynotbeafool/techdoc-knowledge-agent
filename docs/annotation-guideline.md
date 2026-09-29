@@ -301,7 +301,7 @@ v0 记录没有 `lexical_overlap`，保留在 overall 和 reasoning cells 中，
 ```
 
 主表固定报告 **Evidence Recall@1、Recall@3、Recall@5**。Recall@1 不能因已报告 Recall@5
-而省略：试标中 BM25 Recall@5 已达到 1.000，存在明显天花板效应；更严格的 K 能检验相关证据
+而省略：更严格的 K 能检验相关证据
 是否真正排在最前面。出题阶段仍只按 §5.1 的冻结规则控制难度，不得根据某条基线的 Recall@1
 反复改题。
 

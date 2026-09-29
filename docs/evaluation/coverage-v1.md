@@ -30,7 +30,7 @@ For question q with m>0 selected gold spans, let L_i be span length and U_i its 
 - `recall_any = mean_i 1[|U_i| > 0]`; `complete_any = AND_i 1[|U_i| > 0]`.
 - `recall_full_char = mean_i 1[|U_i| = L_i]`; `complete_full_char = AND_i 1[|U_i| = L_i]`.
 - `mean_char_fraction = mean_i |U_i| / L_i`. This is a fraction, not complete-hit rate.
-- Let W_i be offsets whose gold characters satisfy `not char.isspace()`. `recall_full_nonspace` and `complete_full_nonspace` use the predicate `W_i subset U_i`; `mean_nonspace_fraction = mean_i |W_i intersect U_i| / |W_i|`.
+- Let W_i be offsets whose gold characters satisfy `not char.isspace()`. `recall_full_nonspace` and `complete_full_nonspace` use the predicate `W_i subset U_i` only when `W_i` is nonempty; `mean_nonspace_fraction = mean_i |W_i intersect U_i| / |W_i|`.
 
 Whitespace is **exactly Python `str.isspace()`**, with Python version logged. This includes line breaks and Unicode non-breaking spaces. It does not strip punctuation, lowercase, normalize Unicode, remove introductions, or decide whether missing words matter semantically. If any selected span is whitespace-only, all non-whitespace question scores are NA, not perfect; report the reduced valid denominator. If m=0, all evidence-coverage scores are NA; do not let empty conjunctions become successful retrieval.
 
@@ -42,7 +42,7 @@ Report each method × expected behavior (`answer`, `correct_premise`) × cohort 
 
 Compute each question score first, then take a macro mean across eligible questions. Each metric records its sum, valid n and mean; `question_n` records the candidate cohort size. Do not micro-average characters, pool K values, or count lexical and topology rows as independent questions. No new significance or causal claim follows from this small shared-document sample.
 
-The any-overlap and strict audits reproduce existing saved scores before adding non-whitespace results. All new output uses a new path and includes input/script hashes. No gold or historical run is rewritten.
+The runtime audit asserts saved any-overlap scores. Regression tests additionally compare every historical strict-coverage cell and all 270 rows/36 cells of the saved text audit before accepting new non-whitespace results. All new output uses a new path and includes input/script hashes. No gold or historical run is rewritten.
 
 ## 5. Necessary evidence groups: future annotation contract
 
@@ -75,3 +75,5 @@ The exact semantic annotation rubric, independent assessment arrangements, group
 - Saved-run audit: `python scripts/audit_text_coverage.py --run results/runs/frozen-30-hybrid-rrf-v1.jsonl --output results/audits/<new-path>/text-coverage.json`.
 - The original `audit_evidence_coverage.py` and all earlier archived outputs remain available.
 - Regression tests check Unicode offsets, overlapping/adjacent intervals, revision mismatch, missing evidence, punctuation, NA behavior, and the actual saved 17-question cohort.
+
+2026-09-29 provenance correction: new reports hash result inputs after CRLF-to-LF conversion and label that policy explicitly. QA is accepted only under the two registered byte identities, with original identity and actual byte hash recorded separately. Historical raw-byte receipts remain unchanged; `results/audits/2026-09-29-fixes/hash-migration.json` explains their newline differences.

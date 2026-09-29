@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-29",
+  "base_commit": "44888d4a26098f1497a593ad69f40d4ef54fd5da",
+  "full_suite": "231 passed",
+  "after_fixed_refusal_event_change": "41 relevant tests passed",
+  "ruff": "passed",
+  "locked_checker": "passed; 1 existing annotation warning",
+  "frozen_qa": "0 errors / 0 warnings",
+  "protected_tracked_artifacts_unchanged": true,
+  "remote_calls": 0,
+  "new_semantic_labels": 0,
+  "outputs_sha256": {
+    "hash-migration.json": "05756f277b1dcab5d3225fa0f6c146bcd58f40cd1de3153498dec0878899cf3c",
+    "lf-export-verification.json": "44b2a39d940f478371a2a76170af6c51ccdc6938220993a918fab5f8d13677f3",
+    "text-coverage-v1.json": "270d5baf5dcf93ebadf12cf8f9231dab45568bce12eacc24cc78b21dba5ff0a1"
+  },
+  "scope": "Local validation; no claim of current remote CI or formal strategy effectiveness"
+}

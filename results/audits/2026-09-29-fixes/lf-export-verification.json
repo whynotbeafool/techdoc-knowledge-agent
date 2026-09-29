@@ -1,0 +1,10 @@
+{
+  "date": "2026-09-29",
+  "method": "git archive HEAD plus current changes, LF export, original Git QA identity; same Windows Python runtime, not a Linux execution",
+  "all_270_rows_equal": true,
+  "all_36_cells_equal": true,
+  "implementation_hashes_equal": true,
+  "input_identity_hashes_equal": true,
+  "export_qa_actual_sha256": "1e9190c77a9d4f1b64cbbbf9323663a8d22995846e2831d98c3bc89afcf8d3ec",
+  "worktree_qa_actual_sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975"
+}

@@ -1,0 +1,54 @@
+{
+  "protocol_version": "selective-v0.2-dev",
+  "status": "features_only_no_generation",
+  "qa_identity": {
+    "actual_sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+    "original_sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+    "legacy_lf_serialization": false
+  },
+  "question_n": 30,
+  "chunk_n": 379,
+  "corpus": [
+    {
+      "document_id": "rag_paper",
+      "revision": "v1",
+      "text_hash": "sha256:83e663b687893f552ab75710cc7748dc6c0d2b3697c4b669a9f1903497c86a4f"
+    },
+    {
+      "document_id": "autonomous_driving_survey",
+      "revision": "v1",
+      "text_hash": "sha256:96906840430aba16dfc784b7b947715127396f7f3d07067d119b3633778a49f8"
+    },
+    {
+      "document_id": "fastapi_first_steps",
+      "revision": "v1",
+      "text_hash": "sha256:6e909cc5cf438740cdc71dad49b8e2a513865a9c9c609b1944fe3de080ea081c"
+    },
+    {
+      "document_id": "kubernetes_overview",
+      "revision": "v1",
+      "text_hash": "sha256:4caf1cd3bfe590d9eb75d513d2024081338dc48523f81f9e06e3208e749f3c8c"
+    },
+    {
+      "document_id": "pep8",
+      "revision": "v2",
+      "text_hash": "sha256:5398fae01e6df3757181e63c79f12749336c89c7ca5728534174109e243a8833"
+    }
+  ],
+  "method": "bm25",
+  "top_k": 5,
+  "chunk_size": 800,
+  "generator_calls": 0,
+  "semantic_labels": 0,
+  "selected_thresholds": null,
+  "note": "Exposed development data only. Feature values are not answer coverage or risk.",
+  "sha256": {
+    "public-questions.jsonl": "162a445c9a06990ce769222072d806cdb6325d942d4f64846385f91f4c556073",
+    "runtime-features.jsonl": "44a02f30588246402c516bab96ccf621195e8906da9385a6c62f2471d7ef718f",
+    "split.jsonl": "fd01fa4b5b5bf920299468c65f68f708e5863e8e54e8fdfec1f1a99bd675c27d"
+  },
+  "implementation_sha256": {
+    "scripts/prepare_selective_dev.py": "74d6c8df8bc2639adf6c8d0532c29d90218321a78b35cdef76a2de39a81ce531",
+    "backend/app/rag/gating.py": "6477760172b5b32aab46999c4ffc69f4175570740b121d6f42d12aa58f69d61e"
+  }
+}

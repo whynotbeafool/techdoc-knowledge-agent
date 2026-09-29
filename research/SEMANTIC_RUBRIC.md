@@ -1,6 +1,6 @@
-# Semantic judgment rubric — v0.1-dev
+# Semantic judgment rubric — v0.2-dev
 
-Date: 2026-09-28. Applies prospectively to the selective-answering protocol; no original gold labels or locked reannotations are changed. Machine aggregation is implemented, but it does not produce semantic judgments.
+Date: 2026-09-29. Applies prospectively to the selective-answering protocol; no original gold labels or locked reannotations are changed. Machine aggregation is implemented, but it does not produce semantic judgments.
 
 ## Review order and inputs
 
@@ -11,7 +11,7 @@ Date: 2026-09-28. Applies prospectively to the selective-answering protocol; no 
 
 ## Record consumed by the scorer
 
-Required fields: question_id, execution_status (`ok` or `system_error`), behavior, corpus_supported, context_sufficient, correct, complete, supported. All five quality/support labels are boolean or null; use null for unknown, not a guessed false. Score one strategy/cohort at a time with distinct question IDs. The storage record should additionally include strategy, group_id, split, expected_behavior, response hash, reviewer metadata and rationale; these must be validated and linked by a future end-to-end runner.
+Required fields: question_id, execution_status (`ok` or `system_error`), behavior, corpus_supported, context_sufficient, correct, complete, supported. All five quality/support labels are boolean or null; use null for unknown, not a guessed false. Score one strategy/cohort at a time with distinct question IDs. The storage record should additionally include strategy, group_id, split, expected_behavior, response hash, reviewer metadata and rationale; the offline runner now validates linkage and presence of provenance fields. This is not independent validation of the judgments.
 
 - `answer`: a substantive attempt at an ordinary answer.
 - `correction`: explicitly disputes a false premise and supplies a substantive evidence-based correction. It is an attempt even if it begins with a disclaimer or the historical refusal prefix.
@@ -38,3 +38,7 @@ Required fields: question_id, execution_status (`ok` or `system_error`), behavio
 The scorer withholds a rate if its numerator/denominator depends on missing labels. It may still report an independently determined metric: for example, a known factual error is an error even if completeness is unknown. Every rate includes its known denominator and missing-label count; a zero denominator yields null. No synthetic unit-test judgments may be copied into study outputs.
 
 Current q010's unspecified exception scope and q021's unspecified latency setup remain documented unresolved cases. Neither is silently adjudicated by the new scoring code.
+
+## Consistency constraints
+
+`context_sufficient` means sufficient evidence for every required part of a substantive valid answer/correction, not merely readable text or enough information to refuse. With corpus-derived context, context_sufficient=true implies corpus_supported cannot be false. A correct, complete, context-supported substantive answer implies neither context_sufficient nor corpus_supported can be false. Null remains unknown; these constraints do not manufacture missing labels. If context includes external evidence, use a separately versioned protocol rather than forcing it into this corpus-only definition. Contradictions go back to review; the scorer must not automatically flip labels.
