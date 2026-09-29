@@ -1,0 +1,53 @@
+{
+  "protocol_version": "selective-v0.1-dev",
+  "status": "development_only_not_evaluation_frozen",
+  "created_at": "2026-09-28",
+  "current_dataset": {
+    "file": "data/eval/qa.jsonl",
+    "sha256": "21eb2747289309cb5c17fe0ea5b85744220b246a80f7b0314d430d72f847b975",
+    "split": "dev",
+    "previously_exposed": true
+  },
+  "retrieval": {
+    "method": "bm25",
+    "k1": 1.5,
+    "b": 0.75,
+    "chunk_size": 800,
+    "top_k": 5
+  },
+  "candidate_lexical_thresholds": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "selection": {
+    "split": "dev",
+    "min_answer_coverage": 0.5,
+    "selected_thresholds": null
+  },
+  "budget": {
+    "approved_remote_calls": 0,
+    "proposed_pilot_calls": 30,
+    "proposed_max_input_tokens_per_call": 4096,
+    "proposed_max_output_tokens_per_call": 512,
+    "provider": null,
+    "model": null,
+    "currency_cost_estimate": null
+  },
+  "artifacts_sha256": {
+    "research/PROTOCOL.md": "f77663a20077bbc12fea0f2bdc565f286beb30d086c42b2a699068a8003d8e7e",
+    "research/SEMANTIC_RUBRIC.md": "0e490a363e59d0a4e06f0e4e19b1857255aace0d3de24ceecc6f9595e97a603b",
+    "backend/app/rag/gating.py": "adee6179fa2b99f5030ebbd3651379846d77cb3b2a02c3e51a9f6aa5bd745e0d",
+    "backend/app/evaluation/selective.py": "403b76dc9c1a28e07601b5581b4db4518ae1641f44afde1cc2d1ed871f46dcd5"
+  },
+  "outstanding_before_evaluation_freeze": [
+    "new_group_split_manifest",
+    "semantic_review_arrangements_and_labels",
+    "provider_model_prompt_snapshot",
+    "token_and_price_preflight_and_budget",
+    "candidate_replay_and_heldout_runner"
+  ],
+  "note": "This checksum snapshot is not preregistration or proof of independent review."
+}

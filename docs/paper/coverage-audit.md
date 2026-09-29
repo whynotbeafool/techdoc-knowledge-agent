@@ -69,3 +69,10 @@ as post-hoc sensitivity. Do not call every strict-coverage drop a substantive re
 Do not change evidence spans to improve a method's results. A future coverage metric
 should specify whitespace handling and union coverage before a new run is reported.
 The present evidence supports a local Top-5 ordering, not reliable end-to-end failure attribution.
+
+
+## 2026-09-28 operational specification and machine-readable check
+
+`docs/evaluation/coverage-v1.md` now specifies the union, macro denominators, Unicode whitespace and NA cases explicitly. `scripts/audit_text_coverage.py` reproduces the historical contact and strict-full results before calculating non-whitespace sensitivity for all applicable cells. The new immutable output is `results/audits/2026-09-28/text-coverage-v1.json`; it records each metric's numerator/sum, valid denominator, per-question spans and input/code hashes.
+
+In the confirmed answerable Top-5 cell, non-whitespace complete hits are again BM25 7/17, Dense 6/17 and Hybrid 9/17. This is a retrospective check of an already observed formatting effect, not a new primary metric or evidence of semantic sufficiency. Missing punctuation and non-whitespace text still count as uncovered. The historical selected gold and saved rankings are unchanged.

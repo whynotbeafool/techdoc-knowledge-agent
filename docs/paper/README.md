@@ -4,7 +4,7 @@
 
 - `stage-review-2026-09-11.md`: Milestone review, high-impact source corrections, and ordered validation gaps. Read this before using older outline claims in an application or manuscript.
 
-- `manuscript.md`: Generated reading copy of all sections, updated 2026-09-23. Edit the section files as the source of truth; regenerate the reading copy after edits. Working title: Evidence-Anchored Retrieval Evaluation for Technical Documents: A Pilot Study.
+- `manuscript.md`: Generated reading copy of all sections, updated 2026-09-28. Edit the section files as the source of truth; regenerate the reading copy after edits. Working title: Evidence-Anchored Retrieval Evaluation for Technical Documents: A Pilot Study.
 - `abstract.md`, `introduction.md`, `conclusion.md`: Opening and closing drafts aligned with the saved retrieval results and coverage audit. These complete the structural first draft, not a submission-ready paper.
 
 - `discussion.md`: Discussion and Limitations draft, covering cutoff trade-offs, the distinction between interval coverage and semantic support, sampling/annotation limits, and outstanding validation.
@@ -28,3 +28,6 @@ pandoc related-work.md --citeproc --bibliography=references.bib -s -o related-wo
 No venue template or CSL style has been selected. The command above is a rendering recipe, not a claim that a publication template has been compiled or checked.
 
 Editorial scope: preserve the user's thematic organization, shorten repetition, separate pooling bias from lexical query-construction bias, and avoid presenting generation-side evaluation as completed. Citation metadata verification does not replace checking detailed numerical claims against the paper tables before submission.
+
+
+2026-09-28 update: the coverage operational specification is in `../evaluation/coverage-v1.md`; FinBen/RAGAS/Self-RAG claim-level primary-source checks are recorded in `../../research/LITERATURE_CLAIM_AUDIT_20260928.md`. These checks cover the three named papers' current claims, not all references or a full novelty review. The current manuscript includes their clarified scope; the selective-answering development protocol is now in `../../research/PROTOCOL.md`, with its semantic rubric and offline implementation report alongside it. This is not a frozen evaluation or evidence of strategy effectiveness; generation, semantic annotation, held-out evaluation, and submission formatting remain pending.

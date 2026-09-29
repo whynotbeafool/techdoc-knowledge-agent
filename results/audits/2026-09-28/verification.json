@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-28",
+  "base_commit": "0188399561bf956018941a1755f1eec38c3f6f15",
+  "scope": "Local post-hoc audit; no new model or retrieval run. This receipt is not an independent attestation.",
+  "output": {
+    "file": "text-coverage-v1.json",
+    "sha256": "ebaf451d1b2d66d93fe8eee21aa43e162e644119937420b580ebc000e7986f8c"
+  },
+  "verification": {
+    "pytest": "190 passed",
+    "ruff": "passed",
+    "previous_commit_ci": "https://github.com/whynotbeafool/techdoc-knowledge-agent/actions/runs/35821293730",
+    "previous_commit_ci_conclusion": "success",
+    "current_changes_ci": "not run"
+  },
+  "reproduction_command": "python scripts/audit_text_coverage.py --run results/runs/frozen-30-hybrid-rrf-v1.jsonl --output <new-path>.json"
+}

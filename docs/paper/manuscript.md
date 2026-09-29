@@ -3,7 +3,7 @@ title: "Evidence-Anchored Retrieval Evaluation for Technical Documents: A Pilot 
 bibliography: references.bib
 ---
 
-<!-- Generated reading copy, 2026-09-23. Edit the section files and regenerate this copy. -->
+<!-- Generated reading copy, 2026-09-28. Edit the section files and regenerate this copy. -->
 
 # Abstract
 
@@ -21,19 +21,15 @@ The current experiment addresses three questions: how BM25, Dense, and rank fusi
 
 Fusion achieves more Top-5 complete hits than BM25 but lower Recall@3 and MRR@5; Dense performs better in the low-overlap stratum. A post-hoc audit further separates evidence-location hits from full character coverage. These observations motivate the study's three contributions: a traceable pilot protocol, a controlled retrieval comparison, and a coverage sensitivity analysis.
 
----
-bibliography: references.bib
----
-
 # Related Work
 
 ## Vertical-Domain LLM Capability Benchmarks
 
-Vertical-domain LLM benchmarks decompose domain competence into structured task suites. FinBen spans 42 datasets, 24 tasks, and eight aspects of finance [@xie2024finben]. In Chinese college admissions, DomainRAG defines six capability types and compares closed-book, gold-reference, and retrieved-reference settings, with BM25-based retrieval generally yielding stronger downstream results than BGE-base-zh-v1.5 [@wang2024domainrag]. These benchmarks characterize system-level capabilities; FinBen's Regulations evaluation, for example, reports answer-level metrics [@xie2024finben]. The present setting instead calls for controlled retriever comparison using independently annotated evidence spans anchored to character offsets. DomainRAG provides a close reference for domain-specific evaluation, while addressing a broader set of end-to-end capabilities.
+Vertical-domain LLM benchmarks decompose domain competence into structured task suites. FinBen spans 42 datasets, 24 tasks, and eight aspects of finance [@xie2024finben]. In Chinese college admissions, DomainRAG defines six capability types and compares closed-book, gold-reference, and retrieved-reference settings, with BM25-based retrieval generally yielding stronger downstream results than BGE-base-zh-v1.5 [@wang2024domainrag]. These benchmarks characterize system-level capabilities; FinBen's Regulations evaluation, for example, uses ROUGE and BERTScore for long-form answers [@xie2024finben, sec. 2.3]. Its question-answer pairs are mapped to relevant regulatory articles [@xie2024finben, sec. 2.2], so the distinction is not an absence of source association in FinBen. The present setting instead calls for controlled retriever comparison using independently annotated evidence spans anchored to character offsets. DomainRAG provides a close reference for domain-specific evaluation, while addressing a broader set of end-to-end capabilities.
 
 ## Reference-Free and Generation-Integrated RAG Diagnostics
 
-RAG diagnostics distinguish context quality, answer faithfulness, and retrieval decisions. RAGAS uses reference-free metrics for faithfulness, answer relevance, and context relevance [@es2024ragas]. Self-RAG trains the generator to emit reflection tokens indicating whether retrieval is needed, whether retrieved evidence is relevant, whether the output is supported, and its overall utility [@asai2024selfrag]. Both explicitly assess retrieved context, although Self-RAG is a training-and-generation framework rather than an evaluation metric. These judgments offer useful diagnostics but do not themselves supply an independently annotated required evidence set. In the present protocol, character-offset gold evidence enables measurement of whether retrieved chunks overlap annotated evidence locations. This supplies a retrieval diagnostic, but the current any-overlap hit rule does not establish complete content coverage or correct downstream evidence use.
+RAG diagnostics distinguish context quality, answer faithfulness, and retrieval decisions. The 2024 RAGAS paper defines reference-free metrics for faithfulness, answer relevance, and context relevance [@es2024ragas, sec. 3]. Reference-free scoring does not mean absence of human validation: its WikiEval study compares the metrics with human judgments [@es2024ragas, secs. 4–5]. Its context-relevance ratio concerns the focus of retrieved context, not recall of an independently annotated necessary evidence set. Self-RAG trains the generator to emit reflection tokens indicating whether retrieval is needed, whether retrieved evidence is relevant, whether the output is supported, and its overall utility [@asai2024selfrag, table 1 and sec. 3]. The support judgment includes the generated output as an input; it is not a pre-answer guarantee that all necessary evidence is present. A decision not to retrieve can still lead to generation and is not itself a refusal. Both explicitly assess retrieved context, although Self-RAG is a training-and-generation framework rather than an evaluation metric. These judgments offer useful diagnostics but do not themselves supply an independently annotated required evidence set. In the present protocol, character-offset gold evidence enables measurement of whether retrieved chunks overlap annotated evidence locations. This supplies a retrieval diagnostic, but the current any-overlap hit rule does not establish complete content coverage or correct downstream evidence use.
 
 ## Retrieval Benchmarks and Annotation Bias
 
@@ -102,6 +98,11 @@ Reciprocal Rank@5 is 1/r for the first chunk at rank r ≤ 5 that hits any gold 
 Ordinary answerable questions and false-premise questions are summarized separately, with the latter measuring retrieval of counter-evidence. In the selected run, their overall denominators are respectively 17 and 6 under `confirmed_only`, and 18 and 6 under `all_annotations`. The six out-of-scope questions have empty gold sets and receive null retrieval metrics, rather than zeros or vacuous complete hits. Their ranked lists alone do not measure refusal accuracy; that requires generated responses and a separate behavior evaluation.
 
 Every method/class/cohort/stratum cell reports its sample count. Non-null question-level values are averaged and rounded to four decimal places; empty cells have null metrics. Rankings and differences are interpreted within this small development set, with both annotation cohorts retained to expose sensitivity to unresolved labels. Two limitations constrain downstream conclusions: equivalent evidence occurrences are not exhaustively annotated, and partial overlap counts as a hit. Thus, neither a missed gold span nor a complete-hit score alone establishes whether an answer can be supported. Stronger content-coverage measures and answer-support judgments are needed for that diagnosis.
+
+
+### Coverage operationalization and analysis timing
+
+The separate measurement specification `docs/evaluation/coverage-v1.md` (28 September 2026) defines union coverage in canonical Unicode code-point coordinates, per-question macro averaging, missing denominators, and a non-whitespace diagnostic using Python `str.isspace()`. It distinguishes historical any-overlap recall from full-character and full-non-whitespace coverage. Applying this specification to already inspected rankings is post-hoc sensitivity analysis; it does not replace the original primary metric, reannotate equivalent evidence groups, or measure semantic context sufficiency. Answer coverage and selective risk require additional semantic labels and are not inferred from the saved refusal-prefix scores.
 
 # Results
 

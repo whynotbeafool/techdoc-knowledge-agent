@@ -59,20 +59,16 @@
   `multi_hop` 并转为 confirmed；这是提前质控，不替代 30 题冻结后预先抽取的 14 题正式复标。
 - **语料审计修复完成**：错误的 PEP 8 404 页面保留为历史 `v1`，有效正文加入为 `v2` 并设为 active。
 - **14 题独立上下文 AI 复标已锁定归档**：见 `research/REANNOTATION_REPORT.md`。
-  不等同于已验证的人类延迟自我标注信度。当前优先修复核查报告确认的问题。
+  不等同于已验证的人类延迟自我标注信度。核查报告确认的问题已在 `0188399` 修复并推送。
+- **2026-09-28 研究推进**：覆盖规范与 FinBen/RAGAS/Self-RAG 当前论断核查已完成；
+  新文字覆盖诊断和稿件更新见 `research/PROGRESS_20260928.md`。A/B/C 开发协议与离线原型亦已完成，
+  见 `research/PROTOCOL_IMPLEMENTATION_20260928.md`；全套 206 passed，尚无新生成或语义标签。
 
 ## 下一步任务清单
 
-1. **读论文**（当前主线，8 月考试期适合做的"读和想"型任务）：
-   谢倩倩的 FinBen 与 Factual consistency evaluation（她是武大人工智能学院教授，
-   方法论就是给高风险领域造评测基准，与本项目高度同构，是首要套磁目标）→ RAGAS →
-   DomainRAG（人大高瓴的竞品基准，必须能说清区别）→ BEIR → Self-RAG。
-   读的时候留意作者单位——**文献阅读与导师搜索是同一件事**。
-2. **规范定稿**后才批量标 25 题。顺序不能反：用未对照文献的规范批量生产数据，返工代价远大于先读几小时论文。
-3. **剩余题目按词汇重叠度有意分层**。若问题总与证据共享词汇，BM25 天然占优，RQ1 在出题那一刻就没有结论了。
-4. 代码侧零散项：run config 补记 `chromadb` 与 Python 版本（dense 结果依赖它们）、
-   `_print_summary` 的 `correction_rows[0]` 只报第一条前提错误题、`Chunk` 偏移字段可从 `Optional` 收紧、
-   manifest 非原子写入。
+1. 按 `research/PROTOCOL.md` 补齐候选阈值回放与日志集成；生成配置、语义标注安排、调用预算和独立测试集仍待落实。当前只有开发协议及离线原型，不能声称正式门控实验完成。
+2. 原 30 题保留为 dev；新增数据需新版本协议，不因 baseline 表现回改旧 gold。q010/q021 的范围问题按 `research/PROGRESS_20260928.md` 保留并在新题版本中处理。
+3. 指定三篇论文当前论断已核查，不等于完整新颖性审查；针对下一阶段问题扩展文献，之后才扩数据、调参和运行消融。投稿版式最后处理。
 
 ## 跨机器工作
 
@@ -111,7 +107,7 @@ python -m pytest tests/ -q && ruff check .
 
 | 可以并行改 | 为什么安全 |
 |---|---|
-| `data/eval/qa.jsonl` | 槽位由 `annotation-plan.json` 预分配，认领不同 `question_id` 就不会撞；逐行追加，万一冲突保留双方即可。`validate_eval.py` 另有重复 id 检查兜底 |
+| `data/eval/qa.jsonl` | 已冻结，不再按旧槽位流程追加或回改；新数据使用新版本文件与协议 |
 | `results/runs/*` | 每次 run 独立文件，且 `evaluate_retrieval.py` 拒绝覆盖已存在的 run_id |
 | `data/corpus/**` | 冻结后不可变，不会被编辑 |
 | 代码与测试 | git 常规合并 |
@@ -122,7 +118,7 @@ python -m pytest tests/ -q && ruff check .
 
 **`data/eval/annotation-plan.json` 是槽位的权威来源**，同时承担进度追踪和多机分工两个职责。
 
-标注前后的固定动作：
+以下是冻结前的历史标注流程；当前 QA 已冻结，不再用于认领或追加新题：
 
 ```bash
 git pull

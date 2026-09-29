@@ -1,0 +1,30 @@
+{"question_id": "q001", "question": "What critical challenges does the survey identify for end-to-end autonomous driving?"}
+{"question_id": "q002", "question": "Which encryption algorithm does Kubernetes use for etcd data at rest by default?"}
+{"question_id": "q003", "question": "Why is Kubernetes designed as a traditional, all-inclusive PaaS?"}
+{"question_id": "q004", "question": "How does Kubernetes handle high network traffic and move deployed containers toward a desired state?"}
+{"question_id": "q005", "question": "Which later challenge section expands on the behavior-cloning problem in which an imitator relies on false correlations, and what is that problem called?"}
+{"question_id": "q016", "question": "In RAG, which formulation keeps one source for the whole reply, and what two score margins did it achieve over the parametric baseline on the abstractive MS-MARCO benchmark?"}
+{"question_id": "q011", "question": "For a freshly served FastAPI app, where can a developer open each of the two bundled browser-based API references, and which UI supplies each one?"}
+{"question_id": "q012", "question": "For Kubernetes, describe its response to failed workloads and how operators revise confidential settings while leaving container images untouched."}
+{"question_id": "q017", "question": "For FastAPI's two bundled browser references, where can their shared machine-readable foundation be inspected, and which standard describes the payload models nested inside it?"}
+{"question_id": "q018", "question": "Which RAG formulation can base separate output tokens on different retrieved documents, and why might it be especially effective for generating Jeopardy questions?"}
+{"question_id": "q019", "question": "Which approach creates command-conditioned imaginary supervision with a privileged agent, and how does it prioritize samples when reusing data?"}
+{"question_id": "q020", "question": "Which approach trains an RL agent on privileged BEV semantic maps and uses its policy to collect a dataset for a downstream IL agent, and how does it eliminate the upper bound of behavior cloning?"}
+{"question_id": "q006", "question": "How wide may an ordinary Python source row be under the style guide?"}
+{"question_id": "q007", "question": "What failure mode occurs when a behavioral-cloning policy bases its actions on spurious associations between observations and control targets?"}
+{"question_id": "q008", "question": "Which interface supplies FastAPI's automatic browser documentation for trying its API?"}
+{"question_id": "q009", "question": "Which three ways can Kubernetes scale an application?"}
+{"question_id": "q010", "question": "What does PEP 8 say about compound statements containing multiple statements on the same line?"}
+{"question_id": "q021", "question": "How many milliseconds of latency does retrieval add per generated token at inference time?"}
+{"question_id": "q022", "question": "According to the autonomous-driving survey, how should legal liability after a crash be divided between the manufacturer and the human operator?"}
+{"question_id": "q023", "question": "In the FastAPI example, how is the OAuth2 password flow configured, and how long before its JWT access token expires?"}
+{"question_id": "q024", "question": "Which encryption provider protects Kubernetes etcd data at rest, and how often are its keys rotated?"}
+{"question_id": "q025", "question": "Which formatter command does PEP 8 prescribe for automatically rewriting a Python file into compliance?"}
+{"question_id": "q026", "question": "Why does the token-level variant lock the entire response to one retrieved source?"}
+{"question_id": "q027", "question": "Why should access to extra observations eliminate the copycat problem for a learned driver?"}
+{"question_id": "q028", "question": "Why is Swagger UI FastAPI's only automatic documentation interface?"}
+{"question_id": "q029", "question": "Why does Kubernetes expose secrets in stack configuration and require rebuilding container images when updating them?"}
+{"question_id": "q030", "question": "Why are spaces not the preferred indentation method in PEP 8?"}
+{"question_id": "q013", "question": "What two benefits does the paper attribute to RAG's non-parametric memory for refreshing knowledge and understanding model behavior?"}
+{"question_id": "q014", "question": "How does Kubernetes expose and load-balance containers, and how do its automated rollouts move deployments toward their desired state?"}
+{"question_id": "q015", "question": "How many spaces should each indentation level use, and what two alignments are allowed for continuation lines?"}

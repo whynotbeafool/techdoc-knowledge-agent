@@ -1,0 +1,11 @@
+{
+  "date": "2026-09-28",
+  "status": "offline_development_only",
+  "tests": "206 passed",
+  "ruff": "passed",
+  "public_projection_exact_fields": true,
+  "bm25_top5_order_matches_historical_n": 30,
+  "remote_generation_calls": 0,
+  "semantic_label_n": 0,
+  "effectiveness_results_available": false
+}
