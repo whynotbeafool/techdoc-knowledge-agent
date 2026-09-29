@@ -1,0 +1,48 @@
+{
+  "schema_version": "selective-request-draft-v1",
+  "status": "not_ready_for_paid_generation",
+  "protocol_version": "selective-v0.2-dev",
+  "question_n": 30,
+  "remote_calls": 0,
+  "semantic_labels": 0,
+  "approved_remote_calls": 0,
+  "provider": null,
+  "model": null,
+  "proposed_max_input_tokens": 4096,
+  "proposed_max_output_tokens": 512,
+  "token_counts_verified": false,
+  "cost_estimate": null,
+  "prompt_character_range": [
+    3421,
+    4646
+  ],
+  "preflight_manifest_sha256": "542f9aad8c43ea6f0020ac2f70b1be5d4e638a07ec0ddb991461385fd60072ec",
+  "inputs_sha256": {
+    "public-questions.jsonl": "162a445c9a06990ce769222072d806cdb6325d942d4f64846385f91f4c556073",
+    "runtime-features.jsonl": "44a02f30588246402c516bab96ccf621195e8906da9385a6c62f2471d7ef718f",
+    "split.jsonl": "fd01fa4b5b5bf920299468c65f68f708e5863e8e54e8fdfec1f1a99bd675c27d"
+  },
+  "outputs_sha256": {
+    "context-review-tasks.jsonl": "6998cdbce67aaf614dbafbd23a6e8135d3d59cec4c635026dc4ede032994746e",
+    "requests.jsonl": "35467eb101914acbcbf33635bada447577e4fec028476bb659ca157c62454a15",
+    "split.jsonl": "fd01fa4b5b5bf920299468c65f68f708e5863e8e54e8fdfec1f1a99bd675c27d"
+  },
+  "source_hash_policy": "CRLF-to-LF normalized source bytes",
+  "source_sha256": {
+    "scripts/prepare_selective_requests.py": "b556575b51f4214f4ae254f105bcc010782fc0a0c511df40a687db15c82acd1c",
+    "backend/app/rag/generator.py": "8fe2b385908ac90e6849215ec6fef061930a1e78e7f94c162e025d19e6b383ae",
+    "backend/app/rag/citations.py": "34d669a5e4561e39f5a17a6c8ecd7ab707206103c33c867bd37fd7e032ab2a6b",
+    "backend/app/core/response_contract.py": "619963830933093dcae26da4dd5e0c5f65a163f1a1cf89a9095fafc50ab89c50",
+    "backend/app/rag/gating.py": "6477760172b5b32aab46999c4ffc69f4175570740b121d6f42d12aa58f69d61e",
+    "backend/app/rag/chunker.py": "01d5d896549710cbfa91c68fbb14d45890795f7ae7499e454fc17d7b9232fb74",
+    "backend/app/evaluation/retrieval.py": "78fc70098b1b0022b1454ef5e958dd2c5722a7c3657d78c445e0a3b67da9f4b2"
+  },
+  "blockers": [
+    "provider/model and price selection",
+    "real tokenizer including message overhead",
+    "explicit generation budget",
+    "corpus/context review",
+    "response logging adapter"
+  ],
+  "scope": "Draft requests and empty review tasks; not a response cache or new annotation."
+}

@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-30",
+  "base_commit": "2b6e913",
+  "full_suite": "248 passed",
+  "ruff": "passed",
+  "question_n": 30,
+  "remote_calls": 0,
+  "new_semantic_labels": 0,
+  "frozen_qa_reannotation_lock_hashes_unchanged": true,
+  "manifest_sha256": "683f131c15dea45864acd069477b833394bd5fb756a1c9260d09df8914b79c6f",
+  "scope": "Offline request preparation; provider/model/tokenizer/cost/budget unresolved."
+}

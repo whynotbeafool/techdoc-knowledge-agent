@@ -66,7 +66,7 @@
 
 ## 下一步任务清单
 
-1. current-fixes 已修复，见 `research/CURRENT_FIXES_20260929.md`；离线 dev/test 回放、组切分和重采样已有实现，提交前复审全套 241 passed。下一步按 v0.2 协议准备真实 cache/review、生成日志适配、语义审阅与独立组数据，落实配置和预算；仍不能声称正式门控实验完成。
+1. current-fixes 已修复，见 `research/CURRENT_FIXES_20260929.md`；离线 dev/test 回放、组切分和重采样已有实现，提交前复审全套 241 passed。30 题请求草稿已准备（`research/REQUEST_PREPARATION_20260930.md`），最新全套 248 passed；下一步核实模型/token/费用、落实预算，完成语义审阅和响应日志适配，再准备独立组数据。仍无正式效果结果。
 2. 原 30 题保留为 dev；新增数据需新版本协议，不因 baseline 表现回改旧 gold。q010/q021 的范围问题按 `research/PROGRESS_20260928.md` 保留并在新题版本中处理。
 3. 指定三篇论文当前论断已核查，不等于完整新颖性审查；针对下一阶段问题扩展文献，之后才扩数据、调参和运行消融。投稿版式最后处理。
 
