@@ -43,3 +43,4 @@
 /scripts/collect_selective_pilot.py text eol=lf
 /backend/app/evaluation/collection.py text eol=lf
 /backend/app/evaluation/deepseek_transport.py text eol=lf
+/research/next-dataset-20261004/** text eol=lf

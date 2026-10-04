@@ -1,0 +1,35 @@
+{
+  "status": "provisional_not_evaluation_frozen",
+  "source_sha256": "9a96050577d01901083cd763f168c0ba16c63752c02a854d7bc59aca2f8dfea6",
+  "limitation": "Declared links only; semantic completeness and exposure require review. Do not rename questions or change membership to obtain a preferred split.",
+  "records": [
+    {
+      "question_id": "next001",
+      "group_id": "facts-d696cf8027083493c9119b282d19cef2449702e15e3986d0eeb073d180375ed1",
+      "previously_exposed": false,
+      "group_previously_exposed": false,
+      "split": "dev"
+    },
+    {
+      "question_id": "next002",
+      "group_id": "facts-d696cf8027083493c9119b282d19cef2449702e15e3986d0eeb073d180375ed1",
+      "previously_exposed": false,
+      "group_previously_exposed": false,
+      "split": "dev"
+    },
+    {
+      "question_id": "next003",
+      "group_id": "facts-b0ff6c7b31278c3056e8dd393f77c1719bb0bcb5b2c8510dd3b5b700df019a36",
+      "previously_exposed": false,
+      "group_previously_exposed": false,
+      "split": "dev"
+    },
+    {
+      "question_id": "next004",
+      "group_id": "facts-3db143aa0c8c04b18cefb4c53d97cfe79393d53777d484926fdba27e1719e870",
+      "previously_exposed": false,
+      "group_previously_exposed": false,
+      "split": "test"
+    }
+  ]
+}
