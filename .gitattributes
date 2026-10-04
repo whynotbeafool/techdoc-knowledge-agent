@@ -39,3 +39,4 @@
 /scripts/check_locked_reannotation.py text eol=lf
 /research/REPLAY_INPUTS.md text eol=lf
 /scripts/evaluate_retrieval.py text eol=lf
+/scripts/check_deepseek_tokens.py text eol=lf

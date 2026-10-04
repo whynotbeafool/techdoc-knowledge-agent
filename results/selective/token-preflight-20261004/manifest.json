@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-04",
+  "status": "offline_tokens_checked_semantic_review_pending",
+  "source_revision": "8cadfede7063c896b944e7bae05daa3549ae97ea",
+  "source_repository": "https://github.com/deepseek-ai/deepseek-recipe",
+  "source_files": [
+    "deepseek-recipe-encoding/src/v4/mod.rs",
+    "deepseek-recipe-encoding/src/v4/dsv41.rs",
+    "static/tokenizers/v41/README.md"
+  ],
+  "tokenizer_sha256": "81f64d1248a68ce3663e07ab3ee48b851e5df0e32d27cb98e4c9a268151e8d99",
+  "tokenizers_version": "0.21.4",
+  "template_scope": "one system and one user plain-text message, non-thinking, no tools or response format",
+  "verification": "restricted renderer inspected against pinned official source; official Python wheel unavailable; no compiled official renderer cross-check",
+  "input_tokens": {
+    "min": 862,
+    "max": 1270,
+    "sum": 32701
+  },
+  "requests": 30,
+  "new_api_calls": 0,
+  "planned_max_output_tokens_each": 512,
+  "planned_cost_estimate_cny": "0.188282",
+  "cost_basis": "local input counts; 30 times maximum output; CNY 2/8 per million; provider usage not yet measured",
+  "sha256": {
+    "scripts/check_deepseek_tokens.py": "047feec4f5be3fe594b359c28c2211393757a9999d2eee6be1b7691f9659aa15",
+    "results/selective/request-draft-20260930/requests.jsonl": "35467eb101914acbcbf33635bada447577e4fec028476bb659ca157c62454a15",
+    "results\\selective\\token-preflight-20261004\\token-checks.jsonl": "323a58953c3d0756353d33130ab42299eae64f9fc022e06139849c58ee2ff79b"
+  }
+}

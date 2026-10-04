@@ -2,6 +2,8 @@
 
 ## 当前进度
 
+- `0546bd9` 已推送；[远端 CI](https://github.com/whynotbeafool/techdoc-knowledge-agent/actions/runs/37180379845) 的 Python 3.11/3.13 均成功。继续完成 30 条请求的官方 V4.1 限定文本模板 token 预检：862–1,270/题，总计 32,701；结果位于 `results/selective/token-preflight-20261004/`。尚无新接口调用，生成前语义审阅仍待完成。
+- token 预检阶段本地全套 280 passed、Ruff 通过；冻结 QA、复标与 LOCK 哈希复核不变。
 - 用户指定 DeepSeek 并委托确定额度：本轮 30 题 pilot 采用人民币 1 元、最多 30 次请求、不自动重试；按 4,096 输入 / 512 输出 token 与官方高峰缓存未命中价格估算共 0.36864 元。预算及执行条件见 [GENERATION_COLLECTION_20261004.md](GENERATION_COLLECTION_20261004.md)。
 - 响应收录器、DeepSeek 单次调用适配及回放模型身份核验已实现；本地全套 274 passed、Ruff 通过。尚未完成当前模型 token/消息封装预检与生成前语义审阅，实际调用数为 0。
 - 冻结 QA、累计复标及复标 LOCK 的 SHA-256 保持原值，历史结果未修改。旧 manifest 继续对应其原提交，不代表当前代码哈希。

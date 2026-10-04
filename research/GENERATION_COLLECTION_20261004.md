@@ -20,6 +20,22 @@
 
 这些条件未满足，因此没有制作声称可以直接执行的完整运行配置，没有调用真实接口。旧 14 题冻结复标材料与结果不变。
 
+### 同日后续：离线 token 预检完成
+
+30 条请求已按官方 V4.1 纯文本消息模板计数，包含起始标记、角色标记与非思考回答前缀：最小 862、最大 1,270、总计 32,701 token。逐条请求哈希和计数见 `results/selective/token-preflight-20261004/token-checks.jsonl`；软件版本、来源及哈希见同目录 manifest。
+
+官方来源固定为 `deepseek-ai/deepseek-recipe` 提交 `8cadfede7063c896b944e7bae05daa3549ae97ea`。下载的 tokenizer SHA-256 与其 V4.1 README 声明一致。当前环境从配置索引与 PyPI 官方索引均未找到可安装的 `deepseek-recipe` wheel；本实现据固定源码核对，仅支持一条 system、一条 user 的纯文本、非思考输入，不支持工具或结构化输出。未完成与官方编译版 renderer 的独立交叉比对。
+
+按本地输入计数加每条 512 输出 token，估算最多 0.188282 元；原 1 元、30 次与 4,096/512 token 额度不变。这不是供应商实测用量，收录时仍须检测用量越界并停止。生成前语义审阅尚未完成，本次接口调用为 0。
+
+复现时将固定提交中的 `static/tokenizers/v41/tokenizer.json` 下载到忽略目录，然后执行：
+
+```powershell
+python scripts/check_deepseek_tokens.py --requests results/selective/request-draft-20260930/requests.jsonl --tokenizer .venv/tokenizer-preflight/tokenizer.json --output <新的输出目录>/token-checks.jsonl
+```
+
+脚本验证 tokenizer 字节哈希，拒绝不支持的消息结构、重复题号、超额批次和已有输出文件。tokenizer 大文件不纳入本仓库。
+
 ## 已实现与边界
 
 `ResponseCollector` 在调用前用 SQLite 事务持久化额度预留；配置、请求和 token 检查绑定哈希。完成的同一请求直接返回已存结果；中断后结果未知的请求禁止自动重试。失败请求同样占用调用与预留额度。SDK 适配器明确 `max_retries=0`。
