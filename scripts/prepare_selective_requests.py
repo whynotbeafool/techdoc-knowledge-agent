@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -37,6 +38,22 @@ def read_rows(path):
     if not ids or any(not isinstance(i, str) or not i for i in ids) or len(set(ids)) != len(ids):
         raise ValueError("Expected nonempty unique question IDs")
     return {r["question_id"]: r for r in rows}
+
+
+def verify_ranked_context(actual, recorded):
+    """Allow numerical recomputation noise only; identity, order and text stay exact."""
+    if len(actual) != len(recorded):
+        raise ValueError("Preflight ranking length differs")
+    for current, saved in zip(actual, recorded):
+        if {k: v for k, v in current.items() if k != "score"} != {
+            k: v for k, v in saved.items() if k != "score"
+        }:
+            raise ValueError("Preflight ranking/text/coordinates no longer reproduce")
+        a, b = current.get("score"), saved.get("score")
+        if any(type(v) not in (float, int) or not math.isfinite(v) for v in (a, b)) or not math.isclose(
+            a, b, rel_tol=1e-12, abs_tol=1e-12
+        ):
+            raise ValueError("Preflight score differs beyond numerical tolerance")
 
 
 def prepare(preflight, corpus):
@@ -88,8 +105,9 @@ def prepare(preflight, corpus):
         if question["question"] != recorded["question"]:
             raise ValueError("Public question differs from feature input")
         retrieved = retriever.query_chunks(question["question"], top_k=5)
-        if retrieved != recorded["retrieved"]:
-            raise ValueError("Preflight ranking/text/coordinates/scores no longer reproduce")
+        verify_ranked_context(retrieved, recorded["retrieved"])
+        # Preserve the frozen score identity for context hashes and threshold ties.
+        retrieved = recorded["retrieved"]
         context_chunks = [{"text": c["text"], "score": c["score"]} for c in retrieved]
         actual_features = runtime_features(question["question"], [ContextChunk(**c) for c in context_chunks])
         if actual_features != recorded["features"]:

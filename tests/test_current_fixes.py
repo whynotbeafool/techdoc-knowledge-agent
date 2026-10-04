@@ -166,6 +166,24 @@ def test_coverage_fraction_denominators_and_nonempty_na_cell():
     }
 
 
+def assert_coverage_cells(actual, expected):
+    assert len(actual) == len(expected)
+    for a, b in zip(actual, expected):
+        assert {k: v for k, v in a.items() if k != "metrics"} == {
+            k: v for k, v in b.items() if k != "metrics"
+        }
+        assert a["metrics"].keys() == b["metrics"].keys()
+        for name, metric in a["metrics"].items():
+            other = b["metrics"][name]
+            assert metric.keys() == other.keys()
+            assert metric["n"] == other["n"]
+            for field in ("sum", "mean"):
+                if type(other[field]) is float:
+                    assert metric[field] == pytest.approx(other[field], rel=1e-12, abs=1e-12)
+                else:
+                    assert metric[field] == other[field]
+
+
 def test_full_saved_coverage_rows_and_cells_match_current_math():
     audit = load_script("audit_text_coverage")
     old = json.loads((ROOT / "results/audits/2026-09-28/text-coverage-v1.json").read_text(encoding="utf-8"))
@@ -173,7 +191,7 @@ def test_full_saved_coverage_rows_and_cells_match_current_math():
         ROOT / "results/runs/frozen-30-hybrid-rrf-v1.jsonl", ROOT / "data/eval/qa.jsonl", ROOT / "data/corpus"
     )
     assert current["rows"] == old["rows"]
-    assert current["cells"] == old["cells"]
+    assert_coverage_cells(current["cells"], old["cells"])
     assert len(current["rows"]) == 270 and len(current["cells"]) == 36
 
 
@@ -377,8 +395,9 @@ def test_current_audit_hashes_and_data_match():
     new = module.audit(
         ROOT / "results/runs/frozen-30-hybrid-rrf-v1.jsonl", ROOT / "data/eval/qa.jsonl", ROOT / "data/corpus"
     )
-    for key in ("rows", "cells", "implementation"):
+    for key in ("rows", "implementation"):
         assert saved[key] == new[key]
+    assert_coverage_cells(saved["cells"], new["cells"])
     for key in ("run", "config", "qa"):
         assert saved["inputs"][key]["sha256"] == new["inputs"][key]["sha256"]
 
@@ -448,3 +467,17 @@ def test_review_rubric_version_must_match(tmp_path):
     next(iter(reviews.values()))["rubric_version"] = "unrelated-version"
     with pytest.raises(ValueError, match="rubric version"):
         module.join_inputs(cache, reviews, split)
+
+
+def test_coverage_comparison_allows_only_roundoff():
+    cell = {"method": "bm25", "k": 5, "metrics": {"fraction": {"n": 2, "sum": 1.2, "mean": 0.6}}}
+    changed = json.loads(json.dumps(cell))
+    changed["metrics"]["fraction"]["sum"] = math.nextafter(1.2, math.inf)
+    assert_coverage_cells([changed], [cell])
+    changed["metrics"]["fraction"]["sum"] = 1.200001
+    with pytest.raises(AssertionError):
+        assert_coverage_cells([changed], [cell])
+    changed = json.loads(json.dumps(cell))
+    changed["metrics"]["fraction"]["n"] = 3
+    with pytest.raises(AssertionError):
+        assert_coverage_cells([changed], [cell])

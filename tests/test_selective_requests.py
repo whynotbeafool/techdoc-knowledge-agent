@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import math
 import shutil
 from pathlib import Path
 
@@ -87,3 +88,43 @@ def test_cli_provenance_and_no_overwrite(tmp_path, monkeypatch):
         assert tool.sha((ROOT / name).read_bytes().replace(b"\r\n", b"\n")) == expected
     with pytest.raises(ValueError, match="new output"):
         tool.main()
+
+
+@pytest.mark.parametrize("change", ["text", "coordinate", "rank", "score", "nan", "bool"])
+def test_recomputation_tolerance_never_accepts_material_changes(change):
+    tool = module()
+    saved = [
+        {"chunk_id": "a", "text": "a", "start_char": 0, "score": 2.0},
+        {"chunk_id": "b", "text": "b", "start_char": 1, "score": 1.0},
+    ]
+    actual = json.loads(json.dumps(saved))
+    if change == "text":
+        actual[0]["text"] = "changed"
+    elif change == "coordinate":
+        actual[0]["start_char"] = 1
+    elif change == "rank":
+        actual.reverse()
+    elif change == "score":
+        actual[0]["score"] += 1e-6
+    elif change == "nan":
+        actual[0]["score"] = float("nan")
+    elif change == "bool":
+        actual[0]["score"] = True
+    with pytest.raises(ValueError):
+        tool.verify_ranked_context(actual, saved)
+
+
+def test_recomputed_float_noise_preserves_saved_scores_and_hashes(monkeypatch):
+    tool = module()
+    original = tool.BM25Retriever.query_chunks
+
+    def perturbed(self, *args, **kwargs):
+        rows = original(self, *args, **kwargs)
+        for row in rows:
+            row["score"] = math.nextafter(row["score"], math.inf)
+        return rows
+
+    monkeypatch.setattr(tool.BM25Retriever, "query_chunks", perturbed)
+    requests, _, _ = tool.prepare(PREFLIGHT, ROOT / "data/corpus")
+    saved = tool.read_rows(ROOT / "results/selective/request-draft-20260930/requests.jsonl")
+    assert requests == list(saved.values())
