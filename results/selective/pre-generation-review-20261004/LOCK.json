@@ -1,0 +1,33 @@
+{
+  "status": "pre_generation_AI_exposed_dev_review_locked",
+  "locked_at": "2026-10-04T10:01:01.778147+00:00",
+  "question_n": 30,
+  "reviewer_id": "codex-primary-current-thread",
+  "independent_blind_review": false,
+  "new_generated_responses_seen": 0,
+  "corpus_read_scope": "All five complete active frozen canonical texts, including appendices/references; truncated tool displays re-read in overlapping slices.",
+  "unknown_context_ids": [
+    "q010",
+    "q021"
+  ],
+  "scope_clarification_ids": [
+    "q012"
+  ],
+  "context_counts": {
+    "True": 16,
+    "False": 12,
+    "None": 2
+  },
+  "sha256": {
+    "results/selective/pre-generation-review-20261004/corpus-review.jsonl": "45802583b78e22bd7f0380ab5209680605b34969966f76ecbf61f3f5bb987e10",
+    "results/selective/pre-generation-review-20261004/context-review.jsonl": "51f8e7dcf02cce521a50b8a962da7374e262ba5bda443e60543fc8247b5c01c8",
+    "results/selective/request-draft-20260930/requests.jsonl": "35467eb101914acbcbf33635bada447577e4fec028476bb659ca157c62454a15",
+    "results/selective/token-preflight-20261004/token-checks.jsonl": "323a58953c3d0756353d33130ab42299eae64f9fc022e06139849c58ee2ff79b",
+    "research/SEMANTIC_RUBRIC.md": "1c62f2b80d4b4ca3099ca0f5caf790c1d8367375ee160b4c9195a7f3369c22ae",
+    "data/corpus/canonical/rag_paper/v1.txt": "83e663b687893f552ab75710cc7748dc6c0d2b3697c4b669a9f1903497c86a4f",
+    "data/corpus/canonical/autonomous_driving_survey/v1.txt": "96906840430aba16dfc784b7b947715127396f7f3d07067d119b3633778a49f8",
+    "data/corpus/canonical/fastapi_first_steps/v1.txt": "6e909cc5cf438740cdc71dad49b8e2a513865a9c9c609b1944fe3de080ea081c",
+    "data/corpus/canonical/kubernetes_overview/v1.txt": "4caf1cd3bfe590d9eb75d513d2024081338dc48523f81f9e06e3208e749f3c8c",
+    "data/corpus/canonical/pep8/v2.txt": "5398fae01e6df3757181e63c79f12749336c89c7ca5728534174109e243a8833"
+  }
+}

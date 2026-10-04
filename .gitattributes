@@ -40,3 +40,6 @@
 /research/REPLAY_INPUTS.md text eol=lf
 /scripts/evaluate_retrieval.py text eol=lf
 /scripts/check_deepseek_tokens.py text eol=lf
+/scripts/collect_selective_pilot.py text eol=lf
+/backend/app/evaluation/collection.py text eol=lf
+/backend/app/evaluation/deepseek_transport.py text eol=lf
