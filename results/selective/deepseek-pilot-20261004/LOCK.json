@@ -1,0 +1,13 @@
+{
+  "locked_at": "2026-10-04T10:09:14.405917+00:00",
+  "status": "completed_pilot_snapshot",
+  "sha256": {
+    "cache-01.jsonl": "56858a439d6ce86543261e002888847ea5f975e3eac5493177dea3af7cdb1a78",
+    "cache-30.jsonl": "f4fed8081c778b0d6fddf0429cd28cbd6e7864a1b600d567519c896c9e390c32",
+    "dev-replay.json": "968552f529ac78e67bd60f145e1f950ee70025f4b888c395f7ea970d12e0bcf6",
+    "response-review.jsonl": "5540f52111c7a56df6bd9553f6460cc977f498bf8ff9ea62bbe58c54564bde21",
+    "run-manifest.json": "5fbbdcdf8e501227da1709feaebfa1e3e4eb4560255b57d8b8d8b2f6cbbea587",
+    "run-summary.json": "22d23f0731a225ce7617b61103cd027d7d0be90d4ef70199b0e7ab617ed068e7"
+  },
+  "pre_generation_lock_sha256": "d7c9238a6cb98470b1bc2d8e818cc8f9cfa75291c1362cf2e7237153578c5397"
+}

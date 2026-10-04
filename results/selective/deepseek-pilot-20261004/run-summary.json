@@ -1,0 +1,40 @@
+{
+  "completed_at": "2026-10-04T10:07:39.270242+00:00",
+  "status": "generation_complete_AI_reviewed_dev_only",
+  "remote_calls": 30,
+  "retry_calls": 0,
+  "execution_status_counts": {
+    "ok": 30
+  },
+  "finish_reason_counts": {
+    "stop": 30
+  },
+  "returned_model_ids": [
+    "deepseek-flash"
+  ],
+  "model_identity_limitation": "Provider returned only deepseek-flash alias, not an immutable revision.",
+  "input_tokens": 32701,
+  "output_tokens": 2487,
+  "local_input_count_mismatch_ids": [],
+  "cost_estimate_cny": "0.085298",
+  "cost_scope": "Conservative peak/cache-miss estimate, not the provider invoice.",
+  "latency_seconds_sum": 37.86287569998967,
+  "behavior_counts": {
+    "answer": 12,
+    "refusal": 9,
+    "correction": 6,
+    "partial": 3
+  },
+  "correction_with_refusal_prefix_ids": [
+    "q026",
+    "q027",
+    "q028",
+    "q029",
+    "q030"
+  ],
+  "unknown_ids": [
+    "q010",
+    "q021"
+  ],
+  "no_further_calls_authorized_under_this_run": true
+}

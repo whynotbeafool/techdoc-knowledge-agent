@@ -1,0 +1,29 @@
+{
+  "binding": {
+    "config": {
+      "provider": "deepseek",
+      "requested_model": "deepseek-flash",
+      "endpoint": "https://api.deepseek.com",
+      "approval_reference": "user-delegated-budget-20261004-CNY1-30calls",
+      "tokenizer_id": "deepseek-recipe/8cadfede7063c896b944e7bae05daa3549ae97ea/v41/81f64d1248a68ce3663e07ab3ee48b851e5df0e32d27cb98e4c9a268151e8d99",
+      "max_calls": 30,
+      "max_input_tokens": 4096,
+      "max_output_tokens": 512,
+      "temperature": 0.2,
+      "thinking": "disabled",
+      "currency": "CNY",
+      "input_price_per_million": "2",
+      "output_price_per_million": "8",
+      "cost_limit": "1",
+      "price_reference": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/;verified-20261004"
+    },
+    "pre_generation_lock_sha256": "b262c52c2df1abf2bbd8a1e11d7b7d8a6fbc5ada7f6e08b7dd7733c7b4f60351"
+  },
+  "started_at": "2026-10-04T10:03:59.725424+00:00",
+  "scope": "AI-reviewed exposed development pilot; not heldout evidence",
+  "implementation_sha256": {
+    "scripts/collect_selective_pilot.py": "54a67b6aebc393cd8fdabb404345e16b4bcf87293a1e9fd5a6f6a0e777bfd1db",
+    "backend/app/evaluation/collection.py": "cb6f9d5e6e19721596b2018211435ca59c6de6f95c3896c160cc1b8635212b5b",
+    "backend/app/evaluation/deepseek_transport.py": "9539d957ba80dd840de6bee2dbed5bd1b160fb9187495af00ac40fcb2ef08073"
+  }
+}
