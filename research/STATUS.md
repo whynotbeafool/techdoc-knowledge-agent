@@ -2,6 +2,13 @@
 
 ## 当前进度
 
+- 用户指定 DeepSeek 并委托确定额度：本轮 30 题 pilot 采用人民币 1 元、最多 30 次请求、不自动重试；按 4,096 输入 / 512 输出 token 与官方高峰缓存未命中价格估算共 0.36864 元。预算及执行条件见 [GENERATION_COLLECTION_20261004.md](GENERATION_COLLECTION_20261004.md)。
+- 响应收录器、DeepSeek 单次调用适配及回放模型身份核验已实现；本地全套 274 passed、Ruff 通过。尚未完成当前模型 token/消息封装预检与生成前语义审阅，实际调用数为 0。
+- 冻结 QA、累计复标及复标 LOCK 的 SHA-256 保持原值，历史结果未修改。旧 manifest 继续对应其原提交，不代表当前代码哈希。
+- 上轮修复提交 e0e1102 的远端 CI 已确认 Python 3.11/3.13 均成功：[Actions 记录](https://github.com/whynotbeafool/techdoc-knowledge-agent/actions/runs/37177810804)。本轮新增收录适配尚未验证远端 CI。
+
+## 2026-10-04 CI 修复记录
+
 - d4fb5de 的远端 CI 确认失败：Python 3.11/Linux 下 244 passed、4 failed；两个覆盖汇总比较失败、两个请求预检失败。此前 248 passed 仅代表本地环境。
 - 已修复精确浮点比较：汇总测试仅对浮点 sum/mean 使用 rel/abs 1e-12；检索仅对有限 score 使用同等容差，顺序、文本、坐标及其他字段仍精确匹配。请求继续使用归档 score，保持提示词/上下文身份及阈值平局不变。
 - 本地全套 256 passed、Ruff 通过；顺序累加复算也保持 30 题请求与旧归档完全相同。新增 Linux Python 3.11/3.13 CI 矩阵，远端修复验证以对应提交 Actions 为准。

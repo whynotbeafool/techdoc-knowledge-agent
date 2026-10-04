@@ -96,9 +96,20 @@ def join_inputs(cache, reviews, split):
     result = []
     for qid in sorted(cache):
         c, review = cache[qid], reviews[qid]
-        for name in ("question", "prompt", "prompt_template", "provider", "model", "replicate_id"):
+        for name in ("question", "prompt", "prompt_template", "provider", "replicate_id"):
             if not isinstance(c.get(name), str) or not c[name].strip():
                 raise ValueError(f"Missing cache field: {name}")
+        if c.get("requested_model") is not None and (
+            not isinstance(c["requested_model"], str) or not c["requested_model"].strip()
+        ):
+            raise ValueError("Invalid requested model identity")
+        if not isinstance(c.get("model"), str) or not c["model"].strip():
+            if (
+                c.get("execution_status") != "system_error"
+                or not c.get("requested_model")
+                or c.get("model") is not None
+            ):
+                raise ValueError("Returned model identity missing for successful/legacy cache")
         for name in ("decoding", "retrieval", "corpus_hashes"):
             if not isinstance(c.get(name), dict) or not c[name]:
                 raise ValueError(f"Missing cache configuration: {name}")
@@ -135,6 +146,48 @@ def join_inputs(cache, reviews, split):
     return result
 
 
+def generation_config(cache):
+    rows = list(cache.values())
+    if not rows:
+        raise ValueError("Empty generation cache")
+    requested = [
+        {
+            **{
+                k: r[k]
+                for k in (
+                    "provider",
+                    "prompt_template",
+                    "decoding",
+                    "retrieval",
+                    "corpus_hashes",
+                    "replicate_id",
+                )
+            },
+            "model": r.get("requested_model", r["model"]),
+            "endpoint": r.get("endpoint"),
+        }
+        for r in rows
+    ]
+    if any(r != requested[0] for r in requested):
+        raise ValueError("All cached rows must share a generation configuration")
+    observed = {r["model"] for r in rows if r["execution_status"] == "ok"}
+    if len(observed) > 1 or None in observed:
+        raise ValueError("Returned model identity changed or is missing")
+    return {"request": requested[0], "returned_model": next(iter(observed), None)}
+
+
+def check_generation_config(dev, current):
+    saved = dev.get("generation_config")
+    if not saved or digest(saved) != dev.get("generation_config_sha256"):
+        raise ValueError("Missing/inconsistent saved generation configuration")
+    if saved["request"] != current["request"] or (
+        saved["returned_model"] is not None
+        and current["returned_model"] is not None
+        and saved["returned_model"] != current["returned_model"]
+    ):
+        raise ValueError("Heldout generation configuration differs from development")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("cache", "reviews", "split", "output"):
@@ -159,16 +212,7 @@ def main():
         dev = json.loads(args.working_points.read_text(encoding="utf-8"))
         validate_development_report(dev)
 
-        # A single consistent generation configuration must underlie dev and test.
-        def config(r):
-            return {
-                k: r[k]
-                for k in ("provider", "model", "prompt_template", "decoding", "retrieval", "corpus_hashes")
-            }
-
-        configs = {digest(config(c)) for c in load_rows(args.cache).values()}
-        if len(configs) != 1 or dev.get("generation_config_sha256") != next(iter(configs)):
-            raise ValueError("Heldout generation configuration differs from development")
+        check_generation_config(dev, generation_config(load_rows(args.cache)))
         dev_split = dev.get("split_manifest")
         if not dev_split:
             raise ValueError("Development report lacks split provenance")
@@ -196,21 +240,12 @@ def main():
             "outcomes": outcomes,
             "bootstrap": grouped_bootstrap(scored),
         }
-    configs = {
-        digest(
-            {
-                k: c[k]
-                for k in ("provider", "model", "prompt_template", "decoding", "retrieval", "corpus_hashes")
-            }
-        )
-        for c in load_rows(args.cache).values()
-    }
-    if len(configs) != 1:
-        raise ValueError("All cached rows must share a generation configuration")
+    config = generation_config(load_rows(args.cache))
     report["split_manifest"] = list(load_rows(args.split).values())
     report["protocol_version"] = PROTOCOL_VERSION
     report["implementation_sha256"] = implementation_hashes()
-    report["generation_config_sha256"] = next(iter(configs))
+    report["generation_config"] = config
+    report["generation_config_sha256"] = digest(config)
     report["inputs_sha256"] = {
         name: hashlib.sha256(path.read_bytes()).hexdigest() for name, path in paths.items()
     }
